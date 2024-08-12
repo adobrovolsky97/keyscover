@@ -5,10 +5,8 @@ import {createApp} from 'vue';
 import router from "./router.js";
 import store from './store'
 
-import {APP_URL} from "./env.js";
 import axios from "axios";
 
-axios.defaults.baseURL = APP_URL;
 axios.defaults.headers['Content-Type'] = 'application/json';
 axios.defaults.headers['Accept'] = 'application/json';
 
