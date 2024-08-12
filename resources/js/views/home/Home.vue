@@ -125,6 +125,7 @@ export default {
     mounted() {
         this.fetchCategories();
         this.resolveQueryParams();
+        this.search = this.filters.search;
     },
     computed: {
         classes() {
