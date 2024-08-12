@@ -86,7 +86,7 @@ class Product extends BaseModel implements HasMedia
             ->watermarkPosition(Manipulations::POSITION_CENTER)
             ->watermarkWidth(80, Manipulations::UNIT_PERCENT)
             ->watermarkHeight(30, Manipulations::UNIT_PERCENT)
-            ->watermarkOpacity(15)
+            ->watermarkOpacity(35)
             ->nonQueued();
     }
 }
