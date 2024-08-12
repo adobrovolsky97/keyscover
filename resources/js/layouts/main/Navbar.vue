@@ -48,7 +48,7 @@
                             <circle cx="17" cy="19" r="2"/>
                             <path d="M3 3h2l2 12a3 3 0 0 0 3 2h7a3 3 0 0 0 3 -2l1 -7h-15.2"/>
                         </svg>
-                        <span class="mt-0.5">{{ ($store.state.cart?.total ?? 0) - $store.state.cart?.discount_amount_uah ?? 0 }} грн.</span>
+                        <span class="mt-0.5">{{ $store.state.cart?.total ? (($store.state.cart?.total ?? 0) - $store.state.cart?.discount_amount_uah ?? 0) : 0 }} грн.</span>
                     </button>
 
                     <button v-else class="btn btn-outline rounded-2xl btn-sm">
