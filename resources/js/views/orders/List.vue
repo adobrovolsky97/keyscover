@@ -20,8 +20,8 @@
                             <span v-if="order.city_name"><span class="font-bold">Місто</span>: {{ order.city_name }}</span>
                             <span v-if="order.warehouse_name"><span class="font-bold">Відділення</span>: {{ order.warehouse_name }}</span>
                             <span><span class="font-bold">Вартість</span>: {{ order.total_price_usd }} $ / {{ order.total_price_uah }} грн.</span>
-                            <span v-if="order.discount_percent > 0"><span class="font-bold">Знижка ({{ order.discount_percent }}%)</span>: {{ order.discount_usd.toFixed(2) }} $ / {{order.discount_uah.toFixed(0)}} грн.</span>
-                            <span v-if="order.discount_percent > 0"><span class="font-bold">Вартість зі знижкою</span>: {{ order.total_price_usd - order.discount_usd.toFixed(2) }} $ / {{ order.total_price_uah - order.discount_uah.toFixed(0) }} грн.</span>
+                            <span v-if="order.discount_percent > 0"><span class="font-bold">Знижка ({{ order.discount_percent }}%)</span>: {{ order.discount_usd }} $ / {{order.discount_uah}} грн.</span>
+                            <span v-if="order.discount_percent > 0"><span class="font-bold">Вартість зі знижкою</span>: {{ order.total_price_usd - order.discount_usd }} $ / {{ order.total_price_uah - order.discount_uah }} грн.</span>
                         </div>
                         <div class="products-list w-full overflow-x-auto">
                             <table class="table min-w-full">
