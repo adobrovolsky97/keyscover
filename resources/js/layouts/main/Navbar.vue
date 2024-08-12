@@ -10,15 +10,7 @@
                 <a @click="navigate" class="block antialiased font-sans cursor-pointer text-lg font-bold">KeysCover</a>
             </router-link>
             <div class="hidden items-center gap-2 lg:flex">
-                <div class="no-auth justify-center items-center flex flex-row gap-2" v-if="$store.state.user === null">
-                    <router-link to="/login">
-                        <a class="link">Вхід</a>
-                    </router-link>
-                    <router-link to="/sign-up">
-                        <a class="link">Реєстрація</a>
-                    </router-link>
-                </div>
-                <div class="auth flex flex-row justify-center items-center gap-5" v-else>
+                <div class="auth flex flex-row justify-center items-center gap-5">
                     <router-link
                         :to="{name: 'home'}"
                         custom
@@ -38,31 +30,43 @@
                             замовлень</a>
                     </router-link>
                     <p class="mr-5 font-bold" v-if="usd">USD {{ usd }}</p>
-                    <button class="btn btn-outline rounded-2xl btn-sm" v-if="$route.name !== 'checkout'"
-                            onclick="cartModal.showModal()">
-                        <svg class="h-6 w-6 text-slate-500" width="24" height="24" viewBox="0 0 24 24"
-                             stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                             stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z"/>
-                            <circle cx="9" cy="19" r="2"/>
-                            <circle cx="17" cy="19" r="2"/>
-                            <path d="M3 3h2l2 12a3 3 0 0 0 3 2h7a3 3 0 0 0 3 -2l1 -7h-15.2"/>
-                        </svg>
-                        <span class="mt-0.5">{{ $store.state.cart?.total ? (($store.state.cart?.total ?? 0) - $store.state.cart?.discount_amount_uah ?? 0) : 0 }} грн.</span>
-                    </button>
+                    <div v-if="$store.state.user !== null">
+                        <button class="btn btn-outline rounded-2xl btn-sm" v-if="$route.name !== 'checkout'"
+                                onclick="cartModal.showModal()">
+                            <svg class="h-6 w-6 text-slate-500" width="24" height="24" viewBox="0 0 24 24"
+                                 stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                 stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z"/>
+                                <circle cx="9" cy="19" r="2"/>
+                                <circle cx="17" cy="19" r="2"/>
+                                <path d="M3 3h2l2 12a3 3 0 0 0 3 2h7a3 3 0 0 0 3 -2l1 -7h-15.2"/>
+                            </svg>
+                            <span class="mt-0.5">{{
+                                    $store.state.cart?.total ? (($store.state.cart?.total ?? 0) - $store.state.cart?.discount_amount_uah ?? 0) : 0
+                                }} грн.</span>
+                        </button>
 
-                    <button v-else class="btn btn-outline rounded-2xl btn-sm">
-                        <svg class="h-6 w-6 text-slate-500" width="24" height="24" viewBox="0 0 24 24"
-                             stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                             stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z"/>
-                            <circle cx="9" cy="19" r="2"/>
-                            <circle cx="17" cy="19" r="2"/>
-                            <path d="M3 3h2l2 12a3 3 0 0 0 3 2h7a3 3 0 0 0 3 -2l1 -7h-15.2"/>
-                        </svg>
-                        <span class="mt-0.5">{{ $store.state.cart?.total ?? 0 }} грн.</span>
-                    </button>
-                    <a @click="logout" class="link">Вийти</a>
+                        <button v-else class="btn btn-outline rounded-2xl btn-sm">
+                            <svg class="h-6 w-6 text-slate-500" width="24" height="24" viewBox="0 0 24 24"
+                                 stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                 stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z"/>
+                                <circle cx="9" cy="19" r="2"/>
+                                <circle cx="17" cy="19" r="2"/>
+                                <path d="M3 3h2l2 12a3 3 0 0 0 3 2h7a3 3 0 0 0 3 -2l1 -7h-15.2"/>
+                            </svg>
+                            <span class="mt-0.5">{{ $store.state.cart?.total ?? 0 }} грн.</span>
+                        </button>
+                    </div>
+                    <div class="flex flex-row gap-4" v-if="$store.state.user === null">
+                        <router-link to="/login">
+                            <a class="link">Вхід</a>
+                        </router-link>
+                        <router-link to="/sign-up">
+                            <a class="link">Реєстрація</a>
+                        </router-link>
+                    </div>
+                    <a @click="logout" v-if="$store.state.user !== null" class="link">Вийти</a>
                 </div>
             </div>
             <div class="lg:hidden flex flex-row justify-between items-center gap-2">
