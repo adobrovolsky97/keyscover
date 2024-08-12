@@ -79,7 +79,7 @@ export default {
          */
         register() {
             this.errors = {};
-            this.loader.show({container: this.$refs.form, loader: 'bars'});
+            // this.loader.show({container: this.$refs.form, loader: 'bars'});
 
             Auth.register(this.form)
                 .then(() => {
