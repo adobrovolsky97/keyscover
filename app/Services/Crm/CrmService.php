@@ -73,6 +73,10 @@ class CrmService implements CrmServiceInterface
             [
                 'name'  => 'Тип доставки',
                 'value' => $order->delivery_type === 'new-post' ? 'Нова Пошта' : 'Самовивіз'
+            ],
+            [
+                'name'  => 'Тип оплати',
+                'value' => $order->payment_type === Order::PAYMENT_BY_REQUISITES ? 'Оплата по реквізитам' : 'Розрахунок на пошті при отриманні'
             ]
         ];
 
@@ -117,6 +121,7 @@ class CrmService implements CrmServiceInterface
             'custom_fields'     => $deliveryData
         ];
 
+        illuminar()->dump($payload);
         $response = Http::withHeader('X-Auth-Token', config('app.crm_api_key'))
             ->post(self::API_URL . '/agreements', $payload);
 

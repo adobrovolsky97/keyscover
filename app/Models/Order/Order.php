@@ -20,6 +20,7 @@ use Adobrovolsky97\LaravelRepositoryServicePattern\Models\BaseModel;
  * @property string $patronymic
  * @property string $phone
  * @property string $delivery_type
+ * @property string $payment_type
  * @property string $comment
  * @property string $city_id
  * @property string $city_name
@@ -41,6 +42,9 @@ use Adobrovolsky97\LaravelRepositoryServicePattern\Models\BaseModel;
  */
 class Order extends BaseModel
 {
+    const PAYMENT_TYPE_CASH_ON_DELIVERY = 'cash_on_delivery';
+    const PAYMENT_BY_REQUISITES = 'by_requisites';
+
     /**
      * @var array
      */
@@ -51,6 +55,7 @@ class Order extends BaseModel
         'patronymic',
         'phone',
         'delivery_type',
+        'payment_type',
         'comment',
         'city_id',
         'city_name',

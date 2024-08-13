@@ -65,6 +65,17 @@
                                         </label>
                                     </div>
                                 </div>
+
+                                <div class="form-group">
+                                    <select v-model="form.paymentType" class="select select-bordered w-full">
+                                        <option :value="null">Оплата</option>
+                                        <option :value="'cash_on_delivery'">Розрахунок на пошті при отриманні</option>
+                                        <option :value="'by_requisites'">Оплата по реквізитам</option>
+                                    </select>
+                                    <error v-if="Object.keys(errors).length > 0" :errors="errors"
+                                           attribute="payment_type"></error>
+                                </div>
+
                                 <div class="form-group" v-if="deliveryType === 'new-post'">
                                     <label>Місто</label>
                                     <input type="text" class="input input-bordered w-full "
@@ -164,6 +175,7 @@ export default {
                 warehouse: null,
                 warehouseId: null,
                 comment: null,
+                paymentType: null
             }
         };
     },
@@ -189,6 +201,7 @@ export default {
                 this.form.cityId = this.$store.state.user?.last_order?.city_id ?? null;
                 this.form.warehouse = this.$store.state.user?.last_order?.warehouse_name ?? null;
                 this.form.warehouseId = this.$store.state.user?.last_order?.warehouse_id ?? null;
+                this.form.paymentType = this.$store.state.user?.last_order?.payment_type ?? null;
                 this.deliveryType = this.$store.state.user?.last_order?.delivery_type ?? null;
 
                 if (this.form.cityId) {
@@ -289,6 +302,7 @@ export default {
                     city_name: this.form.city,
                     warehouse_id: this.form.warehouseId,
                     warehouse_name: this.form.warehouse,
+                    payment_type: this.form.paymentType,
                 })
                 .then(() => {
                     this.fetchCart();

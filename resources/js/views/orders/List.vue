@@ -17,6 +17,7 @@
                             <span><span class="font-bold">ПІБ</span>: {{ order.surname }} {{ order.name }} {{ order.patronymic }}</span>
                             <span><span class="font-bold">Телефон</span>: {{ order.phone }}</span>
                             <span><span class="font-bold">Спосіб доставки</span>: {{ order.delivery_type === 'new-post' ? 'Нова Пошта' : 'Самовивіз' }}</span>
+                            <span><span class="font-bold">Спосіб оплати</span>: {{ order.payment_type === 'by_requisites' ? 'Оплата по реквізитам' : 'Розрахунок на пошті при отриманні' }}</span>
                             <span v-if="order.city_name"><span class="font-bold">Місто</span>: {{ order.city_name }}</span>
                             <span v-if="order.warehouse_name"><span class="font-bold">Відділення</span>: {{ order.warehouse_name }}</span>
                             <span><span class="font-bold">Вартість</span>: {{ order.total_price_usd }} $ / {{ order.total_price_uah }} грн.</span>
