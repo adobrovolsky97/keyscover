@@ -32,7 +32,7 @@ class OrderService extends BaseCrudService implements OrderServiceInterface
 
             $cart = $cartService->getUserCart();
 
-            if (empty($cart)) {
+            if (empty($cart) || empty($cart->products)) {
                 throw new BadRequestHttpException(__('Кошик пустий'));
             }
 
