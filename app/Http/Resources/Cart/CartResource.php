@@ -32,11 +32,12 @@ class CartResource extends JsonResource
             'discount_percent'    => round($this->discount_percent),
             'discount_amount'     => $this->discount_amount,
             'discount_amount_uah' => $this->discount_amount_uah,
+            'is_changed'          => $this->is_changed,
             'products'            => $this->products->map(function (CartProduct $cartProduct) {
                 $image = $cartProduct->product->getFirstMediaUrl(Media::COLLECTION_MAIN->value, 'watermarked');
                 return [
                     'id'              => $cartProduct->id,
-                    'sku'            => $cartProduct->product->sku,
+                    'sku'             => $cartProduct->product->sku,
                     'name'            => $cartProduct->product->name,
                     'quantity'        => $cartProduct->quantity,
                     'image'           => empty($image) ? asset('no-image.png') : $image,

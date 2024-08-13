@@ -86,13 +86,17 @@ export default {
         addItemToCart(product) {
 
             if (this.cartQty < 1) {
-                toast.error("Невірна кількість товару")
+                toast.error("Невірна кількість товару", {
+                    position:'bottom-right'
+                })
                 return;
             }
 
             if (product.left_in_stock < this.cartQty) {
                 this.cartQty = product.left_in_stock;
-                toast.error("Недостатня кількість товарів на складі. Залишок: " + product.left_in_stock + " штук.");
+                toast.error("Недостатня кількість товарів на складі. Залишок: " + product.left_in_stock + " штук.", {
+                    position:'bottom-right'
+                });
                 return;
             }
 
@@ -123,7 +127,9 @@ export default {
 
             if (this.product.left_in_stock < this.cartQty) {
                 this.cartQty = this.product.left_in_stock;
-                toast.error("Недостатня кількість товарів на складі. Залишок: " + this.product.left_in_stock + " штук.");
+                toast.error("Недостатня кількість товарів на складі. Залишок: " + this.product.left_in_stock + " штук.", {
+                    position:'bottom-right'
+                });
                 return;
             }
 

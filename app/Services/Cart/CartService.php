@@ -23,13 +23,22 @@ class CartService extends BaseCrudService implements CartServiceInterface
     /**
      * @return Model|null
      */
-    public function getUserCart(): ?Cart
+    public function getUserCart(bool $isAdjustCart = true): ?Cart
     {
         if (Auth::guest()) {
             return null;
         }
 
-        return $this->repository->findFirst(['user_id' => Auth::id()]);
+        /** @var Cart|null $cart */
+        $cart = $this->repository->findFirst(['user_id' => Auth::id()]);
+
+        $cart?->update(['is_changed' => false]);
+
+        if (!empty($cart) && $isAdjustCart) {
+            $this->adjustProductQuantityDueToLeftovers($cart);
+        }
+
+        return $cart;
     }
 
     /**
@@ -42,7 +51,7 @@ class CartService extends BaseCrudService implements CartServiceInterface
      */
     public function addProductToCart(Product $product, int $quantity): Cart
     {
-        if (empty($cart = $this->getUserCart())) {
+        if (empty($cart = $this->getUserCart(false))) {
             $cart = $this->repository->create(['user_id' => Auth::id()]);
         }
 
@@ -79,7 +88,7 @@ class CartService extends BaseCrudService implements CartServiceInterface
             throw new Exception('Quantity must be greater than 0');
         }
 
-        if (empty($cart = $this->getUserCart())) {
+        if (empty($cart = $this->getUserCart(false))) {
             throw new Exception('Cart is empty');
         }
 
@@ -172,6 +181,33 @@ class CartService extends BaseCrudService implements CartServiceInterface
     public function clearCart(): void
     {
         $this->getUserCart()?->delete();
+    }
+
+    /**
+     * @param Cart $cart
+     * @return void
+     */
+    protected function adjustProductQuantityDueToLeftovers(Cart $cart): void
+    {
+        $isChangedCart = false;
+
+        foreach ($cart->products as $cartProduct) {
+            if ($cartProduct->quantity > $cartProduct->product->left_in_stock && $cartProduct->product->left_in_stock > 0) {
+                $cartProduct->update(['quantity' => $cartProduct->product->left_in_stock]);
+                $isChangedCart = true;
+                continue;
+            }
+
+            if ($cartProduct->quantity > $cartProduct->product->left_in_stock && $cartProduct->product->left_in_stock === 0) {
+                $cartProduct->delete();
+                $isChangedCart = true;
+            }
+        }
+
+        if ($isChangedCart) {
+            $cart->update(['is_changed' => true]);
+            $this->updateCartTotals($cart);
+        }
     }
 
     /**

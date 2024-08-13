@@ -2,7 +2,6 @@
 
 namespace App\Services\Order;
 
-use Adobrovolsky97\LaravelRepositoryServicePattern\Exceptions\Service\ServiceException;
 use App\Enums\Config\Key;
 use App\Models\CartProduct\CartProduct;
 use App\Models\Order\Order;
@@ -14,6 +13,7 @@ use Adobrovolsky97\LaravelRepositoryServicePattern\Services\BaseCrudService;
 use Auth;
 use DB;
 use Illuminate\Database\Eloquent\Model;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * Class OrderService
@@ -33,7 +33,7 @@ class OrderService extends BaseCrudService implements OrderServiceInterface
             $cart = $cartService->getUserCart();
 
             if (empty($cart)) {
-                throw new ServiceException(__('Cart is empty'));
+                throw new BadRequestHttpException(__('Кошик пустий'));
             }
 
             $data['user_id'] = Auth::id();

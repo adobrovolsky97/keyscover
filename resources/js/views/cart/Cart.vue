@@ -32,7 +32,8 @@
                                         class="btn btn-success join-item btn-sm rounded-l-full">
                                     -
                                 </button>
-                                <input @input="updateProductQuantity(product)" class="input input-bordered text-center input-sm join-item w-14"
+                                <input @input="updateProductQuantity(product)"
+                                       class="input input-bordered text-center input-sm join-item w-14"
                                        placeholder="" v-model="product.quantity"/>
                                 <button @click="incrementQuantity(product)"
                                         class="btn btn-success join-item btn-sm rounded-r-full">
@@ -62,7 +63,8 @@
                                             $store.state.cart.total_usd ?? 0
                                         }} $ / {{ $store.state.cart.total ?? 0 }} грн.</span></span>
                 <span v-if="$store.state.cart.discount_percent > 0">
-                                        Сума знижки (<span class="text-success font-bold">{{ $store.state.cart.discount_percent }}%</span>): <span
+                                        Сума знижки (<span
+                    class="text-success font-bold">{{ $store.state.cart.discount_percent }}%</span>): <span
                     class="font-bold">{{
                         $store.state.cart.discount_amount
                     }} $ / {{ $store.state.cart.discount_amount_uah }} грн.</span>
@@ -116,7 +118,7 @@ export default {
         '$store.state.cart.total': function () {
             this.calculateRemainingDiscounts();
 
-            if(this.$store.state.cart.total === 0) {
+            if (this.$store.state.cart.total === 0) {
                 this.$router.push({name: 'home'})
             }
         }
@@ -143,7 +145,9 @@ export default {
                     this.$store.commit('setCart', response.data.data);
                 })
                 .catch((error) => {
-                    toast.error(error.response.data.message)
+                    toast.error(error.response.data.message, {
+                        position: 'bottom-right'
+                    })
                 })
         },
         decrementQuantity(product) {
@@ -171,7 +175,9 @@ export default {
                         this.cartQty = this.getCartQuantityForCurrentProduct();
                     })
                     .catch((error) => {
-                        toast.error(error.response.data.message)
+                        toast.error(error.response.data.message, {
+                            position: 'bottom-right'
+                        })
                     })
             }, 800);
         }

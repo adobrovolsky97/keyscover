@@ -192,7 +192,7 @@ export default {
         }
 
         this.fetchUser()
-            .then(()=> {
+            .then(() => {
                 this.form.surname = this.$store.state.user?.last_order?.surname ?? null;
                 this.form.name = this.$store.state.user?.last_order?.name ?? null;
                 this.form.patronymic = this.$store.state.user?.last_order?.patronymic ?? null;
@@ -279,13 +279,13 @@ export default {
         fetchCart() {
             axios.get('/api/cart')
                 .then(response => {
-                    this.cart = response.data.data;
-                    this.$store.commit('setCart', response.data.data)
-                    this.isDataLoaded = true;
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+                        this.$store.commit('setCart', response.data.data)
+                        toast.warn('Було перераховано кількість товарів в кошику в звязку зменшенням залишків на складі!', {
+                            timeout: 5000,
+                            position: 'bottom-right'
+                        });
+                    }
+                )
         },
         createOrder() {
             this.isDisabled = true;
@@ -306,7 +306,7 @@ export default {
                 })
                 .then(() => {
                     this.fetchCart();
-                    toast.success("Замовлення успішно створене! Передано на комплектацію!", {autoClose: 5000});
+                    toast.success("Замовлення успішно створене! Передано на комплектацію!", {autoClose: 5000, position: 'bottom-right'});
                     setTimeout(() => {
                         this.$router.push({name: 'home'});
                     }, 2000)

@@ -167,6 +167,7 @@
 <script>
 import Auth from "../../api/Auth/Auth.js";
 import Cart from "../../views/cart/Cart.vue";
+import {toast} from "vue3-toastify";
 
 export default {
     data() {
@@ -174,7 +175,7 @@ export default {
             usd: null,
         }
     },
-    mounted() {
+    created() {
         this.fetchConfigs();
         this.fetchCart();
     },
@@ -184,6 +185,10 @@ export default {
     watch: {
         $route(to, from) {
             this.$refs?.cartModal?.close();
+
+            if (to.path !== from.path) {
+                this.fetchCart();
+            }
         }
     },
     methods: {
@@ -192,6 +197,16 @@ export default {
             axios.get('/api/cart')
                 .then(response => {
                     this.$store.commit('setCart', response.data.data)
+
+                    if (response.data.data.is_changed == true) {
+                        setTimeout(() => {
+                            toast.warn('Було перераховано кількість товарів в кошику в звязку зменшенням залишків на складі!', {
+                                timeout: 5000,
+                                position: 'bottom-right'
+                            });
+                        }, 1000);
+
+                    }
                 })
         },
         fetchConfigs() {

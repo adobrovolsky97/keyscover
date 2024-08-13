@@ -22,6 +22,7 @@ use Adobrovolsky97\LaravelRepositoryServicePattern\Models\BaseModel;
  * @property float $discount_amount
  * @property integer $discount_amount_uah
  * @property float $dollar_rate
+ * @property boolean $is_changed
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property User $user
@@ -41,6 +42,7 @@ class Cart extends BaseModel
         'discount_amount',
         'discount_amount_uah',
         'dollar_rate',
+        'is_changed',
         'created_at',
         'updated_at'
     ];
