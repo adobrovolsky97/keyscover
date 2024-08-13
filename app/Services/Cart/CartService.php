@@ -13,7 +13,7 @@ use App\Services\Config\Contracts\ConfigServiceInterface;
 use Auth;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * Class CartService
@@ -50,7 +50,7 @@ class CartService extends BaseCrudService implements CartServiceInterface
         $cartProduct = $cart->products->where('product_id', $product->id)->first();
 
         if ($product->left_in_stock < $quantity) {
-            throw new BadRequestException('В наявності: ' . $product->left_in_stock . ' штук.');
+            throw new BadRequestHttpException('В наявності: ' . $product->left_in_stock . ' штук.');
         }
 
         !empty($cartProduct)
@@ -87,7 +87,7 @@ class CartService extends BaseCrudService implements CartServiceInterface
         $cartProduct = $cart->products()->where('product_id', $product->id)->firstOrFail();
 
         if ($product->left_in_stock < $quantity) {
-            throw new BadRequestException('В наявності: ' . $product->left_in_stock . ' штук.');
+            throw new BadRequestHttpException('В наявності: ' . $product->left_in_stock . ' штук.');
         }
 
         $cartProduct->update(['quantity' => $quantity]);
