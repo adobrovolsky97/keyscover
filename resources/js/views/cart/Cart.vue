@@ -23,7 +23,7 @@
                             <div class="font-medium">{{ product.name }}</div>
                             <div class="text-sm flex flex-row  justify-between lg:justify-start gap-2">
                                 <span>{{ product.total_price_usd }} $</span>
-                                <span>{{ product.total_price_uah }} грн.</span>
+                                <span> ~{{ product.total_price_uah }} грн.</span>
                             </div>
                         </div>
                         <div class="flex flex-row justify-between items-center gap-1 mb-4 md:mb-0 md:mr-4">

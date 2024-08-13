@@ -64,7 +64,7 @@ class Product extends BaseModel implements HasMedia
      */
     public function getUahPriceAttribute(): float
     {
-        return round(app(ConfigServiceInterface::class)->getValue(Key::DOLLAR->value) * $this->price);
+        return app(ConfigServiceInterface::class)->getValue(Key::DOLLAR->value) * $this->price;
     }
 
     /**

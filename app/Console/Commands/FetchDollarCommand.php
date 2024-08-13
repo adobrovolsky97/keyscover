@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use App\Enums\Config\Key;
 use App\Enums\Config\Type;
 use App\Services\Config\Contracts\ConfigServiceInterface;
+use DOMDocument;
+use DOMXPath;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
@@ -29,18 +31,37 @@ class FetchDollarCommand extends Command
      */
     public function handle(ConfigServiceInterface $configService): void
     {
-        $data = Http::get('https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5')->json();
+        $html = Http::get('https://lion-kurs.rv.ua/')->body();
 
-        $usd = collect($data)->firstWhere('ccy', 'USD');
+        $html = str_replace("\u{FEFF}", '', $html);
+        $dom = new DOMDocument;
+        libxml_use_internal_errors(true); // Suppress warnings due to malformed HTML
+        $dom->loadHTML($html);
+        libxml_clear_errors();
 
-        if (!empty($usd)) {
-            $this->info('USD rate: ' . $usd['sale']);
-            $configService->updateOrCreate(
-                ['key' => Key::DOLLAR],
-                ['value' => round($usd['sale'], 2), 'type' => Type::FLOAT]
-            );
-        } else {
-            $this->error('Failed to fetch dollar rate');
+        $xpath = new DOMXPath($dom);
+
+        $query = "//table/tr[td/img[contains(@alt, 'курс долара США')]]";
+        $entries = $xpath->query($query);
+        $dollarRates = [];
+        foreach ($entries as $entry) {
+            $buyingRate = $entry->getElementsByTagName('td')->item(0)->nodeValue;
+            $sellingRate = $entry->getElementsByTagName('td')->item(2)->nodeValue;
+
+            $dollarRates = [
+                'buying'  => trim($buyingRate),
+                'selling' => trim($sellingRate),
+            ];
         }
+
+        if (empty($dollarRates)) {
+            $this->error('Failed to fetch dollar rate');
+            return;
+        }
+        $this->info('USD rate: ' . $dollarRates['selling']);
+        $configService->updateOrCreate(
+            ['key' => Key::DOLLAR],
+            ['value' => round($dollarRates['selling'], 2), 'type' => Type::FLOAT]
+        );
     }
 }

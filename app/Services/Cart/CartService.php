@@ -113,12 +113,14 @@ class CartService extends BaseCrudService implements CartServiceInterface
 
         $cart->refresh()->products->each(function (CartProduct $cartProduct) use (&$totalPrice, &$totalPriceUah) {
             $totalPrice += round($cartProduct->quantity * $cartProduct->product->price, 2);
-            $totalPriceUah += round($cartProduct->quantity * $cartProduct->product->uah_price);
+            $totalPriceUah += $cartProduct->quantity * $cartProduct->product->uah_price;
         });
 
         $discountPercent = 0;
         $discountAmount = 0;
         $discountAmountUah = 0;
+
+        $totalPriceUah = floor($totalPriceUah);
 
         // calculating discounts
         if ($totalPrice >= $fivePercentConfigValue) {
