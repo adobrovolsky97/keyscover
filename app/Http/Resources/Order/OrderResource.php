@@ -34,7 +34,7 @@ class OrderResource extends JsonResource
             'warehouse_name'          => $this->warehouse_name,
             'total_price_usd'         => $this->total_price_usd,
             'total_price_uah'         => $this->total_price_uah,
-            'discount_percent'        => $this->discount_percent,
+            'discount_percent'        => round($this->discount_percent),
             'discount_usd'            => $this->discount_usd,
             'discount_uah'            => $this->discount_uah,
             'total_with_discount_uah' => round($this->total_price_uah - $this->discount_uah),

@@ -292,7 +292,7 @@ export default {
                 })
                 .then(() => {
                     this.fetchCart();
-                    toast.success("Замовлення успішно створене! Очікуйте на дзвінок!", {autoClose: 5000});
+                    toast.success("Замовлення успішно створене! Передано на комплектацію!", {autoClose: 5000});
                     setTimeout(() => {
                         this.$router.push({name: 'home'});
                     }, 2000)
