@@ -121,7 +121,6 @@ class CrmService implements CrmServiceInterface
             'custom_fields'     => $deliveryData
         ];
 
-        illuminar()->dump($payload);
         $response = Http::withHeader('X-Auth-Token', config('app.crm_api_key'))
             ->post(self::API_URL . '/agreements', $payload);
 
