@@ -145,8 +145,6 @@ export default {
 </script>
 <style>
 .product-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: break-spaces;
 }
 </style>
