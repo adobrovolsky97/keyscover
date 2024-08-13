@@ -18,7 +18,7 @@
                 <div class="drawer z-[1]">
                     <input id="my-drawer" type="checkbox" class="drawer-toggle"/>
                     <div class="drawer-content">
-                        <label for="my-drawer" class="btn btn-neutral drawer-button w-64">Фільтр
+                        <label for="my-drawer" class="btn btn-neutral drawer-button w-64">Категорії
                             <svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
                                  stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z"/>
