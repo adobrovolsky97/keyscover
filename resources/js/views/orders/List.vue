@@ -30,6 +30,7 @@
                                     <th>Фото</th>
                                     <th>Назва</th>
                                     <th>SKU</th>
+                                    <th>Ціна за шт, $</th>
                                     <th>Кількість</th>
                                     <th>Вартість, $</th>
                                     <th>Вартість, грн</th>
@@ -46,6 +47,7 @@
                                     </td>
                                     <td>{{ product.product.name }}</td>
                                     <td class="text-gray-400">{{ product.product.sku }}</td>
+                                    <td>{{product.product.usd_price}} $</td>
                                     <td>{{product.quantity}}</td>
                                     <td>{{product.total_price}} $</td>
                                     <td>{{product.total_price_uah}} грн.</td>

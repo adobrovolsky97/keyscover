@@ -31,6 +31,6 @@ class ProductController extends Controller
      */
     public function index(SearchRequest $request): AnonymousResourceCollection
     {
-        return ProductResource::collection($this->productService->getAllPaginated($request->validated(), 16));
+        return ProductResource::collection($this->productService->getAllPaginated($request->validated(), $request->input('per_page', 20)));
     }
 }

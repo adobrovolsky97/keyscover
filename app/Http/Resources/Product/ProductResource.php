@@ -28,6 +28,7 @@ class ProductResource extends JsonResource
             'price'                 => $this->uah_price,
             'usd_price'             => $this->price, // TODO
             'is_available_in_stock' => $this->is_available_in_stock,
+            'left_in_stock'         => $this->left_in_stock,
             'image'                 => empty($image) ? asset('no-image.png') : $image,
             'category'              => [
                 'id'   => $this->category?->id,

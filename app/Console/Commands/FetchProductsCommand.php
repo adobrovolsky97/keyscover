@@ -10,6 +10,7 @@ use App\Services\Crm\Contracts\CrmServiceInterface;
 use App\Services\Product\Contracts\ProductServiceInterface;
 use Illuminate\Console\Command;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
+use Throwable;
 
 class FetchProductsCommand extends Command
 {
@@ -93,8 +94,8 @@ class FetchProductsCommand extends Command
                 'name'                  => $productData['title'],
                 'category_id'           => $category?->id,
                 'price'                 => $productData['price_amount'],
-                'is_available_in_stock' => $productData['available_in_stock'],
-                'left_in_stock'         => null // TODO
+                'is_available_in_stock' => ($productData['stock_available'] ?? 0) > 0,
+                'left_in_stock'         => $productData['stock_available'] ?? 0
             ]
         );
 
@@ -134,13 +135,17 @@ class FetchProductsCommand extends Command
         }
 
         foreach ($attachments as $id => $attachment) {
-            /** @var \Spatie\MediaLibrary\MediaCollections\Models\Media $media */
-            $product
-                ->addMediaFromUrl($attachment)
-                ->withCustomProperties(['url' => $attachment])
-                ->toMediaCollection($id === 0 ? Media::COLLECTION_MAIN->value : Media::COLLECTION_ADDITIONAL->value);
+            try {
+                /** @var \Spatie\MediaLibrary\MediaCollections\Models\Media $media */
+                $product
+                    ->addMediaFromUrl($attachment)
+                    ->withCustomProperties(['url' => $attachment])
+                    ->toMediaCollection($id === 0 ? Media::COLLECTION_MAIN->value : Media::COLLECTION_ADDITIONAL->value);
 
-            $this->info('Attachment ' . $attachment . ' has been added to product ' . $product->name);
+                $this->info('Attachment ' . $attachment . ' has been added to product ' . $product->name);
+            }catch (Throwable $exception){
+                $this->error('Failed to add attachment ' . $attachment . ' to product ' . $product->name);
+            }
         }
 
     }

@@ -29,7 +29,7 @@ class CartResource extends JsonResource
             'quantity'            => $this->quantity,
             'total_usd'           => $this->total,
             'total'               => $this->total_uah,
-            'discount_percent'    => $this->discount_percent,
+            'discount_percent'    => round($this->discount_percent),
             'discount_amount'     => $this->discount_amount,
             'discount_amount_uah' => $this->discount_amount_uah,
             'products'            => $this->products->map(function (CartProduct $cartProduct) {

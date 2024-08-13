@@ -15,9 +15,8 @@
                 ></category-item>
             </ul>
         </details>
-        <span v-else>
-            <input type="checkbox" :checked="selectedCategories.includes(category.slug)"
-                   @click="categoryClicked(category)" class="checkbox checkbox-sm"/>{{ category.name }}
+        <span @click="categoryClicked(category)" v-else>
+            <input type="checkbox" :checked="selectedCategories.includes(category.slug)" class="checkbox checkbox-sm"/>{{ category.name }}
         </span>
     </li>
 </template>

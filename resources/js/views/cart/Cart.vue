@@ -32,8 +32,8 @@
                                         class="btn btn-success join-item btn-sm rounded-l-full">
                                     -
                                 </button>
-                                <input class="input input-bordered input-sm join-item w-14"
-                                       placeholder="" :value="product.quantity" readonly/>
+                                <input @input="updateProductQuantity(product)" class="input input-bordered text-center input-sm join-item w-14"
+                                       placeholder="" v-model="product.quantity"/>
                                 <button @click="incrementQuantity(product)"
                                         class="btn btn-success join-item btn-sm rounded-r-full">
                                     +
@@ -74,16 +74,19 @@
                         ($store.state.cart?.total - $store.state.cart.discount_amount_uah).toFixed(0) ?? 0
                     }} грн.</span>
                                     </span>
+                <span v-if="freeDeliveryRemaining <= 0">Безкоштовна доставка <span class="font-bold">Новою Поштою</span>.</span>
             </div>
 
             <div class="discount-text mb-4">
                 <p v-if="fivePercentDiscountRemaining > 0">Вам до знижки в <span
                     class="text-success font-bold">5%</span> залишилось докупити товарів на <span
-                    class="text-success font-bold">{{ fivePercentDiscountRemaining }} грн. </span>
+                    class="text-success font-bold">{{ fivePercentDiscountRemaining }} $ </span>
                 </p>
                 <p v-if="tenPercentDiscountRemaining > 0">Вам до знижки в <span
                     class="text-success font-bold">10%</span> залишилось докупити товарів на <span
-                    class="text-success font-bold">{{ tenPercentDiscountRemaining }} грн.</span></p>
+                    class="text-success font-bold">{{ tenPercentDiscountRemaining }} $</span></p>
+                <p v-if="freeDeliveryRemaining > 0">До безкоштовної доставки <span class="font-bold text-success">Новою Поштою</span> залишилось докупити товарів на <span
+                    class="text-success font-bold">{{ freeDeliveryRemaining }} $</span></p>
             </div>
 
             <button v-if="$route.name !== 'checkout'" @click="goToCheckout"
@@ -95,11 +98,15 @@
     </div>
 </template>
 <script>
+import {toast} from "vue3-toastify";
+
 export default {
     data() {
         return {
             fivePercentDiscountRemaining: 0,
             tenPercentDiscountRemaining: 0,
+            freeDeliveryRemaining: null,
+            timer: null,
         }
     },
     mounted() {
@@ -135,6 +142,9 @@ export default {
                 .then(response => {
                     this.$store.commit('setCart', response.data.data);
                 })
+                .catch((error) => {
+                    toast.error(error.response.data.message)
+                })
         },
         decrementQuantity(product) {
             if (product.quantity <= 1) {
@@ -147,9 +157,24 @@ export default {
                 })
         },
         calculateRemainingDiscounts() {
-            this.fivePercentDiscountRemaining = ((this.$store.state.configs.five_percent_discount - this.$store.state.cart.total_usd) * this.$store.state.configs.usd).toFixed(0);
-            this.tenPercentDiscountRemaining = ((this.$store.state.configs.ten_percent_discount - this.$store.state.cart.total_usd) * this.$store.state.configs.usd).toFixed(0);
+            this.fivePercentDiscountRemaining = ((this.$store.state.configs.five_percent_discount - this.$store.state.cart.total_usd)).toFixed(2);
+            this.tenPercentDiscountRemaining = ((this.$store.state.configs.ten_percent_discount - this.$store.state.cart.total_usd)).toFixed(2);
+            this.freeDeliveryRemaining = (this.$store.state.configs.free_delivery_sum - this.$store.state.cart.total_usd).toFixed(2);
         },
+        updateProductQuantity(product) {
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => {
+                axios.patch(`/api/cart/${product.product_id}`, {quantity: product.quantity})
+                    .then(response => {
+                        this.$store.commit('setCart', response.data.data);
+                        this.cart = response.data.data;
+                        this.cartQty = this.getCartQuantityForCurrentProduct();
+                    })
+                    .catch((error) => {
+                        toast.error(error.response.data.message)
+                    })
+            }, 800);
+        }
     },
 }
 </script>

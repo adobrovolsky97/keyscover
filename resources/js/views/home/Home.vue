@@ -69,13 +69,22 @@
             <div v-if="isDataLoaded && !data.data.length">
                 <p class="text-center text-lg font-bold">Товари не знайдені</p>
             </div>
-            <div class="mt-4 w-full"
+            <div class="mt-4 w-full border shadow-xl rounded-2xl p-2 flex flex-row justify-between items-center"
                  v-if="isDataLoaded && data?.meta?.last_page > 1">
                 <Pagination
                     :limit="5"
                     :data="data"
                     @pagination-change-page="updatePage"
                 />
+
+                <div class="flex flex-row justify-between items-center">
+                    <span>Показувати:</span>
+                    <select v-model="filters.per_page" class="select select-sm">
+                        <option value="20">20 записів</option>
+                        <option value="50">50 записів</option>
+                        <option value="100">100 записів</option>
+                    </select>
+                </div>
             </div>
         </div>
     </div>
@@ -103,6 +112,7 @@ export default {
                 page: 1,
                 search: '',
                 categories: '',
+                per_page: 20
             },
             route: useRoute()
         };

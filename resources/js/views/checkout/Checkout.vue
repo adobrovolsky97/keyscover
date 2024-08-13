@@ -147,7 +147,6 @@ export default {
             cityVariants: [],
             filteredWarehouses: [],
             warehouseVariants: [],
-            addresses: [],
 
             isWarehouseFocused: false,
             isAddressFocused: false,
@@ -162,8 +161,6 @@ export default {
                 flat: null,
                 city: null,
                 cityId: null,
-                address_id: null,
-                address_name: null,
                 warehouse: null,
                 warehouseId: null,
                 comment: null,
@@ -182,12 +179,29 @@ export default {
             this.$router.push({name: 'home'});
         }
 
+        this.fetchUser()
+            .then(()=> {
+                this.form.surname = this.$store.state.user?.last_order?.surname ?? null;
+                this.form.name = this.$store.state.user?.last_order?.name ?? null;
+                this.form.patronymic = this.$store.state.user?.last_order?.patronymic ?? null;
+                this.form.phone = this.$store.state.user?.last_order?.phone ?? null;
+                this.form.city = this.$store.state.user?.last_order?.city_name ?? null;
+                this.form.cityId = this.$store.state.user?.last_order?.city_id ?? null;
+                this.form.warehouse = this.$store.state.user?.last_order?.warehouse_name ?? null;
+                this.form.warehouseId = this.$store.state.user?.last_order?.warehouse_id ?? null;
+                this.deliveryType = this.$store.state.user?.last_order?.delivery_type ?? null;
+
+                if (this.form.cityId) {
+                    this.fetchCities();
+                    this.fetchWarehouses();
+                }
+            });
+
         this.isDataLoaded = true;
     },
     methods: {
         selectCity(item) {
             this.warehouseVariants = [];
-            this.addresses = [];
             this.filteredWarehouses = [];
             this.form.cityId = item.id;
             this.form.city = item.name;
@@ -195,6 +209,12 @@ export default {
             this.form.warehouse = null;
             this.isCityFocused = false;
             this.fetchWarehouses();
+        },
+        fetchUser() {
+            return axios.get('/api/users/me')
+                .then(response => {
+                    this.$store.commit('setUser', response.data.data)
+                })
         },
         filterWarehouses() {
             this.filteredWarehouses = this.warehouseVariants.filter((item) => {

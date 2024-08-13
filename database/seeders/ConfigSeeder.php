@@ -16,17 +16,28 @@ class ConfigSeeder extends Seeder
      */
     public function run(): void
     {
-        Config::create([
-           'key' => Key::FIVE_PERCENT_DISCOUNT_SUM,
-           'value' => 200,
-           'type' => Type::INTEGER,
-        ]);
+        Config::updateOrCreate(
+            ['key' => Key::FIVE_PERCENT_DISCOUNT_SUM],
+            [
+                'value' => 200,
+                'type'  => Type::INTEGER,
+            ]
+        );
 
-        Config::create([
-           'key' => Key::TEN_PERCENT_DISCOUNT_SUM,
-           'value' => 400,
-           'type' => Type::INTEGER,
-        ]);
+        Config::updateOrCreate(
+            ['key' => Key::TEN_PERCENT_DISCOUNT_SUM],
+            [
+                'value' => 400,
+                'type'  => Type::INTEGER,
+            ]
+        );
+
+        Config::updateOrCreate(
+            ['key' => Key::FREE_DELIVERY_SUM], [
+                'value' => 40,
+                'type'  => Type::INTEGER,
+            ]
+        );
 
         Artisan::call(FetchDollarCommand::class);
     }

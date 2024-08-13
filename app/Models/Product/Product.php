@@ -4,11 +4,13 @@ namespace App\Models\Product;
 
 use App\Enums\Config\Key;
 use App\Enums\Product\Media;
+use App\Models\CartProduct\CartProduct;
 use App\Services\Config\Contracts\ConfigServiceInterface;
 use Carbon\Carbon;
 use App\Models\Category\Category;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Adobrovolsky97\LaravelRepositoryServicePattern\Models\BaseModel;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use League\Glide\Filesystem\FileNotFoundException;
 use Spatie\Image\Exceptions\InvalidManipulation;
 use Spatie\Image\Manipulations;
@@ -63,6 +65,14 @@ class Product extends BaseModel implements HasMedia
     public function getUahPriceAttribute(): float
     {
         return round(app(ConfigServiceInterface::class)->getValue(Key::DOLLAR->value) * $this->price);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function cartProducts(): HasMany
+    {
+        return $this->hasMany(CartProduct::class, 'product_id', 'id');
     }
 
     /**

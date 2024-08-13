@@ -9,7 +9,7 @@
         <div class="card-body p-2 lg:p-4">
             <p class="text-xs text-gray-400">Арт. {{ product.sku }}</p>
             <p class="text-xs text-gray-400">{{ product.category.name }}</p>
-            <h3 class="font-bold lg:text-lg text-xs">
+            <h3 class="font-bold lg:text-lg text-xs product-name">
                 {{ product.name }}
             </h3>
             <div class="flex flex-row justify-between items-center">
@@ -18,26 +18,33 @@
             </div>
             <div v-if="$store.state.user !== null" class="card-actions justify-center">
 
-                <div class="flex flex-row justify-between items-center gap-1 mb-4 md:mb-0 md:mr-4">
+                <div class="flex flex-row justify-between items-center gap-1 mb-4 md:mb-0">
                     <div class="join">
-                        <button @click="decrementQuantity"
+                        <button :disabled="product.left_in_stock <= 0" @click="decrementQuantity"
                                 class="btn btn-neutral join-item btn-sm lg:btn-md">
                             -
                         </button>
-                        <input class="input input-bordered text-center input-sm lg:input-md join-item w-24"
+                        <input :disabled="product.left_in_stock <= 0"
+                               class="input input-bordered text-center input-sm lg:input-md join-item w-16"
                                placeholder="" v-model="cartQty"/>
-                        <button @click="incrementQuantity"
+                        <button :disabled="product.left_in_stock <= 0" @click="incrementQuantity"
                                 class="btn btn-neutral join-item btn-sm lg:btn-md">
                             +
                         </button>
                     </div>
                 </div>
-
-                <button v-if="!cartProduct" @click="addItemToCart(product)" class="btn btn-neutral btn-block btn-sm lg:btn-md">
+                <button v-if="!cartProduct && product.left_in_stock > 0" @click="addItemToCart(product)"
+                        class="btn btn-neutral btn-block btn-sm lg:btn-md">
                     Додати до кошика
                 </button>
-                <button v-else @click="updateProductQuantity" class="btn btn-success btn-block btn-sm lg:btn-md">
-                    Оновити товар
+
+                <button v-if="!cartProduct && product.left_in_stock <= 0" disabled
+                        class="btn btn-neutral btn-block btn-sm lg:btn-md">
+                    Немає в наявності
+                </button>
+                <button v-if="cartProduct && product.left_in_stock > 0" @click="updateProductQuantity"
+                        class="btn btn-success btn-block btn-sm lg:btn-md">
+                    Оновити кількість
                 </button>
             </div>
         </div>
@@ -78,8 +85,15 @@ export default {
         },
         addItemToCart(product) {
 
-            if(this.cartQty < 1){
+            if (this.cartQty < 1) {
                 toast.error("Невірна кількість товару")
+                return;
+            }
+
+            if (product.left_in_stock < this.cartQty) {
+                this.cartQty = product.left_in_stock;
+                toast.error("Недостатня кількість товарів на складі. Залишок: " + product.left_in_stock + " штук.");
+                return;
             }
 
             axios.post('/api/cart/' + product.id, {quantity: this.cartQty})
@@ -91,16 +105,28 @@ export default {
                 })
         },
         incrementQuantity() {
-            this.cartQty++;
+
+            if (this.product.left_in_stock > this.cartQty) {
+                this.cartQty++;
+            }else{
+                this.cartQty = this.product.left_in_stock;
+            }
         },
         decrementQuantity() {
-            if (this.cartProduct.quantity <= 1) {
+            if (this.cartQty <= 1) {
                 return;
             }
 
             this.cartQty--;
         },
         updateProductQuantity() {
+
+            if (this.product.left_in_stock < this.cartQty) {
+                this.cartQty = this.product.left_in_stock;
+                toast.error("Недостатня кількість товарів на складі. Залишок: " + this.product.left_in_stock + " штук.");
+                return;
+            }
+
             axios.patch(`/api/cart/${this.product.id}`, {quantity: this.cartQty})
                 .then(response => {
                     this.$store.commit('setCart', response.data.data);
@@ -111,3 +137,10 @@ export default {
     }
 }
 </script>
+<style>
+.product-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+</style>

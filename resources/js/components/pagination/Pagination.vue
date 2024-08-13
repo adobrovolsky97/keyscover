@@ -6,7 +6,7 @@
         @pagination-change-page="onPaginationChangePage"
         v-slot="slotProps"
     >
-        <div class="join border bg-base-100 border-gray-100 cursor-pointer w-full block mb-4 rounded-5xl p-2 shadow-xl" v-bind="$attrs" v-if="slotProps.computed.total > slotProps.computed.perPage">
+        <div class="join bg-base-100 border-gray-100 cursor-pointer w-full block" v-bind="$attrs" v-if="slotProps.computed.total > slotProps.computed.perPage">
             <button
                 class="join-item btn btn-sm"
                 :disabled="!slotProps.computed.prevPageUrl"

@@ -13,10 +13,14 @@ class UserController extends Controller
     /**
      * Get user data
      *
-     * @return UserResource
+     * @return UserResource|null
      */
-    public function me(): UserResource
+    public function me(): ?UserResource
     {
+        if (Auth::guest()) {
+            return null;
+        }
+
         return UserResource::make(Auth::guard('api')->user());
     }
 }

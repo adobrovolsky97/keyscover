@@ -39,11 +39,6 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::delete('auth/logout', [AuthController::class, 'logout']);
 
     /**
-     * Users routes
-     */
-    Route::get('users/me', [UserController::class, 'me']);
-
-    /**
      * Delivery
      */
     Route::group(['prefix' => 'delivery/{driver}'], function () {
@@ -70,6 +65,11 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::post('', [OrderController::class, 'store']);
     });
 });
+
+/**
+ * Users routes
+ */
+Route::get('users/me', [UserController::class, 'me']);
 
 Route::get('cart', [CartController::class, 'index']);
 Route::get('categories', [CategoryController::class, 'index']);

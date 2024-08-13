@@ -37,6 +37,7 @@ class CartService extends BaseCrudService implements CartServiceInterface
      * @param Product $product
      * @param int $quantity
      * @return Cart
+     * @throws Exception
      */
     public function addProductToCart(Product $product, int $quantity): Cart
     {
@@ -46,6 +47,10 @@ class CartService extends BaseCrudService implements CartServiceInterface
 
         /** @var CartProduct $cartProduct */
         $cartProduct = $cart->products->where('product_id', $product->id)->first();
+
+        if ($product->left_in_stock < $quantity) {
+            throw new Exception('Недостатня кількість товару на складі. Доступно: ' . $product->left_in_stock . ' штук.');
+        }
 
         !empty($cartProduct)
             ? $cartProduct->update(['quantity' => $cartProduct->quantity + 1])
@@ -80,6 +85,10 @@ class CartService extends BaseCrudService implements CartServiceInterface
         /** @var CartProduct $cartProduct */
         $cartProduct = $cart->products()->where('product_id', $product->id)->firstOrFail();
 
+        if ($product->left_in_stock < $quantity) {
+            throw new Exception('Недостатня кількість товару на складі. Доступно: ' . $product->left_in_stock . ' штук.');
+        }
+
         $cartProduct->update(['quantity' => $quantity]);
 
         $this->updateCartTotals($cart);
@@ -101,7 +110,7 @@ class CartService extends BaseCrudService implements CartServiceInterface
         $totalPrice = 0;
         $totalPriceUah = 0;
 
-        $cart->refresh()->products->each(function (CartProduct $cartProduct)use (&$totalPrice, &$totalPriceUah) {
+        $cart->refresh()->products->each(function (CartProduct $cartProduct) use (&$totalPrice, &$totalPriceUah) {
             $totalPrice += round($cartProduct->quantity * $cartProduct->product->price, 2);
             $totalPriceUah += round($cartProduct->quantity * $cartProduct->product->uah_price);
         });

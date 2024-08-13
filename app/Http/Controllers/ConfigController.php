@@ -22,6 +22,7 @@ class ConfigController extends Controller
             'usd' => $configService->getValue(Key::DOLLAR->value),
             'five_percent_discount' => $configService->getValue(Key::FIVE_PERCENT_DISCOUNT_SUM->value),
             'ten_percent_discount' => $configService->getValue(Key::TEN_PERCENT_DISCOUNT_SUM->value),
+            'free_delivery_sum' => $configService->getValue(Key::FREE_DELIVERY_SUM->value),
         ]);
     }
 }
