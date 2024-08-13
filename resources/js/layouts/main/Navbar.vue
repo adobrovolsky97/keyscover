@@ -140,7 +140,7 @@
         <nav
             class="w-full shadow-xl flex flex-row gap-4 items-center justify-center">
             <p class="text-center hidden lg:block">
-                Увага! Cайт в процесі розробки, помітили помилку чи бажаєте покращити зручність користування буду радиий
+                Увага! Cайт в процесі розробки, помітили помилку чи бажаєте покращити зручність користування буду радий
                 почути ваші ідеї чи зауваження!
             </p>
             <p class="text-center block lg:hidden text-sm">

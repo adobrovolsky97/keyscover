@@ -23,7 +23,7 @@ class CategoryResource extends JsonResource
             'id'       => $this->id,
             'name'     => $this->name,
             'slug'     => $this->slug,
-            'children' => CategoryResource::collection($this->children)
+            'children' => CategoryResource::collection($this->children->sortBy('name'))
         ];
     }
 }
