@@ -23,4 +23,6 @@
 .jv-container.boxed {
     border-radius: var(--rounded-box, 1rem) !important;
 }
-
+.v-toast {
+    z-index: 9999 ! important
+}

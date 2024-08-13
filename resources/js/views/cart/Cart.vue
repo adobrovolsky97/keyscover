@@ -26,19 +26,24 @@
                                 <span> ~{{ product.total_price_uah }} грн.</span>
                             </div>
                         </div>
-                        <div class="flex flex-row justify-between items-center gap-1 mb-4 md:mb-0 md:mr-4">
-                            <div class="join">
-                                <button @click="decrementQuantity(product)"
-                                        class="btn btn-success join-item btn-sm rounded-l-full">
-                                    -
-                                </button>
-                                <input @input="updateProductQuantity(product)"
-                                       class="input input-bordered text-center input-sm join-item w-14"
-                                       placeholder="" v-model="product.quantity"/>
-                                <button @click="incrementQuantity(product)"
-                                        class="btn btn-success join-item btn-sm rounded-r-full">
-                                    +
-                                </button>
+                        <div class="flex flex-col justify-center items-center lg:gap-2 mb-2 lg:mb-0">
+                            <div class="flex flex-row justify-between items-center gap-1 mb-4 md:mb-0 md:mr-4">
+                                <div class="join">
+                                    <button @click="decrementQuantity(product)"
+                                            class="btn btn-success join-item btn-sm rounded-l-full">
+                                        -
+                                    </button>
+                                    <input @input="updateProductQuantity(product)"
+                                           class="input input-bordered text-center input-sm join-item w-14"
+                                           placeholder="" v-model="product.quantity"/>
+                                    <button @click="incrementQuantity(product)"
+                                            class="btn btn-success join-item btn-sm rounded-r-full">
+                                        +
+                                    </button>
+                                </div>
+                            </div>
+                            <div v-if="productErrors[product.product_id]" class="text-error text-md">
+                                {{ productErrors[product.product_id]}}
                             </div>
                         </div>
                         <div @click="deleteProduct(product)"
@@ -54,6 +59,7 @@
                                 <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"/>
                             </svg>
                         </div>
+
                     </div>
                 </li>
             </ul>
@@ -76,7 +82,7 @@
                         ($store.state.cart?.total - $store.state.cart.discount_amount_uah).toFixed(0) ?? 0
                     }} грн.</span>
                                     </span>
-                <span v-if="freeDeliveryRemaining <= 0">Безкоштовна доставка.</span>
+                <span class="text-success font-bold" v-if="freeDeliveryRemaining <= 0">Безкоштовна доставка.</span>
             </div>
 
             <div class="discount-text mb-4">
@@ -109,6 +115,7 @@ export default {
             tenPercentDiscountRemaining: 0,
             freeDeliveryRemaining: null,
             timer: null,
+            productErrors: {},
         }
     },
     mounted() {
@@ -140,20 +147,22 @@ export default {
             this.$router.push({name: 'checkout'})
         },
         incrementQuantity(product) {
+
+            this.productErrors = {};
             axios.patch(`/api/cart/${product.product_id}`, {quantity: product.quantity + 1})
                 .then(response => {
                     this.$store.commit('setCart', response.data.data);
                 })
                 .catch((error) => {
-                    toast.error(error.response.data.message, {
-                        position: 'bottom-right'
-                    })
+                    this.productErrors[product.product_id] = error.response.data.message;
                 })
         },
         decrementQuantity(product) {
             if (product.quantity <= 1) {
                 return;
             }
+
+            this.productErrors = {};
 
             axios.patch(`/api/cart/${product.product_id}`, {quantity: product.quantity - 1})
                 .then(response => {
@@ -166,6 +175,7 @@ export default {
             this.freeDeliveryRemaining = (this.$store.state.configs.free_delivery_sum - this.$store.state.cart.total_usd).toFixed(2);
         },
         updateProductQuantity(product) {
+            this.productErrors = {};
             clearTimeout(this.timer);
             this.timer = setTimeout(() => {
                 axios.patch(`/api/cart/${product.product_id}`, {quantity: product.quantity})
@@ -175,9 +185,7 @@ export default {
                         this.cartQty = this.getCartQuantityForCurrentProduct();
                     })
                     .catch((error) => {
-                        toast.error(error.response.data.message, {
-                            position: 'bottom-right'
-                        })
+                        this.productErrors[product.product_id] = error.response.data.message;
                     })
             }, 800);
         }

@@ -59,7 +59,7 @@ class CartService extends BaseCrudService implements CartServiceInterface
         $cartProduct = $cart->products->where('product_id', $product->id)->first();
 
         if ($product->left_in_stock < $quantity) {
-            throw new BadRequestHttpException('В наявності: ' . $product->left_in_stock . ' штук.');
+            throw new BadRequestHttpException('В наявності: ' . $product->left_in_stock . ' шт.');
         }
 
         !empty($cartProduct)
@@ -96,7 +96,7 @@ class CartService extends BaseCrudService implements CartServiceInterface
         $cartProduct = $cart->products()->where('product_id', $product->id)->firstOrFail();
 
         if ($product->left_in_stock < $quantity) {
-            throw new BadRequestHttpException('В наявності: ' . $product->left_in_stock . ' штук.');
+            throw new BadRequestHttpException('В наявності: ' . $product->left_in_stock . ' шт.');
         }
 
         $cartProduct->update(['quantity' => $quantity]);

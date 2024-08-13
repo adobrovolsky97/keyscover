@@ -279,13 +279,15 @@ export default {
         fetchCart() {
             axios.get('/api/cart')
                 .then(response => {
-                        this.$store.commit('setCart', response.data.data)
+                    this.$store.commit('setCart', response.data.data)
+
+                    if (response.data.data.is_changed) {
                         toast.warn('Було перераховано кількість товарів в кошику в звязку зменшенням залишків на складі!', {
-                            timeout: 5000,
+                            timeout: 15000,
                             position: 'bottom-right'
                         });
                     }
-                )
+                })
         },
         createOrder() {
             this.isDisabled = true;
@@ -306,7 +308,10 @@ export default {
                 })
                 .then(() => {
                     this.fetchCart();
-                    toast.success("Замовлення успішно створене! Передано на комплектацію!", {autoClose: 5000, position: 'bottom-right'});
+                    toast.success("Замовлення успішно створене! Передано на комплектацію!", {
+                        autoClose: 5000,
+                        position: 'bottom-right'
+                    });
                     setTimeout(() => {
                         this.$router.push({name: 'home'});
                     }, 2000)
