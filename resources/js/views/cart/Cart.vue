@@ -74,19 +74,19 @@
                         ($store.state.cart?.total - $store.state.cart.discount_amount_uah).toFixed(0) ?? 0
                     }} грн.</span>
                                     </span>
-                <span v-if="freeDeliveryRemaining <= 0">Безкоштовна доставка <span class="font-bold">Новою Поштою</span>.</span>
+                <span v-if="freeDeliveryRemaining <= 0">Безкоштовна доставка.</span>
             </div>
 
             <div class="discount-text mb-4">
-                <p v-if="fivePercentDiscountRemaining > 0">Вам до знижки в <span
-                    class="text-success font-bold">5%</span> залишилось докупити товарів на <span
+                <p v-if="freeDeliveryRemaining > 0">Для безкоштовної доставки додайте товарів на <span
+                    class="text-success font-bold">{{ freeDeliveryRemaining }} $</span></p>
+                <p v-if="fivePercentDiscountRemaining > 0">Для знижки в <span
+                    class="text-success font-bold">5%</span> додайте товарів на <span
                     class="text-success font-bold">{{ fivePercentDiscountRemaining }} $ </span>
                 </p>
-                <p v-if="tenPercentDiscountRemaining > 0">Вам до знижки в <span
-                    class="text-success font-bold">10%</span> залишилось докупити товарів на <span
+                <p v-if="tenPercentDiscountRemaining > 0">Для знижки в <span
+                    class="text-success font-bold">10%</span> додайте товарів на <span
                     class="text-success font-bold">{{ tenPercentDiscountRemaining }} $</span></p>
-                <p v-if="freeDeliveryRemaining > 0">До безкоштовної доставки <span class="font-bold text-success">Новою Поштою</span> залишилось докупити товарів на <span
-                    class="text-success font-bold">{{ freeDeliveryRemaining }} $</span></p>
             </div>
 
             <button v-if="$route.name !== 'checkout'" @click="goToCheckout"
