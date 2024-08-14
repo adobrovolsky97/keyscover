@@ -2,7 +2,7 @@
     <div class="w-full">
         <h3 class="text-lg font-bold mb-4">Ваш кошик</h3>
         <button v-if="($store.state.cart?.products ?? []).length"
-                class="btn btn-warning btn-outline rounded-full float-end mb-4 btn-sm"
+                class="btn btn-warning btn-outline rounded-full float-start mb-4 btn-sm"
                 @click="clearCart">Очистити кошик
         </button>
         <div v-if="($store.state.cart?.products ?? []).length"

@@ -68,9 +68,8 @@
 
                                 <div class="form-group">
                                     <select v-model="form.paymentType" class="select select-bordered w-full">
-                                        <option :value="null">Оплата</option>
                                         <option :value="'cash_on_delivery'">Розрахунок на пошті при отриманні</option>
-                                        <option :value="'by_requisites'">Оплата по реквізитам</option>
+                                        <option :value="'by_requisites'">Оплата за реквізитами</option>
                                     </select>
                                     <error v-if="Object.keys(errors).length > 0" :errors="errors"
                                            attribute="payment_type"></error>
@@ -313,8 +312,8 @@ export default {
                         position: 'bottom-right'
                     });
                     setTimeout(() => {
-                        this.$router.push({name: 'home'});
-                    }, 2000)
+                        this.$router.push({name: 'orders-list'});
+                    }, 6000)
                 })
                 .catch((e) => {
                     this.errors = e.response.data.errors;
