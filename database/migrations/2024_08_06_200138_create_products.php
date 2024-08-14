@@ -24,7 +24,7 @@ return new class extends Migration {
             $table->bigInteger('external_id')->index();
             $table->string('sku')->index();
             $table->string('name');
-            $table->foreignId('category_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();
             $table->float('price')->index();
             $table->boolean('is_available_in_stock')->index();
             $table->integer('left_in_stock')->nullable();

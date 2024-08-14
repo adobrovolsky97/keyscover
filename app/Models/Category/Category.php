@@ -8,6 +8,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Adobrovolsky97\LaravelRepositoryServicePattern\Models\BaseModel;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Category
@@ -29,7 +30,7 @@ class Category extends BaseModel
     /**
      * @var array
      */
-    protected $fillable = ['external_id', 'slug', 'name', 'parent_id', 'created_at', 'updated_at'];
+    protected $fillable = ['external_id', 'slug', 'name', 'parent_id', 'created_at', 'updated_at', 'deleted_at'];
 
     /**
      * @return HasMany

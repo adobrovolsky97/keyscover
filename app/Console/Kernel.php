@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command(FetchCategoriesCommand::class)->hourly();
+        $schedule->command(FetchCategoriesCommand::class)->everyFiveMinutes();
         $schedule->command(FetchProductsCommand::class)->everyFiveMinutes()->withoutOverlapping();
         $schedule->command(FetchDollarCommand::class)->everyFiveMinutes();
     }

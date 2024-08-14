@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Category\Category;
 use App\Services\Category\Contracts\CategoryServiceInterface;
 use App\Services\Crm\Contracts\CrmServiceInterface;
 use Illuminate\Console\Command;
@@ -36,6 +37,7 @@ class FetchCategoriesCommand extends Command
             return;
         }
 
+        $processedExternalIds = [];
         while ($page <= $lastPage) {
             foreach ($data['items'] ?? [] as $category) {
                 $categoryService->updateOrCreate(
@@ -43,10 +45,13 @@ class FetchCategoriesCommand extends Command
                     ['name' => $category['name'], 'parent_id' => $category['parent_id'] ?? null]
                 );
                 $this->info('Category ' . $category['name'] . ' has been fetched.');
+                $processedExternalIds[] = $category['id'];
             }
 
             $page++;
             $data = $crmService->getCategoriesList(page: $page);
         }
+
+        Category::whereNotIn('external_id', $processedExternalIds)->delete();
     }
 }
