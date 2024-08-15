@@ -88,9 +88,9 @@ class FetchProductsCommand extends Command
 
         /** @var Product $product */
         $product = $this->productService->updateOrCreate(
-            ['external_id' => $productData['id']],
+            ['sku' => $productData['sku']],
             [
-                'sku'                   => $productData['sku'],
+                'external_id'           => $productData['id'],
                 'name'                  => $productData['title'],
                 'category_id'           => $category?->id,
                 'price'                 => $productData['price_amount'],
@@ -107,8 +107,6 @@ class FetchProductsCommand extends Command
                 array_column($productData['attachments'] ?? [], 'original_url'),
             ));
         }
-
-
     }
 
     /**
@@ -143,7 +141,7 @@ class FetchProductsCommand extends Command
                     ->toMediaCollection($id === 0 ? Media::COLLECTION_MAIN->value : Media::COLLECTION_ADDITIONAL->value);
 
                 $this->info('Attachment ' . $attachment . ' has been added to product ' . $product->name);
-            }catch (Throwable $exception){
+            } catch (Throwable $exception) {
                 $this->error('Failed to add attachment ' . $attachment . ' to product ' . $product->name);
             }
         }
