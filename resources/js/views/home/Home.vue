@@ -217,7 +217,6 @@ export default {
                 categoriesArray = this.processAllChildCategories(category, categoriesArray, 'remove');
             } else {
                 categoriesArray = this.processAllChildCategories(category, categoriesArray, 'add');
-                categoriesArray.push(category.slug);
             }
 
             categoriesArray = this.updateParentCategories(this.categories, categoriesArray);
