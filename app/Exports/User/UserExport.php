@@ -34,7 +34,7 @@ class UserExport implements FromQuery, WithMapping, WithHeadings, ShouldAutoSize
             'name'         => $row->name,
             'email'        => $row->email,
             'phone'        => $row->phone,
-            'orders_count' => $row->orders_count ?? 0,
+            'orders_count' => empty($row->orders_count) ? 0 : $row->orders_count,
             'created_at'   => $row->created_at?->format('Y-m-d H:i:s'),
         ];
     }
