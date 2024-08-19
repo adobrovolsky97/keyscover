@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use App\Jobs\SendOrderToCrmJob;
 use App\Models\Order\Order;
 use App\Services\Crm\Contracts\CrmServiceInterface;
+use App\Services\Visit\Contracts\VisitServiceInterface;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class TestCommand extends Command
@@ -26,10 +28,8 @@ class TestCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(CrmServiceInterface $crmService)
+    public function handle(VisitServiceInterface $visitService)
     {
-        $order = Order::query()->latest('id')->first();
-
-        SendOrderToCrmJob::dispatch($order);
+        $visitService->getUniqueVisitsCountForDateRange(Carbon::parse('2024-08-01'), Carbon::parse('2024-08-31'));
     }
 }

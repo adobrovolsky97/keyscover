@@ -3,13 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\User\UserResource;
+use App\Services\User\Contracts\UserServiceInterface;
 use Auth;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 /**
  * Class UserController
  */
 class UserController extends Controller
 {
+    private UserServiceInterface $userService;
+
+    /**
+     * @param UserServiceInterface $userService
+     */
+    public function __construct(UserServiceInterface $userService)
+    {
+        $this->userService = $userService;
+    }
+
     /**
      * Get user data
      *
@@ -22,5 +34,17 @@ class UserController extends Controller
         }
 
         return UserResource::make(Auth::guard('api')->user());
+    }
+
+    /**
+     * Get users list
+     *
+     * @return AnonymousResourceCollection
+     */
+    public function index(): AnonymousResourceCollection
+    {
+        return UserResource::collection(
+            $this->userService->withCount(['orders'])->getAllPaginated(['except' => [Auth::id()]])
+        );
     }
 }

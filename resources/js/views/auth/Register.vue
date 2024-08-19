@@ -1,6 +1,7 @@
 <template>
     <div class="flex flex-col items-center justify-center gap-3 register-controller relative h-full w-full">
         <div class="flex-cell self-center pb-2">
+            <a href="/" class="link absolute left-0 top-2.5 text-md">< Назад</a>
             <h3 class="title text-4xl font-bold">Реєстрація</h3>
         </div>
         <div class="flex flex-col w-full m-auto p-4">
@@ -19,6 +20,13 @@
                 </div>
                 <input type="text" name="eml" v-model="form.email" placeholder="Email" autocomplete="off" class="input input-bordered w-full"/>
                 <span class="text-red-600 text-xs" v-if="errors?.email">{{ errors.email[0] }}</span>
+            </label>
+            <label class="form-control w-full">
+                <div class="label">
+                    <span class="label-text">Номер телефону</span>
+                </div>
+                <input type="text" name="phone" v-model="form.phone" placeholder="Номер телефону" autocomplete="off" class="input input-bordered w-full"/>
+                <span class="text-red-600 text-xs" v-if="errors?.phone">{{ errors.phone[0] }}</span>
             </label>
 
             <label class="form-control w-full">
@@ -67,6 +75,7 @@ export default {
             auth: Auth,
             form: {
                 name: null,
+                phone: null,
                 email: null,
                 password: null,
                 password_confirmation: null,

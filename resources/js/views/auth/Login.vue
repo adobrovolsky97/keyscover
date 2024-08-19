@@ -1,6 +1,7 @@
 <template>
     <div class="flex flex-col items-center justify-center gap-3 register-controller relative h-full w-full" ref="form">
         <div class="flex-cell self-center pb-2">
+            <a href="/" class="link absolute left-0 top-2.5 text-md">< Назад</a>
             <h3 class="title text-4xl font-bold">Авторизація 👋</h3>
         </div>
         <div class="flex flex-col w-full m-auto p-4">

@@ -5,9 +5,13 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\DeliveryController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\StatController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VisitTrackerController;
+use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,6 +31,11 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'guest:api'], function () {
     Route::post('auth/register', [AuthController::class, 'register']);
 });
+
+/**
+ * Visit tracker
+ */
+Route::post('track', [VisitTrackerController::class, 'track']);
 
 /**
  * Auth protected routes
@@ -61,7 +70,7 @@ Route::group(['middleware' => ['auth:api']], function () {
      * Ordering
      */
     Route::group(['prefix' => 'orders'], function () {
-       Route::get('', [OrderController::class, 'index']);
+        Route::get('', [OrderController::class, 'index']);
         Route::post('', [OrderController::class, 'store']);
     });
 });
@@ -77,3 +86,29 @@ Route::get('categories', [CategoryController::class, 'index']);
 Route::get('products', [ProductController::class, 'index']);
 Route::get('configs', [ConfigController::class, 'index']);
 
+/**
+ * Admin routes
+ */
+Route::middleware(AdminMiddleware::class)->group(function () {
+    /**
+     * Users
+     */
+    Route::get('users', [UserController::class, 'index']);
+
+    /**
+     * Exports
+     */
+    Route::get('export', [ExportController::class, 'export']);
+    Route::group(['prefix' => 'exports'], function () {
+        Route::get('', [ExportController::class, 'index']);
+        Route::get('{export}/download', [ExportController::class, 'download']);
+    });
+
+    /**
+     * Stats
+     */
+    Route::group(['prefix' => 'stats'], function () {
+        Route::get('unique-visits', [StatController::class, 'uniqueVisits']);
+        Route::get('visits-by-hour', [StatController::class, 'visitsByHour']);
+    });
+});

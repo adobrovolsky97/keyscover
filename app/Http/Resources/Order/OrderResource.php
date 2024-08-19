@@ -22,6 +22,7 @@ class OrderResource extends JsonResource
     {
         return [
             'id'                      => $this->id,
+            'number'                  => $this->number,
             'surname'                 => $this->surname,
             'name'                    => $this->name,
             'patronymic'              => $this->patronymic,
@@ -40,7 +41,7 @@ class OrderResource extends JsonResource
             'discount_uah'            => $this->discount_uah,
             'total_with_discount_uah' => round($this->total_price_uah - $this->discount_uah),
             'total_with_discount_usd' => round($this->total_price_usd - $this->discount_usd, 2),
-            'created_at'              => $this->created_at->format('d.m.Y H:i:s'),
+            'created_at'              => $this->created_at?->format('d.m.Y H:i:s'),
             'products'                => OrderProductResource::collection($this->products)
         ];
     }

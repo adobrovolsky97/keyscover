@@ -144,6 +144,7 @@ export default {
                     this.$store.commit('setCart', response.data.data);
                     this.cart = response.data.data;
                     this.cartQty = this.getCartQuantityForCurrentProduct();
+                    toast.success("Кількість товару оновлено!", {autoClose: 5000, position: 'bottom-right'});
                 })
         }
     }

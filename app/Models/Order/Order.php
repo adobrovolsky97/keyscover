@@ -19,6 +19,7 @@ use Adobrovolsky97\LaravelRepositoryServicePattern\Models\BaseModel;
  * @property string $name
  * @property string $patronymic
  * @property string $phone
+ * @property string $number
  * @property string $delivery_type
  * @property string $payment_type
  * @property string $comment
@@ -53,6 +54,7 @@ class Order extends BaseModel
         'surname',
         'name',
         'patronymic',
+        'number',
         'phone',
         'delivery_type',
         'payment_type',

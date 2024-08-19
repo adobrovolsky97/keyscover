@@ -9,7 +9,7 @@
                 <div class="collapse collapse-arrow border shadow-xl mb-4 w-full" v-for="order in data.data" :key="order.id">
                     <input type="checkbox"/>
                     <div class="collapse-title md:text-xl text-sm font-medium flex md:flex-row flex-col md:justify-between justify-start md:items-center items-start">
-                        <span>Замовлення #{{ order.id }}</span>
+                        <span>Замовлення #{{ order.number }}</span>
                         <span>{{ order.created_at }}</span>
                     </div>
                     <div class="collapse-content  overflow-x-auto">

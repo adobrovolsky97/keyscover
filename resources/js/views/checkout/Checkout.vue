@@ -195,13 +195,13 @@ export default {
                 this.form.surname = this.$store.state.user?.last_order?.surname ?? null;
                 this.form.name = this.$store.state.user?.last_order?.name ?? null;
                 this.form.patronymic = this.$store.state.user?.last_order?.patronymic ?? null;
-                this.form.phone = this.$store.state.user?.last_order?.phone ?? null;
+                this.form.phone = this.$store.state.user?.last_order?.phone ?? this.$store.state.user.phone;
                 this.form.city = this.$store.state.user?.last_order?.city_name ?? null;
                 this.form.cityId = this.$store.state.user?.last_order?.city_id ?? null;
                 this.form.warehouse = this.$store.state.user?.last_order?.warehouse_name ?? null;
                 this.form.warehouseId = this.$store.state.user?.last_order?.warehouse_id ?? null;
-                this.form.paymentType = this.$store.state.user?.last_order?.payment_type ?? null;
-                this.deliveryType = this.$store.state.user?.last_order?.delivery_type ?? null;
+                this.form.paymentType = this.$store.state.user?.last_order?.payment_type ?? 'by_requisites';
+                this.deliveryType = this.$store.state.user?.last_order?.delivery_type ?? 'self-pickup';
 
                 if (this.form.cityId) {
                     this.fetchCities();

@@ -43,6 +43,7 @@ class OrderService extends BaseCrudService implements OrderServiceInterface
             $data['discount_percent'] = $cart->discount_percent;
             $data['discount_usd'] = $cart->discount_amount;
             $data['discount_uah'] = $cart->discount_amount_uah;
+            $data['number'] = $data['user_id'] . '-' . time();
 
             /** @var Order $order */
             $order = parent::create($data);

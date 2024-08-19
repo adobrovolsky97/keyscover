@@ -22,10 +22,14 @@ class UserResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'         => $this->id,
-            'name'       => $this->name,
-            'email'      => $this->email,
-            'last_order' => OrderResource::make($this->orders()->latest('id')->first())
+            'id'           => $this->id,
+            'name'         => $this->name,
+            'email'        => $this->email,
+            'phone'        => $this->phone,
+            'role'         => $this->role,
+            'orders_count' => $this->whenCounted('orders'),
+            'created_at'   => $this->created_at?->format('Y-m-d H:i:s'),
+            'last_order'   => OrderResource::make($this->orders()->latest('id')->first())
         ];
     }
 }

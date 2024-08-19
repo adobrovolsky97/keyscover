@@ -172,6 +172,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         \App\Providers\PassportServiceProvider::class,
         \Adobrovolsky97\LaravelRepositoryServicePattern\LaravelRepositoryServicePatternServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ])->toArray(),
 
     /*

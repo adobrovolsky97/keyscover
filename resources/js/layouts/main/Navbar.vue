@@ -31,6 +31,15 @@
                             <a @click="navigate" :class="{'link-error': $route.path === '/orders/list'}" class="link">Історія
                                 замовлень</a>
                         </router-link>
+                        <router-link
+                            v-if="$store.state.user !== null && $store.state.user.role === 'admin'"
+                            :to="{name: 'admin.dashboard'}"
+                            custom
+                            v-slot="{ navigate, href }"
+                        >
+                            <a @click="navigate"
+                               class="link">Admin</a>
+                        </router-link>
                         <p class="font-bold" v-if="usd">USD {{ usd }}</p>
                         <div v-if="$store.state.user !== null">
                             <button class="btn btn-outline rounded-2xl btn-sm" v-if="$route.name !== 'checkout'"
@@ -115,6 +124,16 @@
                                 >
                                     <a @click="navigate" :class="{'link-error': $route.path === '/orders/list'}"
                                        class="link">Історія замовлень</a>
+                                </router-link>
+                            </li>
+                            <li v-if="$store.state.user !== null && $store.state.user.role === 'admin'">
+                                <router-link
+                                    :to="{name: 'admin.dashboard'}"
+                                    custom
+                                    v-slot="{ navigate, href }"
+                                >
+                                    <a @click="navigate"
+                                       class="link">Admin</a>
                                 </router-link>
                             </li>
                             <li v-if="$store.state.user == null">
