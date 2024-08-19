@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role\Role;
 use App\Http\Resources\User\UserResource;
 use App\Services\User\Contracts\UserServiceInterface;
 use Auth;
@@ -44,7 +45,10 @@ class UserController extends Controller
     public function index(): AnonymousResourceCollection
     {
         return UserResource::collection(
-            $this->userService->withCount(['orders'])->getAllPaginated(['except' => [Auth::id()], 'role' => 'user'])
+            $this->userService->withCount(['orders'])->getAllPaginated([
+                'except' => [Auth::id()],
+                'role'   => Role::USER->value
+            ])
         );
     }
 }

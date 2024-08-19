@@ -23,6 +23,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         return $this
             ->applyFilterConditions($searchParams)
             ->when(!empty($searchParams['except']), fn(Builder $query) => $query->whereNotIn('id', $searchParams['except']))
+            ->when(!empty($searchParams['role']), fn(Builder $query) => $query->where('role', $searchParams['role']))
             ->orderBy('id', 'desc');
     }
 
