@@ -44,7 +44,7 @@ class UserController extends Controller
     public function index(): AnonymousResourceCollection
     {
         return UserResource::collection(
-            $this->userService->withCount(['orders'])->getAllPaginated(['except' => [Auth::id()]])
+            $this->userService->withCount(['orders'])->getAllPaginated(['except' => [Auth::id()], 'role' => 'user'])
         );
     }
 }
