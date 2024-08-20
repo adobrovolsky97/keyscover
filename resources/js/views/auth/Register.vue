@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col items-center justify-center gap-3 register-controller relative h-full w-full">
         <div class="flex-cell self-center pb-2">
-            <a href="/" class="link absolute left-0 top-2.5 text-md">< Назад</a>
+            <a href="/" class="link absolute -left-2 lg:left-0 top-2.5 text-md">< Назад</a>
             <h3 class="title text-4xl font-bold">Реєстрація</h3>
         </div>
         <div class="flex flex-col w-full m-auto p-4">
