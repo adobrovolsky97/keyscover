@@ -1,23 +1,19 @@
 <template>
     <li>
-        <span>
+        <span @click="categoryClicked(category)" class="flex flex-row justify-start items-center">
             <input type="checkbox" :checked="selectedCategories.includes(category.slug)"
-                   @click="categoryClicked(category)" class="checkbox checkbox-sm"/>{{ category.name }}
-
-            <span v-if="category.children.length > 0" @click="isOpen = !isOpen">
-                <svg v-if="!isOpen" class="h-5 w-5" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                     stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path
-                    stroke="none" d="M0 0h24v24H0z"/>  <line x1="12" y1="5" x2="12" y2="19"/>  <line x1="18" y1="13"
-                                                                                                     x2="12" y2="19"/>  <line
-                    x1="6" y1="13" x2="12" y2="19"/></svg>
-
-                <svg class="h-5 w-5" v-else width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                     stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path
-                    stroke="none" d="M0 0h24v24H0z"/>  <line x1="12" y1="5" x2="12" y2="19"/>  <line x1="18" y1="11"
-                                                                                                     x2="12" y2="5"/>  <line
-                    x1="6" y1="11" x2="12" y2="5"/></svg>
-            </span>
+                   class="checkbox checkbox-sm"/>{{ category.name }}
         </span>
+        <div class="absolute right-0 top-0" v-if="category.children.length > 0" @click="isOpen = !isOpen">
+            <svg v-if="!isOpen" class="h-5 w-5 cursor-pointer" width="24" height="24" viewBox="0 0 24 24"
+                 stroke-width="2"
+                 stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path
+                stroke="none" d="M0 0h24v24H0z"/>  <polyline points="6 9 12 15 18 9"/></svg>
+
+            <svg class="h-5 w-5 cursor-pointer" v-else width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                 stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path
+                stroke="none" d="M0 0h24v24H0z"/>  <polyline points="6 15 12 9 18 15"/></svg>
+        </div>
         <ul class="menu-dropdown" :class="{'menu-dropdown-show': isOpen}">
             <category-item
                 v-on:category-clicked="categoryClicked"
