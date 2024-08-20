@@ -175,13 +175,20 @@ export default {
                 warehouseId: null,
                 comment: null,
                 paymentType: null
-            }
+            },
+            orderTimeout: null,  // To store the timeout ID
         };
     },
     components: {
         TableSkeleton,
         Cart,
         'error': Error
+    },
+    beforeRouteLeave(to, from, next) {
+        if (this.orderTimeout) {
+            clearTimeout(this.orderTimeout);
+        }
+        next(); // continue with the navigation
     },
     mounted() {
         this.cart = this.$store.state.cart;
@@ -311,9 +318,9 @@ export default {
                         autoClose: 5000,
                         position: 'bottom-right'
                     });
-                    setTimeout(() => {
+                    this.orderTimeout = setTimeout(() => {
                         this.$router.push({name: 'orders-list'});
-                    }, 6000)
+                    }, 6000);
                 })
                 .catch((e) => {
                     this.errors = e.response.data.errors;

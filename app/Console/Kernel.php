@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Console\Commands\BackupCommand;
+use App\Console\Commands\CleanBackupsCommand;
 use App\Console\Commands\FetchCategoriesCommand;
 use App\Console\Commands\FetchDollarCommand;
 use App\Console\Commands\FetchProductsCommand;
@@ -18,6 +20,8 @@ class Kernel extends ConsoleKernel
         $schedule->command(FetchCategoriesCommand::class)->everyFiveMinutes();
         $schedule->command(FetchProductsCommand::class)->everyFiveMinutes()->withoutOverlapping();
         $schedule->command(FetchDollarCommand::class)->everyFiveMinutes();
+        $schedule->command(BackupCommand::class)->daily();
+        $schedule->command(CleanBackupsCommand::class)->daily();
     }
 
     /**

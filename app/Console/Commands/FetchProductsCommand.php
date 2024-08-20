@@ -126,10 +126,10 @@ class FetchProductsCommand extends Command
                 continue;
             }
 
-            if (in_array($media->getCustomProperty('url'), $attachments)) {
-                unset($attachments[array_search($media->getCustomProperty('url'), $attachments)]);
-                $this->warn('Attachment ' . $media->getCustomProperty('url') . ' already exists in product ' . $product->name);
-            }
+//            if (in_array($media->getCustomProperty('url'), $attachments)) {
+//                unset($attachments[array_search($media->getCustomProperty('url'), $attachments)]);
+//                $this->warn('Attachment ' . $media->getCustomProperty('url') . ' already exists in product ' . $product->name);
+//            }
         }
 
         foreach ($attachments as $id => $attachment) {
@@ -145,6 +145,5 @@ class FetchProductsCommand extends Command
                 $this->error('Failed to add attachment ' . $attachment . ' to product ' . $product->name);
             }
         }
-
     }
 }

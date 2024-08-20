@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Product;
 
 use App\Enums\Product\Media;
+use App\Http\Resources\Media\MediaResource;
 use App\Models\Product\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -30,6 +31,7 @@ class ProductResource extends JsonResource
             'is_available_in_stock' => $this->is_available_in_stock,
             'left_in_stock'         => $this->left_in_stock,
             'image'                 => empty($image) ? asset('no-image.png') : $image,
+            'media'                 => $this->whenLoaded('media', MediaResource::collection($this->media)),
             'category'              => [
                 'id'   => $this->category?->id,
                 'name' => $this->category?->name,

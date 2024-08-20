@@ -2,14 +2,15 @@
     <div class="card border bg-base-100 shadow-xl">
         <figure>
             <img
-                class=" w-full object-cover"
+                @click="showProduct"
+                class=" w-full object-cover cursor-pointer"
                 :src="product.image"
                 :alt="product.name"/>
         </figure>
         <div class="card-body p-2 lg:p-4">
             <p class="text-xs text-gray-400">Арт. {{ product.sku }}</p>
             <p class="text-xs text-gray-400">{{ product.category.name }}</p>
-            <h3 class="font-bold lg:text-lg text-xs product-name">
+            <h3 class="font-bold lg:text-lg text-xs product-name hover:text-gray-400 cursor-pointer" @click="showProduct">
                 {{ product.name }}
             </h3>
             <div class="flex flex-row justify-between items-center">
@@ -146,6 +147,9 @@ export default {
                     this.cartQty = this.getCartQuantityForCurrentProduct();
                     toast.success("Кількість товару оновлено!", {autoClose: 5000, position: 'bottom-right'});
                 })
+        },
+        showProduct() {
+            this.$router.push({name: 'product.show', params: {id: this.product.id}});
         }
     }
 }

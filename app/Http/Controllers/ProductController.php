@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Product\SearchRequest;
 use App\Http\Resources\Product\ProductResource;
+use App\Models\Product\Product;
 use App\Services\Product\Contracts\ProductServiceInterface;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -32,5 +33,14 @@ class ProductController extends Controller
     public function index(SearchRequest $request): AnonymousResourceCollection
     {
         return ProductResource::collection($this->productService->getAllPaginated($request->validated(), $request->input('per_page', 20)));
+    }
+
+    /**
+     * @param Product $product
+     * @return ProductResource
+     */
+    public function show(Product $product): ProductResource
+    {
+        return ProductResource::make($product->load('media'));
     }
 }

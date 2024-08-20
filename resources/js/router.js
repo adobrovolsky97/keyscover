@@ -16,6 +16,7 @@ import ExportsList from "./views/admin/export/List.vue";
 import AdminLayout from "./layouts/admin/AdminLayout.vue";
 import Dashboard from "./views/admin/Dashboard.vue";
 import NotFound from "./views/errors/NotFound.vue";
+import Detailed from "./views/product/Detailed.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -28,6 +29,11 @@ const router = createRouter({
                     path: '/',
                     name: 'home',
                     component: Home,
+                },
+                {
+                    path: '/product/:id',
+                    name: 'product.show',
+                    component: Detailed,
                 },
                 {
                     path: '/checkout',
