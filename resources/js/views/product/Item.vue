@@ -149,6 +149,11 @@ export default {
                 })
         },
         showProduct() {
+            // Save the current state before navigating
+            localStorage.setItem('productListState', JSON.stringify({
+                scrollPosition: window.scrollY
+            }));
+
             this.$router.push({name: 'product.show', params: {id: this.product.id}});
         }
     }

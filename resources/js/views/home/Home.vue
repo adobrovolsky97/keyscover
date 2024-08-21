@@ -99,7 +99,7 @@
             </div>
 
             <div class="products lg:grid-cols-4 grid gap-3" :class="classes" v-if="isDataLoaded && data.data.length">
-                <Item v-for="product in data.data" :product="product" :key="product.id"/>
+                <Item :id="product.id" v-for="product in data.data" :product="product" :key="product.id"/>
             </div>
             <div v-if="isDataLoaded && !data.data.length">
                 <p class="text-center text-lg font-bold">Товари не знайдені</p>
@@ -173,6 +173,23 @@ export default {
     mounted() {
         this.fetchCategories();
         this.resolveQueryParams();
+
+        this.fetchData()
+            // .then(() => {
+            //     const savedState = localStorage.getItem('productListState');
+            //
+            //     if (savedState) {
+            //         const {scrollPosition} = JSON.parse(savedState);
+            //
+            //         this.$nextTick(() => {
+            //             window.scrollTo(0, scrollPosition);
+            //         });
+            //
+            //         // Clear the saved state
+            //         localStorage.removeItem('productListState');
+            //     }
+            // });
+
         this.search = this.filters.search;
     },
     computed: {
@@ -222,9 +239,10 @@ export default {
         fetchData() {
             RouteHelper.updateQueryParams(this.queryParams);
             this.isDataLoaded = false;
-            axios.get('/api/products', {params: this.filters})
+            return axios.get('/api/products', {params: this.filters})
                 .then((response) => {
                     this.data = response.data;
+                    window.scrollTo({top: 0, behavior: 'smooth'});
                 })
                 .finally(() => {
                     this.isDataLoaded = true;
