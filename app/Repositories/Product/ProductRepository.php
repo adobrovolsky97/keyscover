@@ -39,7 +39,8 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
                     'popularity' => $query->withCount('orderProducts')->orderBy('order_products_count', $orderByAndDir[1] ?? 'desc'),
                     default => $query->orderBy($orderByAndDir[0], $orderByAndDir[1] ?? 'desc'),
                 };
-            });
+            })
+            ->orderBy('left_in_stock', 'desc');
     }
 
     /**
