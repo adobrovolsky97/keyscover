@@ -20,7 +20,7 @@
     "src": "public/logo.png"
   },
   "resources/js/app.css": {
-    "file": "assets/app-5186cac8.css",
+    "file": "assets/app-5215d4c5.css",
     "src": "resources/js/app.css"
   },
   "resources/js/app.js": {
@@ -32,9 +32,9 @@
       "assets/dm-mono-latin-400-normal-f8592521.woff"
     ],
     "css": [
-      "assets/app-5186cac8.css"
+      "assets/app-5215d4c5.css"
     ],
-    "file": "assets/app-96885b50.js",
+    "file": "assets/app-70868f5a.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   }

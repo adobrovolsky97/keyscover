@@ -32,10 +32,12 @@
                     <div class="drawer-side">
                         <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
                         <div class="menu bg-base-100 text-base-content border shadow-xl min-h-full w-80 p-2">
-                           <div class="flex flex-row justify-between items-center">
-                               <p class="px-4 py-2 text-lg font-bold">Категорії</p>
-                               <button @click="clearFilter" class="badge text-white badge-error badge-sm p-2">Скинути фільтр</button>
-                           </div>
+                            <div class="flex flex-row justify-between items-center">
+                                <p class="px-4 py-2 text-lg font-bold">Категорії</p>
+                                <button @click="clearFilter" class="badge text-white badge-error badge-sm p-2">Скинути
+                                    фільтр
+                                </button>
+                            </div>
                             <category-item
                                 :selected-categories="categoriesArray"
                                 v-on:category-clicked="handleCategoryClicked"
@@ -78,23 +80,22 @@
                     <line x1="6" y1="6" x2="18" y2="18"/>
                 </svg>
             </label>
-            <div class="flex flex-col lg:flex-row justify-end items-center mb-6 w-full gap-4">
+            <div class="flex flex-row justify-center lg:justify-end items-center mb-6 w-full gap-4">
                 <div class="form-control">
                     <label class="label cursor-pointer">
                         <span v-if="filters.only_available == 0" class="label-text mr-2">Показувати все</span>
                         <span v-if="filters.only_available == 1" class="label-text mr-2">Лише в наявності</span>
-                        <input type="checkbox" true-value="1" false-value="0" v-model="filters.only_available" class="toggle" />
+                        <input type="checkbox" true-value="1" false-value="0" v-model="filters.only_available"
+                               class="toggle"/>
                     </label>
                 </div>
-                <div class="flex flex-col gap-2">
-                    <select v-model="filters.order_by" class="select select-bordered">
-                        <option :value="'name_asc'">Сортувати: За назвою</option>
-                        <option :value="'id_desc'">Сортувати: За новизною</option>
-                        <option :value="'popularity_desc'">Сортувати: За популярністю</option>
-                        <option :value="'price_asc'">Сортувати: Ціна ↑</option>
-                        <option :value="'price_desc'">Сортувати: Ціна ↓</option>
-                    </select>
-                </div>
+                <select v-model="filters.order_by" class="select select-md select-bordered">
+                    <option :value="'name_asc'">За назвою</option>
+                    <option :value="'id_desc'">За новизною</option>
+                    <option :value="'popularity_desc'">За популярністю</option>
+                    <option :value="'price_asc'">Ціна ↑</option>
+                    <option :value="'price_desc'">Ціна ↓</option>
+                </select>
             </div>
 
             <div class="products lg:grid-cols-4 grid gap-3" :class="classes" v-if="isDataLoaded && data.data.length">
