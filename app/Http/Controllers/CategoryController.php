@@ -31,6 +31,6 @@ class CategoryController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
-        return CategoryResource::collection($this->categoryService->getAll(['parent_id' => null]));
+        return CategoryResource::collection($this->categoryService->withCount(['products'])->getAll(['parent_id' => null]));
     }
 }

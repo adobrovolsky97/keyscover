@@ -19,11 +19,14 @@ class CategoryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $children = CategoryResource::collection($this->children()->withCount('products')->orderBy('name')->get());
+
         return [
-            'id'       => $this->id,
-            'name'     => $this->name,
-            'slug'     => $this->slug,
-            'children' => CategoryResource::collection($this->children->sortBy('name'))
+            'id'             => $this->id,
+            'name'           => $this->name,
+            'slug'           => $this->slug,
+            'products_count' => $children->collection->isNotEmpty() ? $children->collection->sum('products_count') : $this->products_count,
+            'children'       => $children
         ];
     }
 }
