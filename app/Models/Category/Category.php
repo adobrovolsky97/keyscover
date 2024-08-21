@@ -33,6 +33,29 @@ class Category extends BaseModel
     protected $fillable = ['external_id', 'slug', 'name', 'parent_id', 'created_at', 'updated_at', 'deleted_at'];
 
     /**
+     * Get the children categories products count (it can be multi layers).
+     *
+     * @return int
+     */
+    public function getChildrenCategoriesProductsCount(): int
+    {
+        $children = $this->children()->withCount('products')->get();
+        $productsCount = 0;
+
+        if ($children->isNotEmpty()) {
+//            $productsCount = $children->sum('products_count');
+
+            foreach ($children as $child) {
+                $productsCount += $child->getChildrenCategoriesProductsCount();
+            }
+        } else {
+            $productsCount = $this->products->count();
+        }
+
+        return $productsCount;
+    }
+
+    /**
      * @return HasMany
      */
     public function products(): HasMany
