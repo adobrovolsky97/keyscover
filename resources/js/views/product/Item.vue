@@ -10,7 +10,7 @@
         <div class="card-body p-2 lg:p-4">
             <p class="text-xs text-gray-400">Арт. {{ product.sku }}</p>
             <p class="text-xs text-gray-400">{{ product.category.name }}</p>
-            <h3 class="font-bold lg:text-lg text-xs product-name hover:text-gray-400 cursor-pointer" @click="showProduct">
+            <h3 class="font-bold lg:text-lg text-xs product-name hover:text-gray-400 cursor-pointer overflow-x-auto" @click="showProduct">
                 {{ product.name }}
             </h3>
             <div class="flex flex-row justify-between items-center">

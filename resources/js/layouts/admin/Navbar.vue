@@ -8,8 +8,15 @@
                     custom
                     v-slot="{ navigate }"
                 >
-                    <a @click="navigate"
-                       class="block antialiased font-sans cursor-pointer text-lg font-bold">KeysCover</a>
+                    <div class="flex flex-row justify-between items-center gap-2">
+                        <div class="avatar">
+                            <div class="w-8 lg:w-12 rounded-xl">
+                                <img src="../../../../public/logo.png" />
+                            </div>
+                        </div>
+                        <a @click="navigate"
+                           class="block antialiased font-sans cursor-pointer text-md lg:text-lg font-bold">KeysCover</a>
+                    </div>
                 </router-link>
                 <div class="hidden items-center gap-2 lg:flex">
                     <div class="auth flex flex-row justify-center items-center gap-5">

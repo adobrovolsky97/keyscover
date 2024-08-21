@@ -9,8 +9,8 @@
              class="flex flex-col container w-full mx-auto px-4 border items-center justify-center rounded-lg shadow">
             <ul class="flex flex-col divide-y w-full">
                 <li v-for="product in $store.state.cart?.products ?? []" :key="product.id"
-                    class="flex flex-col md:flex-row">
-                    <div class="select-none cursor-pointer flex flex-col md:flex-row items-center md:p-4 p-0  w-full">
+                    class="flex flex-col md:flex-row relative">
+                    <div class="select-none cursor-pointer flex flex-col md:flex-row items-center md:p-4 p-0 w-full">
                         <div class="flex flex-col w-24 h-24 justify-center items-center mb-4 md:mb-0 md:mr-4">
                             <div class="avatar">
                                 <div class="w-24 rounded">
@@ -21,7 +21,7 @@
                         <div class="flex-1 pl-3 mb-4 md:mb-0 md:mr-16 text-center lg:text-start">
                             <div class="text-sm text-gray-400">{{ product.sku }}</div>
                             <div class="font-medium">{{ product.name }}</div>
-                            <div class="text-sm flex flex-row  justify-between lg:justify-start gap-2">
+                            <div class="text-sm flex flex-col lg:flex-row lg:mt-0 mt-2 justify-between lg:justify-start gap-2">
                                 <span>{{ product.total_price_usd }} $</span>
                                 <span> ~{{ product.total_price_uah }} грн.</span>
                             </div>
@@ -30,14 +30,14 @@
                             <div class="flex flex-row justify-between items-center gap-1 mb-4 md:mb-0 md:mr-4">
                                 <div class="join">
                                     <button @click="decrementQuantity(product)"
-                                            class="btn btn-success join-item btn-sm rounded-l-full">
+                                            class="btn btn-success join-item btn-md rounded-l-full">
                                         -
                                     </button>
                                     <input @input="updateProductQuantity(product)"
-                                           class="input input-bordered text-center input-sm join-item w-14"
+                                           class="input input-bordered text-center input-md join-item w-14"
                                            placeholder="" v-model="product.quantity"/>
                                     <button @click="incrementQuantity(product)"
-                                            class="btn btn-success join-item btn-sm rounded-r-full">
+                                            class="btn btn-success join-item btn-md rounded-r-full">
                                         +
                                     </button>
                                 </div>
@@ -46,8 +46,11 @@
                                 {{ productErrors[product.product_id]}}
                             </div>
                         </div>
-                        <div @click="deleteProduct(product)"
-                             class="mb-4 md:mb-0">
+                        <!-- Delete Button Container -->
+                        <div
+                            @click="deleteProduct(product)"
+                            class="absolute top-0 left-0 mt-4 ml-2 md:relative md:mt-0 md:ml-0"
+                        >
                             <svg class="h-6 w-6 text-red-500" width="24" height="24"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                  fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -59,9 +62,9 @@
                                 <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"/>
                             </svg>
                         </div>
-
                     </div>
                 </li>
+
             </ul>
 
             <div class="totals w-full flex flex-col md:justify-end md:items-end justify-start items-start mb-4 text-sm">

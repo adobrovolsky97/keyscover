@@ -1,8 +1,11 @@
 <template>
     <div class="content flex flex-row justify-between items-start gap-4 p-1">
-        <div class="filters hidden lg:block">
-            <ul class="menu rounded-box w-72 border shadow-xl">
-                <p class="px-4 py-2 text-lg font-bold">Категорії</p>
+        <div class="filters hidden lg:block border rounded-2xl shadow-xl">
+            <div class="flex flex-row justify-between items-center px-6 mt-4">
+                <p class="text-lg font-bold">Категорії</p>
+                <button @click="clearFilter" class="badge badge-error text-white badge-sm p-2">Скинути фільтр</button>
+            </div>
+            <ul class="menu w-72">
                 <category-item
                     :selected-categories="categoriesArray"
                     v-on:category-clicked="handleCategoryClicked"
@@ -29,7 +32,10 @@
                     <div class="drawer-side">
                         <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
                         <div class="menu bg-base-100 text-base-content border shadow-xl min-h-full w-80 p-2">
-                            <p class="px-4 py-2 text-lg font-bold">Категорії</p>
+                           <div class="flex flex-row justify-between items-center">
+                               <p class="px-4 py-2 text-lg font-bold">Категорії</p>
+                               <button @click="clearFilter" class="badge text-white badge-error badge-sm p-2">Скинути фільтр</button>
+                           </div>
                             <category-item
                                 :selected-categories="categoriesArray"
                                 v-on:category-clicked="handleCategoryClicked"
@@ -64,21 +70,36 @@
                         d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
                         clip-rule="evenodd"/>
                 </svg>
-                <svg v-if="search !== ''" @click="clearSearch" class="h-5 w-5 cursor-pointer" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                <svg v-if="search !== ''" @click="clearSearch" class="h-5 w-5 cursor-pointer" width="24" height="24"
+                     viewBox="0 0 24 24" stroke-width="2"
                      stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path stroke="none" d="M0 0h24v24H0z"/>
                     <line x1="18" y1="6" x2="6" y2="18"/>
                     <line x1="6" y1="6" x2="18" y2="18"/>
                 </svg>
             </label>
+            <div class="flex flex-row justify-end items-center mb-6 w-full gap-4">
+                <div class="flex flex-col gap-2">
+                    <span>Сортування:</span>
+                    <select v-model="filters.order_by" class="select select-bordered">
+                        <option :value="'name_asc'">За назвою</option>
+                        <option :value="'id_desc'">За новизною</option>
+                        <option :value="'popularity_desc'">За популярністю</option>
+                        <option :value="'price_asc'">Ціна ↑</option>
+                        <option :value="'price_desc'">Ціна ↓</option>
+                    </select>
+                </div>
+            </div>
+
             <div class="products lg:grid-cols-4 grid gap-3" :class="classes" v-if="isDataLoaded && data.data.length">
                 <Item v-for="product in data.data" :product="product" :key="product.id"/>
             </div>
             <div v-if="isDataLoaded && !data.data.length">
                 <p class="text-center text-lg font-bold">Товари не знайдені</p>
             </div>
-            <div class="mt-4 w-full border shadow-xl rounded-2xl p-2 flex lg:flex-row flex-col gap-2 justify-between items-center"
-                 v-if="isDataLoaded && data?.meta?.last_page > 1">
+            <div
+                class="mt-4 w-full border shadow-xl rounded-2xl p-2 flex lg:flex-row flex-col gap-2 justify-between items-center"
+                v-if="isDataLoaded && data?.meta?.last_page > 1">
                 <Pagination
                     :limit="5"
                     :data="data"
@@ -117,6 +138,7 @@ export default {
             mode: this.$store.state.mode,
             isDataLoaded: false,
             filters: {
+                order_by: 'id_desc',
                 page: 1,
                 search: '',
                 categories: '',
@@ -265,6 +287,10 @@ export default {
             };
 
             return processParentCategories(categories, selectedCategories);
+        },
+        clearFilter() {
+            this.filters.categories = '';
+            this.filters.page = 1;
         }
     }
 };

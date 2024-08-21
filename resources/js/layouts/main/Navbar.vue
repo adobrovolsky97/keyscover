@@ -1,15 +1,22 @@
 <template>
     <div>
         <nav
-            class="navbar block py-4 w-full max-w-full rounded-none px-4 border-0 top-0 shadow-xl">
+            class="navbar block py-4 w-full max-w-full rounded-none px-2 lg:px-4 border-0 top-0 shadow-xl">
             <div class="container mx-auto flex items-center justify-between">
                 <router-link
                     :to="{name: 'home'}"
                     custom
                     v-slot="{ navigate }"
                 >
-                    <a @click="navigate"
-                       class="block antialiased font-sans cursor-pointer text-lg font-bold">KeysCover</a>
+                    <div class="flex flex-row justify-between items-center gap-2">
+                        <div class="avatar">
+                            <div class="w-8 lg:w-12 rounded-xl">
+                                <img src="../../../../public/logo.png" />
+                            </div>
+                        </div>
+                        <a @click="navigate"
+                           class="block antialiased font-sans cursor-pointer text-md lg:text-lg font-bold">KeysCover</a>
+                    </div>
                 </router-link>
                 <div class="hidden items-center gap-2 lg:flex">
                     <div class="auth flex flex-row justify-center items-center gap-5">
@@ -80,7 +87,7 @@
                         <a @click="logout" v-if="$store.state.user !== null" class="link">Вийти</a>
                     </div>
                 </div>
-                <div class="lg:hidden flex flex-row justify-between items-center gap-2">
+                <div class="lg:hidden flex flex-row justify-between items-center">
                     <span class="font-bold text-sm" v-if="usd">USD {{ usd }}</span>
                     <button class="btn btn-ghost btn-sm" v-if="$route.name !== 'checkout'"
                             onclick="cartModal.showModal()">

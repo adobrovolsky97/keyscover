@@ -5,9 +5,11 @@ namespace App\Models\Product;
 use App\Enums\Config\Key;
 use App\Enums\Product\Media;
 use App\Models\CartProduct\CartProduct;
+use App\Models\OrderProduct\OrderProduct;
 use App\Services\Config\Contracts\ConfigServiceInterface;
 use Carbon\Carbon;
 use App\Models\Category\Category;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Adobrovolsky97\LaravelRepositoryServicePattern\Models\BaseModel;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -31,6 +33,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Category $category
+ * @property OrderProduct[]|Collection $orderProducts
  */
 class Product extends BaseModel implements HasMedia
 {
@@ -65,6 +68,14 @@ class Product extends BaseModel implements HasMedia
     public function getUahPriceAttribute(): float
     {
         return app(ConfigServiceInterface::class)->getValue(Key::DOLLAR->value) * $this->price;
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function orderProducts(): HasMany
+    {
+        return $this->hasMany(OrderProduct::class, 'product_id', 'id');
     }
 
     /**
