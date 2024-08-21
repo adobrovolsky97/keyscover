@@ -21,9 +21,9 @@
                         <div class="flex-1 pl-3 mb-4 md:mb-0 md:mr-16 text-center lg:text-start">
                             <div class="text-sm text-gray-400">{{ product.sku }}</div>
                             <div class="font-medium">{{ product.name }}</div>
-                            <div class="text-sm flex flex-col lg:flex-row lg:mt-0 mt-2 justify-between lg:justify-start gap-2">
-                                <span>{{ product.total_price_usd }} $</span>
-                                <span> ~{{ product.total_price_uah }} грн.</span>
+                            <div class="text-sm flex flex-row lg:mt-0 mt-2 justify-center lg:justify-start gap-1">
+                                <span>{{ product.total_price_usd }}$</span>
+                                <span> ~{{ product.total_price_uah }}грн.</span>
                             </div>
                         </div>
                         <div class="flex flex-col justify-center items-center lg:gap-2 mb-2 lg:mb-0">
