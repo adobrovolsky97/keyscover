@@ -17,10 +17,15 @@ class SearchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'search'     => ['nullable', 'string'],
-            'categories' => ['nullable', 'string', new ValidateCategories()],
-            'per_page'   => ['nullable', 'integer', Rule::in([20, 50, 100])],
-            'order_by'   => ['nullable', 'string', Rule::in(['id_desc', 'name_asc', 'price_asc', 'price_desc', 'popularity_desc'])],
+            'search'         => ['nullable', 'string'],
+            'categories'     => ['nullable', 'string', new ValidateCategories()],
+            'per_page'       => ['nullable', 'integer', Rule::in([20, 50, 100])],
+            'order_by'       => [
+                'nullable',
+                'string',
+                Rule::in(['id_desc', 'name_asc', 'price_asc', 'price_desc', 'popularity_desc'])
+            ],
+            'only_available' => ['nullable', 'boolean']
         ];
     }
 }

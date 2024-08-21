@@ -79,14 +79,19 @@
                 </svg>
             </label>
             <div class="flex flex-row justify-end items-center mb-6 w-full gap-4">
+                <div class="form-control">
+                    <label class="label cursor-pointer">
+                        <span class="label-text">Показувати лише в наявності</span>
+                        <input type="checkbox" true-value="1" false-value="0" v-model="filters.only_available" class="toggle ml-2" />
+                    </label>
+                </div>
                 <div class="flex flex-col gap-2">
-                    <span>Сортування:</span>
                     <select v-model="filters.order_by" class="select select-bordered">
-                        <option :value="'name_asc'">За назвою</option>
-                        <option :value="'id_desc'">За новизною</option>
-                        <option :value="'popularity_desc'">За популярністю</option>
-                        <option :value="'price_asc'">Ціна ↑</option>
-                        <option :value="'price_desc'">Ціна ↓</option>
+                        <option :value="'name_asc'">Сортувати: За назвою</option>
+                        <option :value="'id_desc'">Сортувати: За новизною</option>
+                        <option :value="'popularity_desc'">Сортувати: За популярністю</option>
+                        <option :value="'price_asc'">Сортувати: Ціна ↑</option>
+                        <option :value="'price_desc'">Сортувати: Ціна ↓</option>
                     </select>
                 </div>
             </div>
@@ -138,6 +143,7 @@ export default {
             mode: this.$store.state.mode,
             isDataLoaded: false,
             filters: {
+                only_available: 1,
                 order_by: 'id_desc',
                 page: 1,
                 search: '',
