@@ -40,10 +40,8 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
                     default => $query->orderBy($orderByAndDir[0], $orderByAndDir[1] ?? 'desc'),
                 };
             })
-            ->when(isset($searchParams['only_available']), function (Builder $query) use ($searchParams) {
-                $searchParams['only_available']
-                    ? $query->where('left_in_stock', '>', 0)
-                    : $query->where('left_in_stock', 0);
+            ->when(!empty($searchParams['only_available']), function (Builder $query) use ($searchParams) {
+                $query->where('left_in_stock', '>', 0);
             });
     }
 

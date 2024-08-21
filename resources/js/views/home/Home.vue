@@ -78,11 +78,12 @@
                     <line x1="6" y1="6" x2="18" y2="18"/>
                 </svg>
             </label>
-            <div class="flex flex-row justify-end items-center mb-6 w-full gap-4">
+            <div class="flex flex-col lg:flex-row justify-end items-center mb-6 w-full gap-4">
                 <div class="form-control">
                     <label class="label cursor-pointer">
-                        <span class="label-text">Показувати лише в наявності</span>
-                        <input type="checkbox" true-value="1" false-value="0" v-model="filters.only_available" class="toggle ml-2" />
+                        <span v-if="filters.only_available == 0" class="label-text mr-2">Показувати все</span>
+                        <span v-if="filters.only_available == 1" class="label-text mr-2">Лише в наявності</span>
+                        <input type="checkbox" true-value="1" false-value="0" v-model="filters.only_available" class="toggle" />
                     </label>
                 </div>
                 <div class="flex flex-col gap-2">
