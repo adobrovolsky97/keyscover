@@ -22,6 +22,19 @@ class ProductResource extends JsonResource
     public function toArray(Request $request): array
     {
         $image = $this->getFirstMediaUrl(Media::COLLECTION_MAIN->value, 'watermarked');
+
+        $fieldsToRender = ['Тип', 'Лезо', 'Кількість кнопок', 'Логотип', 'Частота'];
+
+        $customFields = [];
+        foreach ($this->custom_fields ?? [] as $key => $value) {
+            if (in_array($key, $fieldsToRender) && !empty($value)) {
+                $customFields[] = [
+                    'key'   => $key,
+                    'value' => $value
+                ];
+            }
+        }
+
         return [
             'id'                    => $this->id,
             'sku'                   => $this->sku,
@@ -35,7 +48,8 @@ class ProductResource extends JsonResource
             'category'              => [
                 'id'   => $this->category?->id,
                 'name' => $this->category?->name,
-            ]
+            ],
+            'custom_fields'         => $customFields
         ];
     }
 }

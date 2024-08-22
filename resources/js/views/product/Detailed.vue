@@ -27,10 +27,22 @@
                         <p>
                             Категорія: {{ product.category.name }}
                             <br>
-                            <span class="text-gray-400">SKU: {{ product.sku }}</span>
+                            <span class="text-gray-400">Арт.: {{ product.sku }}</span>
                             <br>
                             {{ product.usd_price }} $ / {{ product.price }} грн.
                         </p>
+                        <div class="overflow-x-auto rounded-lg mt-4" v-if="product.custom_fields.length > 0">
+                            <hr>
+                            <table class="table">
+                                <tbody>
+                                <tr v-for="(customField, index) in product.custom_fields" :key="index">
+                                    <td>{{ customField.key }}</td>
+                                    <td>{{ customField.value }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
                     <div v-if="$store.state.user !== null" class="card-actions justify-center">
 

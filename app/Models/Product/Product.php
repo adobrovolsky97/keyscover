@@ -28,6 +28,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property string $sku
  * @property string $name
  * @property float $price
+ * @property array $custom_fields
  * @property boolean $is_available_in_stock
  * @property integer $left_in_stock
  * @property Carbon $created_at
@@ -50,8 +51,13 @@ class Product extends BaseModel implements HasMedia
         'price',
         'is_available_in_stock',
         'left_in_stock',
+        'custom_fields',
         'created_at',
         'updated_at'
+    ];
+
+    protected $casts = [
+        'custom_fields' => 'array'
     ];
 
     /**

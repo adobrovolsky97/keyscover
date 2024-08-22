@@ -95,7 +95,8 @@ class FetchProductsCommand extends Command
                 'category_id'           => $category?->id,
                 'price'                 => $productData['price_amount'],
                 'is_available_in_stock' => ($productData['stock_available'] ?? 0) > 0,
-                'left_in_stock'         => $productData['stock_available'] ?? 0
+                'left_in_stock'         => $productData['stock_available'] ?? 0,
+                'custom_fields'         => $productData['custom_fields'] ?? [],
             ]
         );
 
