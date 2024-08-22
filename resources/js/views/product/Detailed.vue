@@ -3,26 +3,35 @@
                      :classes="'flex flex-row justify-between items-center gap-4'"/>
     <div v-else>
         <div class="card lg:card-side border rounded-2xl shadow-xl">
-            <figure>
-                <div class="carousel overflow-hidden relative" style="width: 32rem">
-                    <div class="flex transition-transform duration-300"
-                         :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
-                        <div v-for="(image, index) in media"
-                             :key="index"
-                             class="carousel-item w-full flex-shrink-0">
-                            <img :src="image.url" class="w-full"/>
+            <div class="flex flex-col justify-center items-center w-full lg:w-2/6">
+                <figure>
+                    <div class="carousel overflow-hidden relative">
+                        <div class="flex transition-transform duration-300"
+                             :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
+                            <div v-for="(image, index) in media"
+                                 :key="index"
+                                 class="carousel-item w-full flex-shrink-0">
+                                <img :src="image.url" class="w-full"/>
+                            </div>
+                        </div>
+                        <div v-if="media.length > 1"
+                             class="absolute left-5 opacity-50 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
+                            <button @click="prevSlide" class="btn btn-circle">❮</button>
+                            <button @click="nextSlide" class="btn btn-circle">❯</button>
                         </div>
                     </div>
-                    <div v-if="media.length > 1"
-                         class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-                        <button @click="prevSlide" class="btn btn-circle">❮</button>
-                        <button @click="nextSlide" class="btn btn-circle">❯</button>
+                </figure>
+                <div v-if="media.length > 1" class="flex gap-2 mt-4 overflow-x-auto mb-4">
+                    <div v-for="(image, index) in thumbnailMedia" :key="index" @click="currentSlide = index"
+                         class="cursor-pointer border rounded-lg overflow-hidden">
+                        <img :src="image.url" class="w-24 h-24 object-cover"
+                             :class="{ 'border-blue-500': currentSlide === index }"/>
                     </div>
                 </div>
-            </figure>
+            </div>
             <div class="card-body">
                 <div class="flex flex-col lg:flex-row justify-between items-start gap-4">
-                    <div>
+                    <div class="w-full">
                         <h2 class="card-title text-2xl">{{ product.name }}</h2>
                         <p>
                             Категорія: {{ product.category.name }}
@@ -42,10 +51,8 @@
                                 </tbody>
                             </table>
                         </div>
-
                     </div>
                     <div v-if="$store.state.user !== null" class="card-actions justify-center">
-
                         <div class="flex flex-col items-center justify-center">
                             <div class="flex flex-row justify-between items-center gap-1 mb-4 md:mb-0">
                                 <div class="join">
@@ -62,14 +69,13 @@
                                     </button>
                                 </div>
                             </div>
-                            <span class="text-error" v-if="productErrors[product.id]">{{productErrors[product.id]}}</span>
+                            <span class="text-error"
+                                  v-if="productErrors[product.id]">{{ productErrors[product.id] }}</span>
                         </div>
-
                         <button v-if="!cartProduct && product.left_in_stock > 0" @click="addItemToCart(product)"
                                 class="btn btn-neutral btn-block btn-sm lg:btn-md">
                             Додати до кошика
                         </button>
-
                         <button v-if="!cartProduct && product.left_in_stock <= 0" disabled
                                 class="btn btn-neutral btn-block btn-sm lg:btn-md">
                             Немає в наявності
@@ -84,7 +90,6 @@
         </div>
     </div>
 </template>
-
 <script>
 import ContentSkeleton from "../../components/skeleton/ContentSkeleton.vue";
 import {toast} from "vue3-toastify";
@@ -114,7 +119,40 @@ export default {
     },
     computed: {
         media() {
-            return this.product.media.length ? this.product.media : [{url: this.product.image}];
+            return this.product?.media?.length ? this.product.media : [{url: this.product.image}];
+        },
+        thumbnailMedia() {
+            const length = this.media.length;
+            const numThumbnails = 4; // Number of thumbnails to show
+            let start = 0;
+            let end = numThumbnails - 1;
+
+            // Calculate the range of thumbnails to show
+            if (length <= numThumbnails) {
+                // Show all thumbnails if there are fewer than or equal to numThumbnails
+                return this.media.filter((_, index) => index !== this.currentSlide);
+            } else {
+                if (this.currentSlide < numThumbnails - 1) {
+                    // If currentSlide is less than the number of thumbnails to show, start from the beginning
+                    start = 0;
+                    end = numThumbnails;
+                } else if (this.currentSlide > length - numThumbnails) {
+                    // If currentSlide is near the end, adjust the start to show the last slides
+                    start = length - numThumbnails;
+                    end = length;
+                } else {
+                    // Normal case where currentSlide is in the middle
+                    start = this.currentSlide - Math.floor(numThumbnails / 2);
+                    end = this.currentSlide + Math.floor(numThumbnails / 2);
+                }
+
+                // Ensure start and end are within bounds
+                start = Math.max(start, 0);
+                end = Math.min(end, length - 1);
+
+                // Exclude the current slide from the thumbnails
+                return this.media.filter((_, index) => index !== this.currentSlide && index >= start && index <= end);
+            }
         }
     },
     mounted() {
@@ -143,8 +181,7 @@ export default {
             this.currentSlide = (this.currentSlide === this.media.length - 1) ? 0 : this.currentSlide + 1;
         },
         getCartQuantityForCurrentProduct() {
-
-            if(!this.product) {
+            if (!this.product) {
                 return 1;
             }
 
@@ -153,10 +190,9 @@ export default {
             return cartItem ? cartItem.quantity : 1;
         },
         addItemToCart(product) {
-
             if (this.cartQty < 1) {
                 toast.error("Невірна кількість товару", {
-                    position:'bottom-right'
+                    position: 'bottom-right'
                 })
                 return;
             }
@@ -164,7 +200,7 @@ export default {
             if (product.left_in_stock < this.cartQty) {
                 this.cartQty = product.left_in_stock;
                 toast.error("Недостатня кількість товарів на складі. Залишок: " + product.left_in_stock + " штук.", {
-                    position:'bottom-right'
+                    position: 'bottom-right'
                 });
                 return;
             }
@@ -178,10 +214,9 @@ export default {
                 })
         },
         incrementQuantity() {
-
             if (this.product.left_in_stock > this.cartQty) {
                 this.cartQty++;
-            }else{
+            } else {
                 this.cartQty = this.product.left_in_stock;
                 this.productErrors[this.product.id] = "В наявності: " + this.product.left_in_stock + " шт.";
             }
@@ -194,11 +229,10 @@ export default {
             this.cartQty--;
         },
         updateProductQuantity() {
-
             if (this.product.left_in_stock < this.cartQty) {
                 this.cartQty = this.product.left_in_stock;
                 toast.error("Недостатня кількість товарів на складі. Залишок: " + this.product.left_in_stock + " штук.", {
-                    position:'bottom-right'
+                    position: 'bottom-right'
                 });
                 return;
             }
