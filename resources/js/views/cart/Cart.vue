@@ -128,7 +128,7 @@ export default {
         '$store.state.cart.total': function () {
             this.calculateRemainingDiscounts();
 
-            if (this.$store.state.cart.total === 0) {
+            if (this.$store.state.cart.total === 0 && this.$route.name === 'checkout') {
                 this.$router.push({name: 'home'})
             }
         }

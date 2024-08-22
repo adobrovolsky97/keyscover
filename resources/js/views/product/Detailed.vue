@@ -3,7 +3,7 @@
                      :classes="'flex flex-row justify-between items-center gap-4'"/>
     <div v-else>
         <div class="card lg:card-side border rounded-2xl shadow-xl">
-            <div class="flex flex-col justify-center items-center w-full lg:w-2/6">
+            <div class="flex flex-col justify-center items-center w-full lg:w-1/2">
                 <figure>
                     <div class="carousel overflow-hidden relative">
                         <div class="flex transition-transform duration-300"
@@ -23,7 +23,8 @@
                 </figure>
                 <div v-if="media.length > 1" class="flex gap-2 mt-4 overflow-x-auto mb-4">
                     <div v-for="(image, index) in media" :key="index" @click="currentSlide = index"
-                         class="cursor-pointer border rounded-lg overflow-hidden" :class="{ 'border-red-500': currentSlide === index, 'hidden': !isThumbnailVisible(index) }">
+                         class="cursor-pointer border rounded-lg overflow-hidden"
+                         :class="{ 'border-red-500': currentSlide === index, 'hidden': !isThumbnailVisible(index) }">
                         <img :src="image.url" class="w-20 h-20 object-cover"/>
                     </div>
                 </div>
@@ -32,13 +33,47 @@
                 <div class="flex flex-col lg:flex-row justify-between items-start gap-4">
                     <div class="w-full">
                         <h2 class="font-bold text-2xl">{{ product.name }}</h2>
-                        <p>
+                        <p class="text-lg">
                             Категорія: {{ product.category.name }}
                             <br>
                             <span class="text-gray-400">Арт.: {{ product.sku }}</span>
                             <br>
-                            {{ product.usd_price }} $ / {{ product.price }} грн.
+                            <span class="text-error font-bold text-2xl">{{ product.usd_price }} $ / {{ product.price }} грн.</span>
                         </p>
+                        <hr class="mt-2">
+                        <div v-if="$store.state.user !== null" class="flex lg:flex-row flex-col gap-1 mt-5">
+                            <div class="flex flex-col items-center justify-center">
+                                <div class="flex flex-row justify-between items-center gap-1 mb-4 md:mb-0">
+                                    <div class="join">
+                                        <button :disabled="product.left_in_stock <= 0" @click="decrementQuantity"
+                                                class="btn btn-neutral join-item btn-sm lg:btn-md">
+                                            -
+                                        </button>
+                                        <input :disabled="product.left_in_stock <= 0"
+                                               class="input input-bordered text-center input-sm lg:input-md join-item w-16"
+                                               placeholder="" v-model="cartQty"/>
+                                        <button :disabled="product.left_in_stock <= 0" @click="incrementQuantity"
+                                                class="btn btn-neutral join-item btn-sm lg:btn-md">
+                                            +
+                                        </button>
+                                    </div>
+                                </div>
+                                <span class="text-error"
+                                      v-if="productErrors[product.id]">{{ productErrors[product.id] }}</span>
+                            </div>
+                            <button v-if="!cartProduct && product.left_in_stock > 0" @click="addItemToCart(product)"
+                                    class="btn btn-neutral btn-sm lg:btn-md">
+                                Додати до кошика
+                            </button>
+                            <button v-if="!cartProduct && product.left_in_stock <= 0" disabled
+                                    class="btn btn-neutral btn-sm lg:btn-md">
+                                Немає в наявності
+                            </button>
+                            <button v-if="cartProduct && product.left_in_stock > 0" @click="updateProductQuantity"
+                                    class="btn btn-success text-white btn-sm lg:btn-md">
+                                Оновити кількість
+                            </button>
+                        </div>
                         <div class="overflow-x-auto rounded-lg mt-4" v-if="product.custom_fields.length > 0">
                             <hr>
                             <table class="table">
@@ -50,39 +85,6 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                    <div v-if="$store.state.user !== null" class="card-actions justify-center w-full">
-                        <div class="flex flex-col items-center justify-center">
-                            <div class="flex flex-row justify-between items-center gap-1 mb-4 md:mb-0">
-                                <div class="join">
-                                    <button :disabled="product.left_in_stock <= 0" @click="decrementQuantity"
-                                            class="btn btn-neutral join-item btn-sm lg:btn-md">
-                                        -
-                                    </button>
-                                    <input :disabled="product.left_in_stock <= 0"
-                                           class="input input-bordered text-center input-sm lg:input-md join-item w-16"
-                                           placeholder="" v-model="cartQty"/>
-                                    <button :disabled="product.left_in_stock <= 0" @click="incrementQuantity"
-                                            class="btn btn-neutral join-item btn-sm lg:btn-md">
-                                        +
-                                    </button>
-                                </div>
-                            </div>
-                            <span class="text-error"
-                                  v-if="productErrors[product.id]">{{ productErrors[product.id] }}</span>
-                        </div>
-                        <button v-if="!cartProduct && product.left_in_stock > 0" @click="addItemToCart(product)"
-                                class="btn btn-neutral btn-block btn-sm lg:btn-md">
-                            Додати до кошика
-                        </button>
-                        <button v-if="!cartProduct && product.left_in_stock <= 0" disabled
-                                class="btn btn-neutral btn-block btn-sm lg:btn-md">
-                            Немає в наявності
-                        </button>
-                        <button v-if="cartProduct && product.left_in_stock > 0" @click="updateProductQuantity"
-                                class="btn btn-success btn-block btn-sm lg:btn-md">
-                            Оновити кількість
-                        </button>
                     </div>
                 </div>
             </div>

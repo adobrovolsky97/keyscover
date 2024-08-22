@@ -11,7 +11,7 @@
                     <div class="flex flex-row justify-between items-center gap-2">
                         <div class="avatar">
                             <div class="w-8 lg:w-12 rounded-xl">
-                                <img src="../../../../public/logo.png" />
+                                <img src="../../../../public/logo.png"/>
                             </div>
                         </div>
                         <a @click="navigate"
@@ -20,15 +20,9 @@
                 </router-link>
                 <div class="hidden items-center gap-2 lg:flex">
                     <div class="auth flex flex-row justify-center items-center gap-5">
-                        <router-link
-                            :to="{name: 'home'}"
-                            custom
-                            v-slot="{ navigate, href }"
-                        >
-                            <a @click="navigate"
-                               :class="{'link-error': $route.path === '/'}"
-                               class="link">Каталог</a>
-                        </router-link>
+                        <a @click="goToProducts"
+                           :class="{'link-error': $route.path === '/'}"
+                           class="link">Каталог</a>
                         <router-link
                             v-if="$store.state.user !== null"
                             :to="{name: 'orders-list'}"
@@ -113,15 +107,9 @@
                             tabindex="0"
                             class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[2] mt-3 w-52 p-2 shadow">
                             <li>
-                                <router-link
-                                    :to="{name: 'home'}"
-                                    custom
-                                    v-slot="{ navigate, href }"
-                                >
-                                    <a @click="navigate"
-                                       :class="{'link-error': $route.path === '/'}"
-                                       class="link">Каталог</a>
-                                </router-link>
+                                <a @click="goToProducts"
+                                   :class="{'link-error': $route.path === '/'}"
+                                   class="link">Каталог</a>
                             </li>
                             <li v-if="$store.state.user !== null">
                                 <router-link
@@ -256,6 +244,11 @@ export default {
                     this.$store.commit('clearUser')
                     this.$router.push({name: 'home'});
                 })
+        },
+        goToProducts() {
+            localStorage.removeItem('productListState');
+
+            this.$router.push({name: 'home'});
         }
     }
 }
