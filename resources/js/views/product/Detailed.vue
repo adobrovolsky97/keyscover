@@ -22,10 +22,9 @@
                     </div>
                 </figure>
                 <div v-if="media.length > 1" class="flex gap-2 mt-4 overflow-x-auto mb-4">
-                    <div v-for="(image, index) in thumbnailMedia" :key="index" @click="currentSlide = index"
-                         class="cursor-pointer border rounded-lg overflow-hidden">
-                        <img :src="image.url" class="w-24 h-24 object-cover"
-                             :class="{ 'border-blue-500': currentSlide === index }"/>
+                    <div v-for="(image, index) in media" :key="index" @click="currentSlide = index"
+                         class="cursor-pointer border rounded-lg overflow-hidden" :class="{ 'border-red-500': currentSlide === index, 'hidden': !isThumbnailVisible(index) }">
+                        <img :src="image.url" class="w-20 h-20 object-cover"/>
                     </div>
                 </div>
             </div>
@@ -121,44 +120,29 @@ export default {
         media() {
             return this.product?.media?.length ? this.product.media : [{url: this.product.image}];
         },
-        thumbnailMedia() {
-            const length = this.media.length;
-            const numThumbnails = 4; // Number of thumbnails to show
-            let start = 0;
-            let end = numThumbnails - 1;
-
-            // Calculate the range of thumbnails to show
-            if (length <= numThumbnails) {
-                // Show all thumbnails if there are fewer than or equal to numThumbnails
-                return this.media.filter((_, index) => index !== this.currentSlide);
-            } else {
-                if (this.currentSlide < numThumbnails - 1) {
-                    // If currentSlide is less than the number of thumbnails to show, start from the beginning
-                    start = 0;
-                    end = numThumbnails;
-                } else if (this.currentSlide > length - numThumbnails) {
-                    // If currentSlide is near the end, adjust the start to show the last slides
-                    start = length - numThumbnails;
-                    end = length;
-                } else {
-                    // Normal case where currentSlide is in the middle
-                    start = this.currentSlide - Math.floor(numThumbnails / 2);
-                    end = this.currentSlide + Math.floor(numThumbnails / 2);
-                }
-
-                // Ensure start and end are within bounds
-                start = Math.max(start, 0);
-                end = Math.min(end, length - 1);
-
-                // Exclude the current slide from the thumbnails
-                return this.media.filter((_, index) => index !== this.currentSlide && index >= start && index <= end);
-            }
-        }
     },
     mounted() {
         this.fetchProduct();
     },
     methods: {
+        isThumbnailVisible(index) {
+            const totalThumbnails = 5;
+            const half = Math.floor(totalThumbnails / 2);
+
+            let start = this.currentSlide - half;
+            let end = this.currentSlide + half;
+
+            // Ensure start and end are within bounds
+            if (start < 0) {
+                start = 0;
+                end = totalThumbnails - 1;
+            } else if (end >= this.media.length) {
+                start = this.media.length - totalThumbnails;
+                end = this.media.length - 1;
+            }
+
+            return index >= start && index <= end;
+        },
         fetchProduct() {
             axios.get('/api/products/' + this.$route.params.id)
                 .then((response) => {
