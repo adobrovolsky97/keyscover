@@ -31,7 +31,7 @@
             <div class="card-body">
                 <div class="flex flex-col lg:flex-row justify-between items-start gap-4">
                     <div class="w-full">
-                        <h2 class="card-title text-2xl">{{ product.name }}</h2>
+                        <h2 class="font-bold text-2xl">{{ product.name }}</h2>
                         <p>
                             Категорія: {{ product.category.name }}
                             <br>
@@ -51,7 +51,7 @@
                             </table>
                         </div>
                     </div>
-                    <div v-if="$store.state.user !== null" class="card-actions justify-center">
+                    <div v-if="$store.state.user !== null" class="card-actions justify-center w-full">
                         <div class="flex flex-col items-center justify-center">
                             <div class="flex flex-row justify-between items-center gap-1 mb-4 md:mb-0">
                                 <div class="join">

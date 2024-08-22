@@ -68,7 +68,7 @@
 
                                 <div class="form-group">
                                     <select v-model="form.paymentType" class="select select-bordered w-full">
-                                        <option :value="'cash_on_delivery'">Розрахунок на пошті при отриманні</option>
+                                        <option v-if="deliveryType ==='new-post'" :value="'cash_on_delivery'">Розрахунок на пошті при отриманні</option>
                                         <option :value="'by_requisites'">Оплата за реквізитами</option>
                                     </select>
                                     <error v-if="Object.keys(errors).length > 0" :errors="errors"
