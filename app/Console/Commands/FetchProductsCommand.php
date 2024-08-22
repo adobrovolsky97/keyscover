@@ -121,16 +121,16 @@ class FetchProductsCommand extends Command
     protected function addAttachmentsToProduct(Product $product, array $attachments): void
     {
         foreach ($product->getMedia('*') as $media) {
-            if (!in_array($media->getCustomProperty('url'), $attachments)) {
-                $media->delete();
-                $this->warn('Attachment ' . $media->getCustomProperty('url') . ' has been removed from product ' . $product->name);
-                continue;
-            }
-
-//            if (in_array($media->getCustomProperty('url'), $attachments)) {
-//                unset($attachments[array_search($media->getCustomProperty('url'), $attachments)]);
-//                $this->warn('Attachment ' . $media->getCustomProperty('url') . ' already exists in product ' . $product->name);
+//            if (!in_array($media->getCustomProperty('url'), $attachments)) {
+//                $media->delete();
+//                $this->warn('Attachment ' . $media->getCustomProperty('url') . ' has been removed from product ' . $product->name);
+//                continue;
 //            }
+
+            if (in_array($media->getCustomProperty('url'), $attachments)) {
+                unset($attachments[array_search($media->getCustomProperty('url'), $attachments)]);
+                $this->warn('Attachment ' . $media->getCustomProperty('url') . ' already exists in product ' . $product->name);
+            }
         }
 
         foreach ($attachments as $id => $attachment) {
