@@ -144,6 +144,7 @@ export default {
             search: '',
             mode: this.$store.state.mode,
             isDataLoaded: false,
+            isInitialLoad: true,
             filters: {
                 only_available: 1,
                 order_by: 'id_desc',
@@ -170,25 +171,9 @@ export default {
             deep: true
         }
     },
-    mounted() {
+    created() {
         this.fetchCategories();
         this.resolveQueryParams();
-
-        this.fetchData()
-            // .then(() => {
-            //     const savedState = localStorage.getItem('productListState');
-            //
-            //     if (savedState) {
-            //         const {scrollPosition} = JSON.parse(savedState);
-            //
-            //         this.$nextTick(() => {
-            //             window.scrollTo(0, scrollPosition);
-            //         });
-            //
-            //         // Clear the saved state
-            //         localStorage.removeItem('productListState');
-            //     }
-            // });
 
         this.search = this.filters.search;
     },
@@ -242,10 +227,28 @@ export default {
             return axios.get('/api/products', {params: this.filters})
                 .then((response) => {
                     this.data = response.data;
-                    window.scrollTo({top: 0, behavior: 'smooth'});
+                })
+                .then(() => {
+                    this.isDataLoaded = true;
+
+                    if (!this.isInitialLoad) {
+                        window.scrollTo({top: 0, behavior: 'smooth'});
+                    } else {
+                        const savedState = localStorage.getItem('productListState');
+                        if (savedState) {
+                            const {scrollPosition} = JSON.parse(savedState);
+
+                            this.$nextTick(() => {
+                                //scroll to position smooth
+                                window.scrollTo({top: scrollPosition, behavior: 'smooth'});
+                            });
+                        }
+                        // Clear the saved state
+                        localStorage.removeItem('productListState');
+                    }
                 })
                 .finally(() => {
-                    this.isDataLoaded = true;
+                    this.isInitialLoad = false;
                 });
         },
         resolveQueryParams() {
