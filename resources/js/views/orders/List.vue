@@ -46,7 +46,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td>{{ product.product.name }}</td>
+                                    <td><span class="link cursor-pointer" @click="showProduct(product)">{{ product.product.name }}</span></td>
                                     <td class="text-gray-400">{{ product.product.sku }}</td>
                                     <td>{{product.product.usd_price}} $</td>
                                     <td>{{product.quantity}}</td>
@@ -127,6 +127,16 @@ export default {
                     this.data = response.data;
                     this.isDataLoaded = true;
                 })
+        },
+        showProduct(product) {
+            // open in new tab
+            const url = this.$router.resolve({
+                name: 'product.show',
+                params: { id: product.product.id }
+            }).href;
+
+            window.open(url, '_blank');
+
         }
     }
 }

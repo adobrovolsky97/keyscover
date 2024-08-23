@@ -41,19 +41,19 @@
                             <span class="text-error font-bold text-2xl">{{ product.usd_price }} $ / {{ product.price }} грн.</span>
                         </p>
                         <hr class="mt-2">
-                        <div v-if="$store.state.user !== null" class="flex lg:flex-row flex-col gap-1 mt-5">
+                        <div v-if="$store.state.user !== null" class="flex flex-row-reverse md:flex-row w-full gap-1 justify-center lg:justify-start mt-5">
                             <div class="flex flex-col items-center justify-center">
                                 <div class="flex flex-row justify-between items-center gap-1 mb-4 md:mb-0">
                                     <div class="join">
                                         <button :disabled="product.left_in_stock <= 0" @click="decrementQuantity"
-                                                class="btn btn-neutral join-item btn-sm lg:btn-md">
+                                                class="btn btn-neutral join-item">
                                             -
                                         </button>
                                         <input :disabled="product.left_in_stock <= 0"
-                                               class="input input-bordered text-center input-sm lg:input-md join-item w-16"
+                                               class="input input-bordered text-center join-item w-16"
                                                placeholder="" v-model="cartQty"/>
                                         <button :disabled="product.left_in_stock <= 0" @click="incrementQuantity"
-                                                class="btn btn-neutral join-item btn-sm lg:btn-md">
+                                                class="btn btn-neutral join-item">
                                             +
                                         </button>
                                     </div>
@@ -62,15 +62,15 @@
                                       v-if="productErrors[product.id]">{{ productErrors[product.id] }}</span>
                             </div>
                             <button v-if="!cartProduct && product.left_in_stock > 0" @click="addItemToCart(product)"
-                                    class="btn btn-neutral btn-sm lg:btn-md">
+                                    class="btn btn-neutral">
                                 Додати до кошика
                             </button>
                             <button v-if="!cartProduct && product.left_in_stock <= 0" disabled
-                                    class="btn btn-neutral btn-sm lg:btn-md">
+                                    class="btn btn-neutral">
                                 Немає в наявності
                             </button>
                             <button v-if="cartProduct && product.left_in_stock > 0" @click="updateProductQuantity"
-                                    class="btn btn-success text-white btn-sm lg:btn-md">
+                                    class="btn btn-success text-white">
                                 Оновити кількість
                             </button>
                         </div>

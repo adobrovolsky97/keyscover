@@ -121,7 +121,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="btn btn-block btn-outline mt-4"
+                        <button class="btn btn-block btn-success text-white mt-4"
                                 :disabled="isDisabled || $store.state.cart?.total <= 0"
                                 @click="createOrder">Створити замовлення
                         </button>

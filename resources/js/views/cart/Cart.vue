@@ -30,14 +30,14 @@
                             <div class="flex flex-row justify-between items-center gap-1 mb-4 md:mb-0 md:mr-4">
                                 <div class="join">
                                     <button @click="decrementQuantity(product)"
-                                            class="btn btn-success join-item btn-md rounded-l-full">
+                                            class="btn btn-success text-white join-item btn-md rounded-l-full">
                                         -
                                     </button>
                                     <input @input="updateProductQuantity(product)"
                                            class="input input-bordered text-center input-md join-item w-14"
                                            placeholder="" v-model="product.quantity"/>
                                     <button @click="incrementQuantity(product)"
-                                            class="btn btn-success join-item btn-md rounded-r-full">
+                                            class="btn btn-success text-white join-item btn-md rounded-r-full">
                                         +
                                     </button>
                                 </div>
