@@ -9,8 +9,9 @@
         </figure>
         <div class="card-body p-2 lg:p-4">
             <p class="text-xs text-gray-400">Арт. {{ product.sku }}</p>
-            <p class="text-xs text-gray-400">{{ product.category.name }}</p>
-            <h3 class="font-bold lg:text-lg text-xs product-name hover:text-gray-400 cursor-pointer overflow-x-auto" @click="showProduct">
+            <p class="text-xs text-gray-400">{{ product.category.breadcrumbs }}</p>
+            <h3 class="font-bold lg:text-lg text-xs product-name hover:text-gray-400 cursor-pointer overflow-x-auto"
+                @click="showProduct">
                 {{ product.name }}
             </h3>
             <div class="flex flex-row justify-between items-center">
@@ -35,7 +36,7 @@
                             </button>
                         </div>
                     </div>
-                    <span class="text-error" v-if="productErrors[product.id]">{{productErrors[product.id]}}</span>
+                    <span class="text-error" v-if="productErrors[product.id]">{{ productErrors[product.id] }}</span>
                 </div>
 
                 <button v-if="!cartProduct && product.left_in_stock > 0" @click="addItemToCart(product)"
@@ -93,7 +94,7 @@ export default {
 
             if (this.cartQty < 1) {
                 toast.error("Невірна кількість товару", {
-                    position:'bottom-right'
+                    position: 'bottom-right'
                 })
                 return;
             }
@@ -101,7 +102,7 @@ export default {
             if (product.left_in_stock < this.cartQty) {
                 this.cartQty = product.left_in_stock;
                 toast.error("Недостатня кількість товарів на складі. Залишок: " + product.left_in_stock + " штук.", {
-                    position:'bottom-right'
+                    position: 'bottom-right'
                 });
                 return;
             }
@@ -118,7 +119,7 @@ export default {
 
             if (this.product.left_in_stock > this.cartQty) {
                 this.cartQty++;
-            }else{
+            } else {
                 this.cartQty = this.product.left_in_stock;
                 this.productErrors[this.product.id] = "В наявності: " + this.product.left_in_stock + " шт.";
             }
@@ -135,7 +136,7 @@ export default {
             if (this.product.left_in_stock < this.cartQty) {
                 this.cartQty = this.product.left_in_stock;
                 toast.error("Недостатня кількість товарів на складі. Залишок: " + this.product.left_in_stock + " штук.", {
-                    position:'bottom-right'
+                    position: 'bottom-right'
                 });
                 return;
             }

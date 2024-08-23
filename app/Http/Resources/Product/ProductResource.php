@@ -48,6 +48,7 @@ class ProductResource extends JsonResource
             'category'              => [
                 'id'   => $this->category?->id,
                 'name' => $this->category?->name,
+                'breadcrumbs' => $this->category?->breadcrumbs
             ],
             'custom_fields'         => $customFields
         ];

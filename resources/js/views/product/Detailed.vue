@@ -34,7 +34,7 @@
                     <div class="w-full">
                         <h2 class="font-bold text-2xl">{{ product.name }}</h2>
                         <p class="text-lg">
-                            Категорія: {{ product.category.name }}
+                            {{ product.category.breadcrumbs }}
                             <br>
                             <span class="text-gray-400">Арт.: {{ product.sku }}</span>
                             <br>

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Product\Product;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Adobrovolsky97\LaravelRepositoryServicePattern\Models\BaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -69,6 +70,26 @@ class Category extends BaseModel
     public function children(): HasMany
     {
         return $this->hasMany(Category::class, 'parent_id', 'external_id');
+    }
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'parent_id', 'external_id');
+    }
+
+    public function getBreadcrumbsAttribute(): string
+    {
+        $breadcrumbs = [];
+        $category = $this;
+
+        while (!empty($category->parent_id)) {
+            $breadcrumbs[] = $category->name;
+            $category = $category->parent;
+        }
+
+        $breadcrumbs[] = $category->name;
+
+        return implode(' / ', array_reverse($breadcrumbs));
     }
 
     public function sluggable(): array
