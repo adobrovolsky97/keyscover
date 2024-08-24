@@ -13,7 +13,7 @@
                 />
             </div>
             <div class="border rounded-2xl p-4 w-full">
-                <p>Погодинна кількість не унікальних візитів за сьогодні</p>
+                <p>Погодинна кількість кліків за сьогодні</p>
                 <Bar
                     v-if="isHourlyVisitsLoaded"
                     id="my-chart-id"
@@ -98,7 +98,7 @@ export default {
                     });
 
                     this.hourlyVisitsChartData.datasets[0] = {
-                        label: 'Погодинні візити',
+                        label: 'Кліки',
                         backgroundColor: '#79b4f8',
                         data: data
                     };
