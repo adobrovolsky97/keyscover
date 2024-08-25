@@ -16,7 +16,6 @@
             </ul>
         </div>
         <div class="products-data bg-base-100 w-full">
-            <ContentSkeleton v-if="!isDataLoaded"/>
             <div class="mobile lg:hidden flex flex-row justify-between items-center mb-4">
                 <div class="drawer z-[1]">
                     <input id="my-drawer" type="checkbox" class="drawer-toggle"/>
@@ -98,6 +97,7 @@
                 </select>
             </div>
 
+            <ContentSkeleton v-if="!isDataLoaded"/>
             <div class="products lg:grid-cols-4 grid gap-3" :class="classes" v-if="isDataLoaded && data.data.length">
                 <Item :id="product.id" v-for="product in data.data" :product="product" :key="product.id"/>
             </div>
