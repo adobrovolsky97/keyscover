@@ -1,11 +1,24 @@
 <template>
     <div class="card border bg-base-100 shadow-xl">
-        <figure>
+        <figure class="w-full h-72 overflow-hidden">
+            <!-- Plug image -->
             <img
+                v-if="loading"
+                src="../../../../public/no-image.png"
+                alt="Loading"
+                class="w-full h-full object-cover"
+            />
+
+            <!-- Основна картинка -->
+            <img
+                v-show="!loading"
                 @click="showProduct"
-                class=" w-full object-cover cursor-pointer"
+                @load="loading = false"
+                @error="onImageError"
                 :src="product.image"
-                :alt="product.name"/>
+                :alt="product.name"
+                class="w-full h-full object-cover cursor-pointer"
+            />
         </figure>
         <div class="card-body p-2 lg:p-4">
             <p class="text-xs text-gray-400">Арт. {{ product.sku }}</p>
@@ -68,6 +81,8 @@ export default {
             cart: this.$store.state.cart,
             cartQty: 0,
             cartProduct: null,
+            fallbackImage: '../../../../public/no-image.png',
+            loading: true,
         }
     },
     watch: {
@@ -156,7 +171,11 @@ export default {
             }));
 
             this.$router.push({name: 'product.show', params: {id: this.product.id}});
-        }
+        },
+        onImageError(event) {
+            event.target.src = this.fallbackImage;
+            this.loading = false;
+        },
     }
 }
 </script>

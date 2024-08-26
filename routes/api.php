@@ -111,5 +111,8 @@ Route::middleware(AdminMiddleware::class)->group(function () {
     Route::group(['prefix' => 'stats'], function () {
         Route::get('unique-visits', [StatController::class, 'uniqueVisits']);
         Route::get('visits-by-hour', [StatController::class, 'visitsByHour']);
+        Route::get('platforms', [StatController::class, 'platforms']);
+        Route::get('browsers', [StatController::class, 'browsers']);
+        Route::get('devices', [StatController::class, 'devices']);
     });
 });

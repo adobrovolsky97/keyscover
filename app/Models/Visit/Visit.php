@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property integer $id
  * @property string $ip
+ * @property string $os
+ * @property string $device
+ * @property string $browser
  * @property integer $user_id
  * @property string $user_agent
  * @property string $url
@@ -24,7 +27,7 @@ class Visit extends BaseModel
     /**
      * @var array
      */
-    protected $fillable = ['ip', 'user_id', 'user_agent', 'url', 'date', 'created_at', 'updated_at'];
+    protected $fillable = ['ip', 'os', 'device', 'browser', 'user_id', 'user_agent', 'url', 'date', 'created_at', 'updated_at'];
 
     protected $casts = [
         'date' => 'datetime:Y-m-d',

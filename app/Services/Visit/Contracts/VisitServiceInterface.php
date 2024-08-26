@@ -25,4 +25,25 @@ interface VisitServiceInterface extends BaseCrudServiceInterface
      * @return array
      */
     public function getVisitsCountForTodayByHour(): array;
+
+    /**
+     * Get platform statistics
+     *
+     * @return array
+     */
+    public function getPlatformStatistics(): array;
+
+    /**
+     * Get device statistics
+     *
+     * @return array
+     */
+    public function getDeviceStatistics(): array;
+
+    /**
+     * Get browser statistics
+     *
+     * @return array
+     */
+    public function getBrowserStatistics(): array;
 }

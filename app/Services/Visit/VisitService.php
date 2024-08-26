@@ -36,6 +36,53 @@ class VisitService extends BaseCrudService implements VisitServiceInterface
     }
 
     /**
+     * Get platform statistics
+     *
+     * @return array
+     */
+    public function getPlatformStatistics(): array
+    {
+        return $this->calculatePercentage(
+            $this->repository->getGroupedStatisticByColumn('os')->toArray()
+        );
+    }
+
+    /**
+     * Get device statistics
+     *
+     * @return array
+     */
+    public function getDeviceStatistics(): array
+    {
+        return $this->calculatePercentage(
+            $this->repository->getGroupedStatisticByColumn('device')->toArray()
+        );
+    }
+
+    /**
+     * Get browser statistics
+     *
+     * @return array
+     */
+    public function getBrowserStatistics(): array
+    {
+        return $this->calculatePercentage(
+            $this->repository->getGroupedStatisticByColumn('browser')->toArray()
+        );
+    }
+
+    protected function calculatePercentage(array $data): array
+    {
+        $total = array_sum(array_column($data, 'count'));
+
+        return array_map(function ($item) use ($total) {
+            $item['percentage'] = round($item['count'] / $total * 100, 2);
+
+            return $item;
+        }, $data);
+    }
+
+    /**
      * @return string
      */
     protected function getRepositoryClass(): string

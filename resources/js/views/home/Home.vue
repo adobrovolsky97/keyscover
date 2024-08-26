@@ -60,7 +60,7 @@
                 </button>
             </div>
             <label class="input input-bordered flex items-center gap-2 mb-6">
-                <input @input="delaySearch" v-model="search" type="text" class="grow" placeholder="Пошук"/>
+                <input @input="delaySearch" v-model="search" type="text" class="grow" :placeholder="filters.categories.length > 0 ? 'Пошук по категорії' : 'Загальний пошук'"/>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 16 16"

@@ -12,6 +12,7 @@
         "daaner/novaposhta": "^1.4",
         "graham-campbell/github": "^12.4",
         "guzzlehttp/guzzle": "^7.2",
+        "jenssegers/agent": "^2.6",
         "laravel/framework": "^10.10",
         "laravel/passport": "^11.10",
         "laravel/sanctum": "^3.3",

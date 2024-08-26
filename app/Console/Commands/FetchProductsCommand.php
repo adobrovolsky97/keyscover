@@ -143,7 +143,7 @@ class FetchProductsCommand extends Command
 
                 $this->info('Attachment ' . $attachment . ' has been added to product ' . $product->name);
             } catch (Throwable $exception) {
-                $this->error('Failed to add attachment ' . $attachment . ' to product ' . $product->name);
+                $this->error('Failed to add attachment ' . $attachment . ' to product ' . $product->name. ' ' . $exception->getMessage());
             }
         }
     }

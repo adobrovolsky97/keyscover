@@ -26,4 +26,12 @@ interface VisitRepositoryInterface extends BaseRepositoryInterface
      * @return Collection
      */
     public function getVisitsCountForTodayByHour(): Collection;
+
+    /**
+     * Get grouped statistic by column
+     *
+     * @param string $column
+     * @return Collection
+     */
+    public function getGroupedStatisticByColumn(string $column): Collection;
 }

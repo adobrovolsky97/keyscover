@@ -12,28 +12,75 @@ use Response;
 class StatController extends Controller
 {
     /**
+     * @var VisitServiceInterface
+     */
+    private VisitServiceInterface $visitService;
+
+    /**
+     * @param VisitServiceInterface $visitService
+     */
+    public function __construct(VisitServiceInterface $visitService)
+    {
+        $this->visitService = $visitService;
+    }
+
+    /**
      * Get unique visits count for date range
      *
-     * @param VisitServiceInterface $visitService
      * @return JsonResponse
      */
-    public function uniqueVisits(VisitServiceInterface $visitService): JsonResponse
+    public function uniqueVisits(): JsonResponse
     {
         return Response::json([
-            'data' => $visitService->getUniqueVisitsCountForDateRange(today()->subDays(6), today())
+            'data' => $this->visitService->getUniqueVisitsCountForDateRange(today()->subDays(6), today())
         ]);
     }
 
     /**
      * Get visits count for today by hour
      *
-     * @param VisitServiceInterface $visitService
      * @return JsonResponse
      */
-    public function visitsByHour(VisitServiceInterface $visitService): JsonResponse
+    public function visitsByHour(): JsonResponse
     {
         return Response::json([
-            'data' => $visitService->getVisitsCountForTodayByHour()
+            'data' => $this->visitService->getVisitsCountForTodayByHour()
+        ]);
+    }
+
+    /**
+     * Get platform statistics
+     *
+     * @return JsonResponse
+     */
+    public function platforms(): JsonResponse
+    {
+        return Response::json([
+            'data' => $this->visitService->getPlatformStatistics()
+        ]);
+    }
+
+    /**
+     * Get device statistics
+     *
+     * @return JsonResponse
+     */
+    public function devices(): JsonResponse
+    {
+        return Response::json([
+            'data' => $this->visitService->getDeviceStatistics()
+        ]);
+    }
+
+    /**
+     * Get browser statistics
+     *
+     * @return JsonResponse
+     */
+    public function browsers(): JsonResponse
+    {
+        return Response::json([
+            'data' => $this->visitService->getBrowserStatistics()
         ]);
     }
 }

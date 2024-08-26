@@ -51,6 +51,21 @@ class VisitRepository extends BaseRepository implements VisitRepositoryInterface
     }
 
     /**
+     * Get grouped statistic by column
+     *
+     * @param string $column
+     * @return Collection
+     */
+    public function getGroupedStatisticByColumn(string $column): Collection
+    {
+        return $this->getQuery()
+            ->selectRaw("count(*) as count, $column")
+            ->groupBy($column)
+            ->whereNotNull($column)
+            ->get();
+    }
+
+    /**
      * @return string
      */
     protected function getModelClass(): string

@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\SendOrderToCrmJob;
 use App\Models\Order\Order;
+use App\Models\Product\Product;
 use App\Services\Crm\Contracts\CrmServiceInterface;
 use App\Services\Visit\Contracts\VisitServiceInterface;
 use Carbon\Carbon;
@@ -30,6 +31,14 @@ class TestCommand extends Command
      */
     public function handle(VisitServiceInterface $visitService)
     {
-        $visitService->getUniqueVisitsCountForDateRange(Carbon::parse('2024-08-01'), Carbon::parse('2024-08-31'));
+        $product = Product::findOrFail(2);
+
+        $mediaUrl = $product->getFirstMediaUrl('main', 'watermarked');
+        if (empty($mediaUrl)) {
+            $mediaUrl = $product->getFallbackMediaUrl('main');
+        }
+        dd($mediaUrl);
+//
+//        $visitService->getUniqueVisitsCountForDateRange(Carbon::parse('2024-08-01'), Carbon::parse('2024-08-31'));
     }
 }

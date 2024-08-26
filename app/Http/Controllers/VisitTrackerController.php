@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\VisitTracker\VisitTrackerRequest;
 use App\Services\Visit\Contracts\VisitServiceInterface;
 use Illuminate\Http\JsonResponse;
+use Jenssegers\Agent\Agent;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -29,10 +30,15 @@ class VisitTrackerController extends Controller
      * @param VisitTrackerRequest $request
      * @return JsonResponse
      */
-    public function track(VisitTrackerRequest $request): JsonResponse
+    public function track(VisitTrackerRequest $request, Agent $agent): JsonResponse
     {
+        $agent->setUserAgent($request->userAgent());
+
         $this->visitService->create([
             'ip'         => $request->ip(),
+            'os'         => $agent->platform(),
+            'browser'    => $agent->browser(),
+            'device'     => $agent->device(),
             'url'        => $request->input('url'),
             'user_agent' => $request->userAgent(),
             'user_id'    => $request->user()?->id,
