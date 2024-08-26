@@ -11,7 +11,7 @@
                             <div v-for="(image, index) in media"
                                  :key="index"
                                  class="carousel-item w-full flex-shrink-0">
-                                <img :src="image.url" class="w-full max-h-96 object-cover"/>
+                                <img :src="image.url" class="w-full object-cover"/>
                             </div>
                         </div>
                         <div v-if="media.length > 1"
