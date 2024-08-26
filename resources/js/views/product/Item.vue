@@ -1,6 +1,6 @@
 <template>
     <div class="card border bg-base-100 shadow-xl">
-        <figure class="w-full h-72 overflow-hidden">
+        <figure class="w-full overflow-hidden">
             <!-- Plug image -->
             <img
                 v-if="loading"
