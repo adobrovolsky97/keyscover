@@ -10,6 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\File;
 use Spatie\MediaLibrary\Conversions\FileManipulator;
 use Spatie\MediaLibrary\Conversions\Jobs\PerformConversionsJob;
+use Storage;
 
 class CustomPerformConversionsJob extends PerformConversionsJob implements ShouldQueue
 {
@@ -20,7 +21,7 @@ class CustomPerformConversionsJob extends PerformConversionsJob implements Shoul
      */
     public function handle(FileManipulator $fileManipulator): bool
     {
-        File::chmod(storage_path(), 0775);
+        File::chmod(storage_path('app/public'), 0775);
 
         return parent::handle($fileManipulator);
     }
