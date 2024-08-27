@@ -314,7 +314,7 @@ export default {
                 .post('/api/orders', {
                     surname: this.form.surname,
                     name: this.form.name,
-                    phone: this.form.phone,
+                    phone: '0' + this.form.phone,
                     patronymic: this.form.patronymic,
                     delivery_type: this.deliveryType,
                     comment: this.form.comment,
