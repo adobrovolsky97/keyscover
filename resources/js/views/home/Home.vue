@@ -116,9 +116,9 @@
                 <div class="flex flex-row justify-between items-center">
                     <span>Показувати:</span>
                     <select v-model="filters.per_page" class="select">
-                        <option value="20">20 записів</option>
-                        <option value="50">50 записів</option>
-                        <option value="100">100 записів</option>
+                        <option value="20">20 товарів</option>
+                        <option value="50">50 товарів</option>
+                        <option value="100">100 товарів</option>
                     </select>
                 </div>
             </div>
