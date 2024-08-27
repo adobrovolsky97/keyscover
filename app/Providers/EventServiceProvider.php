@@ -18,6 +18,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        \Spatie\MediaLibrary\MediaCollections\Events\MediaHasBeenAdded::class => [
+            \App\Listeners\SetFilePermissions::class,
+        ],
     ];
 
     /**
