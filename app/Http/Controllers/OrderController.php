@@ -47,7 +47,7 @@ class OrderController extends Controller
     {
         $order = $this->orderService->create($request->validated());
 
-        SendOrderToCrmJob::dispatch($order);
+        SendOrderToCrmJob::dispatch($order)->onQueue('crm');
 
         return response()->json();
     }

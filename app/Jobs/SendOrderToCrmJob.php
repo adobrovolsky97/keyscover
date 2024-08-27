@@ -20,11 +20,6 @@ class SendOrderToCrmJob implements ShouldQueue
     private Order $order;
 
     /**
-     * @var string
-     */
-    public $queue = 'crm';
-
-    /**
      * Create a new job instance.
      */
     public function __construct(Order $order)
