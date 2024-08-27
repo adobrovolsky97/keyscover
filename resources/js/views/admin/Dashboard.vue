@@ -187,7 +187,7 @@ export default {
 
                     response.data.data.forEach(item => {
                         labels.push(item.date);
-                        data.push(item.percentage);
+                        data.push(item.count);
                     });
 
                     this.uniqueVisitsChartData.datasets[0] = {
@@ -216,7 +216,7 @@ export default {
                         if (item.hour < 10) item.hour = '0' + item.hour;
 
                         labels.push(item.hour);
-                        data.push(item.percentage);
+                        data.push(item.count);
                     });
 
                     this.hourlyVisitsChartData.datasets[0] = {
