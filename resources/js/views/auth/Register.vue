@@ -18,14 +18,18 @@
                 <div class="label">
                     <span class="label-text">Email</span>
                 </div>
-                <input type="text" name="eml" v-model="form.email" placeholder="Email" autocomplete="off" class="input input-bordered w-full"/>
+                <input type="text" name="eml" v-model="form.email" placeholder="Email" autocomplete="off"
+                       class="input input-bordered w-full"/>
                 <span class="text-red-600 text-xs" v-if="errors?.email">{{ errors.email[0] }}</span>
             </label>
             <label class="form-control w-full">
                 <div class="label">
                     <span class="label-text">Номер телефону</span>
                 </div>
-                <input type="text" name="phone" v-model="form.phone" placeholder="Номер телефону" autocomplete="off" class="input input-bordered w-full"/>
+                <label class="input input-bordered flex items-center gap-2">
+                    +380
+                    <input type="tel" autocomplete="off" v-model="form.phone" placeholder="975231231"/>
+                </label>
                 <span class="text-red-600 text-xs" v-if="errors?.phone">{{ errors.phone[0] }}</span>
             </label>
 
@@ -79,6 +83,13 @@ export default {
                 email: null,
                 password: null,
                 password_confirmation: null,
+            }
+        }
+    },
+    watch: {
+        'form.phone': function (val) {
+            if (val.length > 9) {
+                this.form.phone = val.slice(0, 9);
             }
         }
     },

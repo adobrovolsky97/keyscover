@@ -10,7 +10,7 @@
             <ul class="flex flex-col divide-y w-full">
                 <li v-for="product in $store.state.cart?.products ?? []" :key="product.id"
                     class="flex flex-col md:flex-row relative">
-                    <div class="select-none cursor-pointer flex flex-col md:flex-row items-center md:p-4 p-0 w-full">
+                    <div class="select-none cursor-pointer flex flex-col md:flex-row items-center md:p-4 p-0 w-full overflow-hidden break-all">
                         <div class="flex flex-col w-24 h-24 justify-center items-center mb-4 md:mb-0 md:mr-4">
                             <div class="avatar">
                                 <div class="w-24 rounded">

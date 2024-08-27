@@ -152,7 +152,7 @@
 
                     <div class="modal-box w-11/12 max-w-3xl">
                         <form method="dialog">
-                            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                            <button class="btn btn-lg btn-circle btn-ghost absolute right-2 top-2">✕</button>
                         </form>
                         <Cart/>
                     </div>

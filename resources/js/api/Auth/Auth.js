@@ -17,6 +17,7 @@ class Auth {
      * @returns {Promise<axios.AxiosResponse<any>>}
      */
     register(body) {
+        body.phone = '0'+ body.phone;
         return axios.post('/api/auth/register', body);
     }
 

@@ -35,10 +35,14 @@
 
                                 <div class="form-group">
                                     <label>Номер телефону</label>
-                                    <input type="text" class="input input-bordered w-full " placeholder="Номер телефону"
-                                           v-model="form.phone">
-                                    <error v-if="Object.keys(errors).length > 0" :errors="errors"
-                                           attribute="phone"></error>
+                                    <label class="form-control w-full">
+                                        <label class="input input-bordered flex items-center gap-2">
+                                            +380
+                                            <input type="tel" autocomplete="off" v-model="form.phone" placeholder="975231231"/>
+                                        </label>
+                                        <error v-if="Object.keys(errors).length > 0" :errors="errors"
+                                               attribute="phone"></error>
+                                    </label>
                                 </div>
                                 <div class="form-group">
                                     <label for="">Коментар</label>
@@ -190,6 +194,13 @@ export default {
         }
         next(); // continue with the navigation
     },
+    watch : {
+        'form.phone': function (val) {
+            if (val.length > 9) {
+                this.form.phone = val.slice(0, 9);
+            }
+        }
+    },
     mounted() {
         this.cart = this.$store.state.cart;
 
@@ -203,6 +214,7 @@ export default {
                 this.form.name = this.$store.state.user?.last_order?.name ?? null;
                 this.form.patronymic = this.$store.state.user?.last_order?.patronymic ?? null;
                 this.form.phone = this.$store.state.user?.last_order?.phone ?? this.$store.state.user.phone;
+                this.form.phone = this.form.phone.replace(/^0+/, '');
                 this.form.city = this.$store.state.user?.last_order?.city_name ?? null;
                 this.form.cityId = this.$store.state.user?.last_order?.city_id ?? null;
                 this.form.warehouse = this.$store.state.user?.last_order?.warehouse_name ?? null;
