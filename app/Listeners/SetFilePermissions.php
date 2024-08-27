@@ -18,6 +18,6 @@ class SetFilePermissions
         $path = $media->getPath(); // Get the full path to the file
 
         // Set the correct permissions
-        chmod($path, 0664); // Adjust the permissions as needed
+        chmod($path, 0775); // Adjust the permissions as needed
     }
 }
