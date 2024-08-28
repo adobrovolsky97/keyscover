@@ -37,7 +37,7 @@
                                     <label>Номер телефону</label>
                                     <label class="form-control w-full">
                                         <label class="input input-bordered flex items-center gap-2">
-                                            +380
+                                            +38
                                             <input type="tel" autocomplete="off" v-model="form.phone" placeholder="975231231"/>
                                         </label>
                                         <error v-if="Object.keys(errors).length > 0" :errors="errors"
@@ -196,9 +196,16 @@ export default {
     },
     watch : {
         'form.phone': function (val) {
-            if (val.length > 9) {
-                this.form.phone = val.slice(0, 9);
+            // Remove any non-digit characters
+            val = val.replace(/\D/g, '');
+
+            // Ensure the length does not exceed 10 digits
+            if (val.length > 10) {
+                val = val.slice(0, 10);
             }
+
+            // Update the form.phone value
+            this.form.phone = val;
         }
     },
     mounted() {
@@ -214,7 +221,6 @@ export default {
                 this.form.name = this.$store.state.user?.last_order?.name ?? null;
                 this.form.patronymic = this.$store.state.user?.last_order?.patronymic ?? null;
                 this.form.phone = this.$store.state.user?.last_order?.phone ?? this.$store.state.user.phone;
-                this.form.phone = this.form.phone.replace(/^0+/, '');
                 this.form.city = this.$store.state.user?.last_order?.city_name ?? null;
                 this.form.cityId = this.$store.state.user?.last_order?.city_id ?? null;
                 this.form.warehouse = this.$store.state.user?.last_order?.warehouse_name ?? null;
@@ -314,7 +320,7 @@ export default {
                 .post('/api/orders', {
                     surname: this.form.surname,
                     name: this.form.name,
-                    phone: '0' + this.form.phone,
+                    phone: this.form.phone,
                     patronymic: this.form.patronymic,
                     delivery_type: this.deliveryType,
                     comment: this.form.comment,

@@ -27,8 +27,8 @@
                     <span class="label-text">Номер телефону</span>
                 </div>
                 <label class="input input-bordered flex items-center gap-2">
-                    +380
-                    <input type="tel" autocomplete="off" v-model="form.phone" placeholder="975231231"/>
+                    +38
+                    <input type="tel" autocomplete="off" v-model="form.phone" placeholder="0975231231"/>
                 </label>
                 <span class="text-red-600 text-xs" v-if="errors?.phone">{{ errors.phone[0] }}</span>
             </label>
@@ -88,9 +88,16 @@ export default {
     },
     watch: {
         'form.phone': function (val) {
-            if (val.length > 9) {
-                this.form.phone = val.slice(0, 9);
+            // Remove any non-digit characters
+            val = val.replace(/\D/g, '');
+
+            // Ensure the length does not exceed 10 digits
+            if (val.length > 10) {
+                val = val.slice(0, 10);
             }
+
+            // Update the form.phone value
+            this.form.phone = val;
         }
     },
     methods: {
