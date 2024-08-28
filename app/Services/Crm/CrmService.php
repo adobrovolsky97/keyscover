@@ -71,7 +71,7 @@ class CrmService implements CrmServiceInterface
     {
         $customFieldsData = [
             [
-                'name'  => 'Тип доставки',
+                'name'  => 'Номер телефону з сайту',
                 'value' => $order->phone,
             ],
             [
@@ -79,7 +79,7 @@ class CrmService implements CrmServiceInterface
                 'value' => $order->full_name,
             ],
             [
-                'name'  => 'Номер телефону з сайту',
+                'name'  => 'Тип доставки',
                 'value' => $order->delivery_type === 'new-post' ? 'Нова Пошта' : 'Самовивіз'
             ],
             [
