@@ -154,6 +154,10 @@ export default {
                     if (this.$store.state.user !== null) {
                         this.cartQty = this.getCartQuantityForCurrentProduct();
                     }
+                })
+                .then(() => {
+                    // scroll to top
+                    window.scrollTo(0, 0);
                     this.isDataLoaded = true;
                 })
                 .catch((error) => {
