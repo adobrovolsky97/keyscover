@@ -82,6 +82,14 @@ class Order extends BaseModel
     protected $casts = ['sync_error' => 'array'];
 
     /**
+     * @return string
+     */
+    public function getFullNameAttribute(): string
+    {
+        return "$this->surname $this->name $this->patronymic";
+    }
+
+    /**
      * @return HasMany
      */
     public function products(): HasMany

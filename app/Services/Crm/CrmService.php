@@ -69,40 +69,48 @@ class CrmService implements CrmServiceInterface
      */
     public function createOrder(Order $order): void
     {
-        $deliveryData = [
+        $customFieldsData = [
             [
                 'name'  => 'Тип доставки',
+                'value' => $order->phone,
+            ],
+            [
+                'name'  => 'П.І.Б з сайту',
+                'value' => $order->full_name,
+            ],
+            [
+                'name'  => 'Номер телефону з сайту',
                 'value' => $order->delivery_type === 'new-post' ? 'Нова Пошта' : 'Самовивіз'
             ],
             [
                 'name'  => 'Тип оплати',
-                'value' => $order->payment_type === Order::PAYMENT_BY_REQUISITES ? 'Оплата по реквізитам' : 'Розрахунок на пошті при отриманні'
+                'value' => $order->payment_type === Order::PAYMENT_BY_REQUISITES ? 'Оплата за реквізитами' : 'Розрахунок на пошті при отриманні'
             ]
         ];
 
         if ($order->delivery_type === 'new-post') {
-            $deliveryData[] = [
+            $customFieldsData[] = [
                 'name'  => 'Місто',
                 'value' => $order->city_name
             ];
-            $deliveryData[] = [
+            $customFieldsData[] = [
                 'name'  => 'Відділення',
                 'value' => $order->warehouse_name
             ];
         }
 
         $payload = [
-            'title'             => "Замовлення з сайту #$order->id",
-            'total'             => $order->total_price_uah - ($order->discount_uah ?? 0),
-            'currency'          => 'UAH',
-            'comment'          => $order->comment,
+            'title'                   => "Замовлення з сайту #$order->id",
+            'total'                   => $order->total_price_uah - ($order->discount_uah ?? 0),
+            'currency'                => 'UAH',
+            'comment'                 => $order->comment,
             'products_total_as_total' => false,
-            'client_attributes' => [
+            'client_attributes'       => [
                 'person' => $order->surname . ' ' . $order->name . ' ' . $order->patronymic,
                 'email'  => $order->user->email,
                 'phones' => [$order->phone]
             ],
-            'jobs_attributes'   => $order->products
+            'jobs_attributes'         => $order->products
                 ->map(function ($product) {
                     return [
                         'amount'             => $product->quantity,
@@ -116,9 +124,9 @@ class CrmService implements CrmServiceInterface
                     ];
                 })
                 ->toArray(),
-            'discount' => $order->discount_uah,
-            'discount_kind' => 'absolute_discount',
-            'custom_fields'     => $deliveryData
+            'discount'                => $order->discount_uah,
+            'discount_kind'           => 'absolute_discount',
+            'custom_fields'           => $customFieldsData
         ];
 
         $response = Http::withHeader('X-Auth-Token', config('app.crm_api_key'))
