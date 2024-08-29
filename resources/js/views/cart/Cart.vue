@@ -9,25 +9,25 @@
              class="flex flex-col container w-full mx-auto px-4 border items-center justify-center rounded-lg shadow">
             <ul class="flex flex-col divide-y w-full">
                 <li v-for="product in $store.state.cart?.products ?? []" :key="product.id"
-                    class="flex flex-col lg:flex-row relative">
-                    <div class="select-none cursor-pointer flex flex-col lg:flex-row items-center lg:p-4 p-0 w-full overflow-hidden break-all">
-                        <div class="flex flex-col w-24 h-24 justify-center items-center mb-4 lg:mb-0 lg:mr-4">
+                    class="flex flex-col xl:flex-row relative">
+                    <div class="select-none cursor-pointer flex flex-col xl:flex-row items-center xl:p-4 p-0 w-full overflow-hidden break-all">
+                        <div class="flex flex-col w-24 h-24 justify-center items-center mb-4 xl:mb-0 xl:mr-4">
                             <div class="avatar">
                                 <div class="w-24 rounded">
                                     <img :src="product.image"/>
                                 </div>
                             </div>
                         </div>
-                        <div class="flex-1 pl-3 mb-4 lg:mb-0 lg:mr-16 text-center lg:text-start">
+                        <div class="flex-1 pl-3 mb-4 xl:mb-0 xl:mr-16 text-center xl:text-start">
                             <div class="text-sm text-gray-400">{{ product.sku }}</div>
                             <div class="font-medium">{{ product.name }}</div>
-                            <div class="text-sm flex flex-row lg:mt-0 mt-2 justify-center lg:justify-start gap-1">
+                            <div class="text-sm flex flex-row xl:mt-0 mt-2 justify-center xl:justify-start gap-1">
                                 <span>{{ product.total_price_usd }}$</span>
                                 <span> ~{{ product.total_price_uah }}грн.</span>
                             </div>
                         </div>
-                        <div class="flex flex-col justify-center items-center lg:gap-2 mb-2 lg:mb-0">
-                            <div class="flex flex-row justify-between items-center gap-1 mb-4 lg:mb-0 lg:mr-4">
+                        <div class="flex flex-col justify-center items-center xl:gap-2 mb-2 xl:mb-0">
+                            <div class="flex flex-row justify-between items-center gap-1 mb-4 xl:mb-0 xl:mr-4">
                                 <div class="join">
                                     <button @click="decrementQuantity(product)"
                                             class="btn btn-success text-white join-item btn-md rounded-l-full">
@@ -49,7 +49,7 @@
                         <!-- Delete Button Container -->
                         <div
                             @click="deleteProduct(product)"
-                            class="absolute top-0 left-0 mt-4 ml-2 lg:relative lg:mt-0 lg:ml-0"
+                            class="absolute top-0 left-0 mt-4 ml-2 xl:relative xl:mt-0 xl:ml-0"
                         >
                             <svg class="h-6 w-6 text-red-500" width="24" height="24"
                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -67,7 +67,7 @@
 
             </ul>
 
-            <div class="totals w-full flex flex-col lg:justify-end lg:items-end justify-start items-start mb-4 text-sm">
+            <div class="totals w-full flex flex-col xl:justify-end xl:items-end justify-start items-start mb-4 text-sm">
                                     <span>Сума замовлення: <span class="font-bold">{{
                                             $store.state.cart.total_usd ?? 0
                                         }} $ / {{ $store.state.cart.total ?? 0 }} грн.</span></span>
