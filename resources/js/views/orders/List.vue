@@ -23,6 +23,7 @@
                             <span><span class="font-bold">Вартість</span>: {{ order.total_price_usd }} $ / {{ order.total_price_uah }} грн.</span>
                             <span v-if="order.discount_percent > 0"><span class="font-bold">Знижка ({{ order.discount_percent }}%)</span>: {{ order.discount_usd }} $ / {{order.discount_uah}} грн.</span>
                             <span v-if="order.discount_percent > 0"><span class="font-bold">Вартість зі знижкою</span>: {{ order.total_with_discount_usd }} $ / {{ order.total_with_discount_uah}} грн.</span>
+                            <span v-if="order.comment"><span class="font-bold">Коментар</span>: {{ order.comment }}</span>
                         </div>
                         <div class="products-list w-full overflow-x-auto">
                             <table class="table min-w-full">
