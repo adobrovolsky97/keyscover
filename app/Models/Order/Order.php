@@ -89,6 +89,16 @@ class Order extends BaseModel
         return "$this->surname $this->name $this->patronymic";
     }
 
+    public function getDeliveryTypeTextAttribute(): string
+    {
+        return $this->delivery_type === 'self_pickup' ? 'Самовивіз' : 'Нова Пошта';
+    }
+
+    public function getPaymentTypeTextAttribute(): string
+    {
+        return $this->payment_type === 'cash_on_delivery' ? 'Розрахунок на пошті при отриманні' : 'Оплата за реквізитами';
+    }
+
     /**
      * @return HasMany
      */

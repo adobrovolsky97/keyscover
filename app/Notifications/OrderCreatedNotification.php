@@ -40,11 +40,14 @@ class OrderCreatedNotification extends Notification implements ShouldQueue
      */
     public function toTelegram(object $notifiable): TelegramMessage
     {
-        $message = 'Замовлення: ' . $this->order->number . PHP_EOL .
-            'Клієнт: ' . $this->order->full_name . PHP_EOL .
-            'Вартість: ' . $this->order->total_price_usd . ' $ / ' . $this->order->total_price_uah . ' грн';
         return TelegramMessage::create()
             ->to($notifiable->routeNotificationFor('telegram'))
-            ->content($message);
+            ->line("Клієнт: *{$this->order->full_name}*")
+            ->line("Вартість: *{$this->order->total_price_usd} $ / {$this->order->total_price_uah} грн*")
+            ->line("Доставка: *{$this->order->delivery_type_text}*")
+            ->line("Оплата: *{$this->order->payment_type_text}*")
+            ->lineIf(!empty($this->order->comment), "Коментар: *{$this->order->comment}*")
+            ->line("Замовлення: *{$this->order->number}*");
+
     }
 }
