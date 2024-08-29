@@ -7,7 +7,7 @@ return [
      | Base URL NovaPoshta
      | @see https://developers.novaposhta.ua/
      */
-    'base_uri' => 'https://api.novaposhta.ua/v2.0/',
+    'base_uri'                 => 'https://api.novaposhta.ua/v2.0/',
 
     /*
      | End Point
@@ -15,25 +15,25 @@ return [
      |
      | Supported: "json", "xml" (XML - еще не поддерживается и вряд ли будет)
      */
-    'point' => env('NP_POINT', 'json'),
+    'point'                    => env('NP_POINT', 'json'),
 
     // OTHER
     /*
      | Ключ API из личного кабинета.
      */
-    'api_key' => env('NP_API_KEY', 'api_key'),
+    'api_key'                  => env('NP_API_KEY', 'api_key'),
 
     /*
      | Режим отладки запросов.
      | Добавляет во все ответы полное тело ответа в переменную `dev` в массив.
      */
-    'dev' => env('NP_DEV', false),
+    'dev'                      => env('NP_DEV', false),
 
     /*
     | Лимит списка по умолчанию.
     | Максимальное значение для всего 500, для улиц - 1500.
      */
-    'page_limit' => 500,
+    'page_limit'               => 500,
 
     /*
     |--------------------------------------------------------------------------
@@ -58,27 +58,27 @@ return [
     /*
      | Идентификатор отправителя по умолчанию.
      */
-    'sender' => '5ace4a2e-13ee-11e5-add9-005056887b8d',
+    'sender'                   => '5ace4a2e-13ee-11e5-add9-005056887b8d',
 
     /*
     | Идентификатор города отправителя по умолчанию.
     */
-    'city_sender' => '8d5a980d-391c-11dd-90d9-001a92567626',
+    'city_sender'              => '8d5a980d-391c-11dd-90d9-001a92567626',
 
     /*
     | Идентификатор адреса отправителя по умолчанию.
     */
-    'sender_address' => 'd492290b-55f2-11e5-ad08-005056801333',
+    'sender_address'           => 'd492290b-55f2-11e5-ad08-005056801333',
 
     /*
     | Идентификатор контактного лица отправителя по умолчанию.
     */
-    'contact_sender' => '613b77c4-1411-11e5-ad08-005056801333',
+    'contact_sender'           => '613b77c4-1411-11e5-ad08-005056801333',
 
     /*
     | Телефон отправителя в формате: +380660000000, 380660000000, 0660000000 по умолчанию.
     */
-    'senders_phone' => '380991234567',
+    'senders_phone'            => '380991234567',
 
     /*
     | RecipientType по умолчанию
@@ -87,35 +87,35 @@ return [
     |
     | 'PrivatePerson', 'Organization'
     */
-    'recipient_type' => 'PrivatePerson',
+    'recipient_type'           => 'PrivatePerson',
 
     /*
     | ServiceType по умолчанию.
     |
     | 'DoorsDoors', 'DoorsWarehouse', 'WarehouseWarehouse', 'WarehouseDoors'
     */
-    'service_type' => 'WarehouseWarehouse',
+    'service_type'             => 'WarehouseWarehouse',
 
     /*
     | CargoType по умолчанию.
     |
     | 'Cargo', 'Documents', 'TiresWheels', 'Pallet', 'Parcel'
     */
-    'cargo_type' => 'Parcel',
+    'cargo_type'               => 'Parcel',
 
     /*
     | PaymentMethod по умолчанию.
     |
     | 'Cash', 'NonCash'
     */
-    'payment_method' => 'Cash',
+    'payment_method'           => 'Cash',
 
     /*
     | PayerType по умолчанию.
     |
     | 'Sender', 'Recipient', 'ThirdPerson'
     */
-    'payer_type' => 'Recipient',
+    'payer_type'               => 'Recipient',
 
     /*
     | PayerType для BackwardDeliveryData по умолчанию
@@ -140,22 +140,22 @@ return [
     /*
     | Description по умолчанию (описание посылки).
     */
-    'description' => 'Товары',
+    'description'              => 'Товары',
 
     /*
     | Целое число, количество мест отправления по умолчанию.
     */
-    'seats_amount' => 1,
+    'seats_amount'             => 1,
 
     /*
     | Целое число, объявленная стоимость по умолчанию.
     */
-    'cost' => 300,
+    'cost'                     => 300,
 
     /*
     | Вес посылки по умолчанию.
     */
-    'weight' => 1,
+    'weight'                   => 1,
 
     /*
     | Параметры груза по умолчанию.
@@ -164,41 +164,41 @@ return [
     | Объемный вес (кг) = (Длина(см) × Ширина(см) × Высота(см)) / 4 000
     | Если выбрать значение не из массива - примется значение 1кг.
     */
-    'options_seat' => [
-        '1' => [
+    'options_seat'             => [
+        '1'  => [
             'volumetricVolume' => '1',
-            'volumetricWidth' => '24',
+            'volumetricWidth'  => '24',
             'volumetricLength' => '17',
             'volumetricHeight' => '10',
-            'weight' => '1',
+            'weight'           => '1',
         ],
-        '2' => [
+        '2'  => [
             'volumetricVolume' => '2',
-            'volumetricWidth' => '34',
+            'volumetricWidth'  => '34',
             'volumetricLength' => '24',
             'volumetricHeight' => '10',
-            'weight' => '2',
+            'weight'           => '2',
         ],
-        '3' => [
+        '3'  => [
             'volumetricVolume' => '3',
-            'volumetricWidth' => '24',
+            'volumetricWidth'  => '24',
             'volumetricLength' => '24',
             'volumetricHeight' => '21',
-            'weight' => '3',
+            'weight'           => '3',
         ],
-        '5' => [
+        '5'  => [
             'volumetricVolume' => '4',
-            'volumetricWidth' => '40',
+            'volumetricWidth'  => '40',
             'volumetricLength' => '24',
             'volumetricHeight' => '21',
-            'weight' => '5',
+            'weight'           => '5',
         ],
         '10' => [
             'volumetricVolume' => '9.8',
-            'volumetricWidth' => '40',
+            'volumetricWidth'  => '40',
             'volumetricLength' => '35',
             'volumetricHeight' => '28',
-            'weight' => '10',
+            'weight'           => '10',
         ],
     ],
 
@@ -209,51 +209,51 @@ return [
     | http_retry_max_time - the maximum number of times the request should be attempted
     | http_retry_delay - the number of milliseconds that Laravel should wait in between attempts
     */
-    'http_response_timeout' => 15,
-    'http_retry_max_time' => 2,
-    'http_retry_delay' => 500,
+    'http_response_timeout'    => 15,
+    'http_retry_max_time'      => 2,
+    'http_retry_delay'         => 500,
 
     /*
     | Идентификатор возврата по умолчанию.
     | ref_return_reasons - "Відмова від доставки"
     | ref_return_reasons_sub - "Відправлення не відповідає замовленню, не підійшло"
     */
-    'ref_return_reasons' => '49754eb2-a9e1-11e3-9fa0-0050568002cf',
-    'ref_return_reasons_sub' => '49754ec8-a9e1-11e3-9fa0-0050568002cf',
+    'ref_return_reasons'       => '49754eb2-a9e1-11e3-9fa0-0050568002cf',
+    'ref_return_reasons_sub'   => '49754ec8-a9e1-11e3-9fa0-0050568002cf',
 
     /*
     | Идентификатор отделения для возврата посылок по умолчанию.
     | Ref из справочника отделений.
     | Киев-30 - '4049833d-e1c2-11e3-8c4a-0050568002cf'
     */
-    'ref_return_warehouse' => '',
+    'ref_return_warehouse'     => '',
 
     /*
     | Заметка для возвратов и переадресаций по умолчанию.
     */
-    'return_note' => 'Возврат посылки',
-    'redirecting_note' => 'Переадресация посылки',
+    'return_note'              => 'Возврат посылки',
+    'redirecting_note'         => 'Переадресация посылки',
 
     /*
     | Формат возврата по умолчанию Cash/NonCash. (нал / безнал)
     */
-    'return_cash_method' => 'Cash',
+    'return_cash_method'       => 'Cash',
 
     /*
     | Формат оплаты продления хранения Cash/NonCash. (нал / безнал)
     */
-    'term_payment_method' => 'Cash',
+    'term_payment_method'      => 'Cash',
 
     /*
     | Формат печати по умолчанию
     | Document_new, Marking_85x85, Marking_100x100
     */
-    'print_form' => 'Marking_100x100',
+    'print_form'               => 'Marking_100x100',
 
     /*
     | Ориентация PDF реестра по умолчанию
     | 'portrait' или 'landscape'
     */
-    'scan_sheet_orientation' => 'portrait',
+    'scan_sheet_orientation'   => 'portrait',
 
 ];

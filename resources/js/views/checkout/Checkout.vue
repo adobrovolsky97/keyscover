@@ -38,7 +38,8 @@
                                     <label class="form-control w-full">
                                         <label class="input input-bordered flex items-center gap-2">
                                             +38
-                                            <input type="tel" autocomplete="off" v-model="form.phone" placeholder="975231231"/>
+                                            <input type="tel" autocomplete="off" v-model="form.phone"
+                                                   placeholder="975231231"/>
                                         </label>
                                         <error v-if="Object.keys(errors).length > 0" :errors="errors"
                                                attribute="phone"></error>
@@ -72,7 +73,9 @@
 
                                 <div class="form-group">
                                     <select v-model="form.paymentType" class="select select-bordered w-full">
-                                        <option v-if="deliveryType ==='new-post'" :value="'cash_on_delivery'">Розрахунок на пошті при отриманні</option>
+                                        <option v-if="deliveryType ==='new-post'" :value="'cash_on_delivery'">Розрахунок
+                                            на пошті при отриманні
+                                        </option>
                                         <option :value="'by_requisites'">Оплата за реквізитами</option>
                                     </select>
                                     <error v-if="Object.keys(errors).length > 0" :errors="errors"
@@ -99,6 +102,12 @@
                                     </div>
                                     <error v-if="Object.keys(errors).length > 0" :errors="errors"
                                            attribute="city_id"></error>
+                                </div>
+
+                                <div class="form-group flex flex-col gap-2"
+                                     v-if="deliveryType === 'new-post' && isWarehouseLoading">
+                                    <label>Відділення</label>
+                                    <span class="loading loading-spinner mx-auto loading-md"></span>
                                 </div>
 
                                 <div class="form-group"
@@ -162,6 +171,7 @@ export default {
             filteredWarehouses: [],
             warehouseVariants: [],
 
+            isWarehouseLoading: false,
             isWarehouseFocused: false,
             isAddressFocused: false,
             isCityFocused: false,
@@ -194,7 +204,7 @@ export default {
         }
         next(); // continue with the navigation
     },
-    watch : {
+    watch: {
         'form.phone': function (val) {
             // Remove any non-digit characters
             val = val.replace(/\D/g, '');
@@ -268,12 +278,16 @@ export default {
                 this.warehouseTimer = null;
             }
             this.warehouseTimer = setTimeout(() => {
+                this.isWarehouseLoading = true;
                 axios
                     .get('/api/delivery/' + this.deliveryType + '/cities/' + this.form.cityId + '/warehouses')
                     .then((response) => {
                         this.warehouseVariants = response.data.data
                         this.filteredWarehouses = response.data.data
 
+                    })
+                    .finally(() => {
+                        this.isWarehouseLoading = false;
                     })
             }, 500)
         },
