@@ -55,7 +55,10 @@ class OrderController extends Controller
 
         Notification::route('telegram', config('services.telegram-bot-api.recipient'))
             ->notify(new OrderCreatedNotification($order));
-//        SendOrderToCrmJob::dispatch($order)->onQueue('crm');
+
+        if(!app()->isLocal()){
+            SendOrderToCrmJob::dispatch($order)->onQueue('crm');
+        }
 
         return response()->json();
     }
