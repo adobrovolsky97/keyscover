@@ -46,6 +46,9 @@ class Order extends BaseModel
     const PAYMENT_TYPE_CASH_ON_DELIVERY = 'cash_on_delivery';
     const PAYMENT_BY_REQUISITES = 'by_requisites';
 
+    const DELIVERY_TYPE_SELF_PICKUP = 'self-pickup';
+    const DELIVERY_TYPE_NEW_POST = 'new-post';
+
     /**
      * @var array
      */
@@ -91,7 +94,7 @@ class Order extends BaseModel
 
     public function getDeliveryTypeTextAttribute(): string
     {
-        return $this->delivery_type === 'self_pickup' ? 'Самовивіз' : 'Нова Пошта';
+        return $this->delivery_type === self::DELIVERY_TYPE_SELF_PICKUP ? 'Самовивіз' : 'Нова Пошта';
     }
 
     public function getPaymentTypeTextAttribute(): string

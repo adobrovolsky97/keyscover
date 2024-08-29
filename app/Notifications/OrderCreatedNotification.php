@@ -44,7 +44,8 @@ class OrderCreatedNotification extends Notification implements ShouldQueue
             ->to($notifiable->routeNotificationFor('telegram'))
             ->line("Клієнт: *{$this->order->full_name}*")
             ->line("Вартість: *{$this->order->total_price_usd} $ / {$this->order->total_price_uah} грн*")
-            ->line("Доставка: *{$this->order->delivery_type_text}*")
+            ->lineIf($this->order->delivery_type === Order::DELIVERY_TYPE_SELF_PICKUP, "Доставка: *{$this->order->delivery_type_text}*")
+            ->lineIf($this->order->delivery_type === Order::DELIVERY_TYPE_NEW_POST, "Доставка: *{$this->order->city_name}*, *{$this->order->warehouse_name}*")
             ->line("Оплата: *{$this->order->payment_type_text}*")
             ->lineIf(!empty($this->order->comment), "Коментар: *{$this->order->comment}*")
             ->line("Замовлення: *{$this->order->number}*");

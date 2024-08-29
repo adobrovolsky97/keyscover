@@ -28,7 +28,12 @@ class StoreRequest extends FormRequest
                 'max:255',
                 Rule::in([Order::PAYMENT_BY_REQUISITES, Order::PAYMENT_TYPE_CASH_ON_DELIVERY])
             ],
-            'delivery_type'  => ['required', 'string', 'max:255', Rule::in(['new-post', 'self-pickup'])],
+            'delivery_type'  => [
+                'required',
+                'string',
+                'max:255',
+                Rule::in([Order::DELIVERY_TYPE_NEW_POST, Order::DELIVERY_TYPE_SELF_PICKUP])
+            ],
             'city_id'        => ['nullable', 'required_if:delivery_type,new-post', 'string', 'max:255'],
             'city_name'      => ['nullable', 'required_if:delivery_type,new-post', 'string', 'max:255'],
             'warehouse_id'   => ['nullable', 'required_if:delivery_type,new-post', 'string', 'max:255'],
