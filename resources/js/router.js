@@ -12,6 +12,7 @@ import admin from "./middleware/admin.js";
 import Checkout from "./views/checkout/Checkout.vue";
 import List from "./views/orders/List.vue";
 import UsersList from "./views/admin/user/List.vue";
+import OrdersList from "./views/admin/order/List.vue";
 import ExportsList from "./views/admin/export/List.vue";
 import AdminLayout from "./layouts/admin/AdminLayout.vue";
 import Dashboard from "./views/admin/Dashboard.vue";
@@ -96,6 +97,14 @@ const router = createRouter({
                     path: 'users',
                     name: 'admin.users',
                     component: UsersList,
+                    meta: {
+                        middleware: [admin]
+                    }
+                },
+                {
+                    path: 'orders',
+                    name: 'admin.orders',
+                    component: OrdersList,
                     meta: {
                         middleware: [admin]
                     }

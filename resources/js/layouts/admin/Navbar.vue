@@ -39,6 +39,15 @@
                                class="link">Користувачі</a>
                         </router-link>
                         <router-link
+                            :to="{name: 'admin.orders'}"
+                            custom
+                            v-slot="{ navigate, href }"
+                        >
+                            <a @click="navigate"
+                               :class="{'link-error': $route.path === '/admin/orders'}"
+                               class="link">Замовлення</a>
+                        </router-link>
+                        <router-link
                             :to="{name: 'admin.exports'}"
                             custom
                             v-slot="{ navigate, href }"
@@ -97,6 +106,15 @@
                                     <a @click="navigate"
                                        :class="{'link-error': $route.path === '/admin/users'}"
                                        class="link">Користувачі</a>
+                                </router-link>
+                                <router-link
+                                    :to="{name: 'admin.orders'}"
+                                    custom
+                                    v-slot="{ navigate, href }"
+                                >
+                                    <a @click="navigate"
+                                       :class="{'link-error': $route.path === '/admin/orders'}"
+                                       class="link">Замовлення</a>
                                 </router-link>
                                 <router-link
                                     :to="{name: 'admin.exports'}"

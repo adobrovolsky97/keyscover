@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role\Role;
 use App\Http\Requests\Order\StoreRequest;
 use App\Http\Resources\Order\OrderResource;
 use App\Jobs\SendOrderToCrmJob;
+use App\Notifications\OrderCreatedNotification;
 use App\Services\Order\Contracts\OrderServiceInterface;
+use Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Notification;
 
 /**
  * Class OrderController
@@ -34,7 +38,9 @@ class OrderController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
-        return OrderResource::collection($this->orderService->getAllPaginated(['user_id' => auth()->id()]));
+        return OrderResource::collection($this->orderService->getAllPaginated(
+            Auth::user()->role === Role::ADMIN ? [] : ['user_id' => auth()->id()]
+        ));
     }
 
     /**
@@ -47,7 +53,9 @@ class OrderController extends Controller
     {
         $order = $this->orderService->create($request->validated());
 
-        SendOrderToCrmJob::dispatch($order)->onQueue('crm');
+        Notification::route('telegram', config('services.telegram-bot-api.recipient'))
+            ->notify(new OrderCreatedNotification($order));
+//        SendOrderToCrmJob::dispatch($order)->onQueue('crm');
 
         return response()->json();
     }

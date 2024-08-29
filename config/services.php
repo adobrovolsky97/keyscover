@@ -30,6 +30,11 @@ return [
         'token' => env('POSTMARK_TOKEN'),
     ],
 
+    'telegram-bot-api' => [
+        'token' => env('TELEGRAM_TOKEN'),
+        'recipient' => env('TELEGRAM_NOTIFICATION_RECIPIENT'),
+    ],
+
     'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
