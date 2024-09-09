@@ -133,6 +133,7 @@
         </button>
 
         <button
+            v-if="$store.state.user !== null"
             v-show="showScrollToTop"
             @click="showCart"
             class="fixed bottom-2 right-4 bg-neutral text-white p-3 rounded-full shadow-lg hover:bg-neutral-focus transition-opacity duration-300"
