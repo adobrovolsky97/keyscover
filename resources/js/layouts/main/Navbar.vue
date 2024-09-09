@@ -200,6 +200,9 @@ export default {
     created() {
         this.fetchConfigs();
         this.fetchCart();
+        this.emitter.on('show-cart', (evt) => {
+            this.$refs?.cartModal?.showModal();
+        })
     },
     components: {
         Cart

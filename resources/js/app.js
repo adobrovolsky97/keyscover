@@ -31,10 +31,15 @@ axios.interceptors.response.use(
     }
 );
 
+const emitter = mitt()
+
 import App from './views/App.vue';
+import mitt from "mitt";
 
 const app = createApp(App);
 app.use(router);
 app.use(store);
+
+app.config.globalProperties.emitter = emitter
 
 app.mount('#app');

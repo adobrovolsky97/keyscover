@@ -20,7 +20,15 @@
                         </div>
                         <div class="flex-1 pl-3 mb-4 xl:mb-0 xl:mr-16 text-center xl:text-start">
                             <div class="text-sm text-gray-400">{{ product.sku }}</div>
-                            <div class="font-medium">{{ product.name }}</div>
+                            <div class="font-medium">
+                                <router-link
+                                    :to="{ name: 'product.show', params: { id: product.id } }"
+                                    @click="handleClick($event)"
+                                    class="w-full h-full object-cover cursor-pointer"
+                                >
+                                    {{ product.name }}
+                                </router-link>
+                            </div>
                             <div class="text-sm flex flex-row xl:mt-0 mt-2 justify-center xl:justify-start gap-1">
                                 <span>{{ product.total_price_usd }}$</span>
                                 <span> ~{{ product.total_price_uah }}грн.</span>
@@ -176,6 +184,13 @@ export default {
             this.fivePercentDiscountRemaining = ((this.$store.state.configs.five_percent_discount - this.$store.state.cart.total_usd)).toFixed(2);
             this.tenPercentDiscountRemaining = ((this.$store.state.configs.ten_percent_discount - this.$store.state.cart.total_usd)).toFixed(2);
             this.freeDeliveryRemaining = (this.$store.state.configs.free_delivery_sum - this.$store.state.cart.total_usd).toFixed(2);
+        },
+        handleClick(event) {
+            // Handle left-click only (event.button === 0) and let middle-click, Ctrl+click work as normal
+            if (event.button === 0 && !event.ctrlKey && !event.metaKey) {
+                event.preventDefault();
+                this.showProduct();
+            }
         },
         updateProductQuantity(product) {
             this.productErrors = {};

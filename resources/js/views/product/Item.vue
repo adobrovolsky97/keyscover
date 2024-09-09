@@ -1,32 +1,35 @@
 <template>
     <div class="card border bg-base-100 shadow-xl">
         <figure class="w-full overflow-hidden">
-            <!-- Plug image -->
-            <img
-                v-if="loading"
-                src="../../../../public/no-image.png"
-                alt="Loading"
-                class="w-full h-full object-cover"
-            />
-
             <!-- Основна картинка -->
-            <img
-                v-show="!loading"
-                @click="showProduct"
-                @load="loading = false"
-                @error="onImageError"
-                :src="product.image"
-                :alt="product.name"
+            <router-link
+                :to="{ name: 'product.show', params: { id: product.id } }"
+                @click="handleClick($event)"
                 class="w-full h-full object-cover cursor-pointer"
-            />
+            >
+                <img
+                    v-show="!loading"
+                    @load="loading = false"
+                    @error="onImageError"
+                    :src="product.image"
+                    :alt="product.name"
+                    class="w-full h-full object-cover cursor-pointer"
+                />
+            </router-link>
         </figure>
         <div class="card-body p-2 lg:p-4">
             <p class="text-xs text-gray-400">Арт. {{ product.sku }}</p>
             <p class="text-xs text-gray-400">{{ product.category.breadcrumbs }}</p>
-            <h3 class="font-bold lg:text-lg text-xs product-name hover:text-gray-400 cursor-pointer overflow-x-auto"
-                @click="showProduct">
+
+            <!-- Product name -->
+            <router-link
+                :to="{ name: 'product.show', params: { id: product.id } }"
+                @click="handleClick($event)"
+                class="font-bold lg:text-lg text-xs product-name hover:text-gray-400 cursor-pointer overflow-x-auto"
+            >
                 {{ product.name }}
-            </h3>
+            </router-link>
+
             <div class="flex flex-row justify-between items-center">
                 <div class="badge badge-outline badge-neutral badge-sm lg:badge-md">{{ product.usd_price }}$</div>
                 <div class="badge badge-outline badge-neutral badge-sm lg:badge-md">{{ product.price }} грн.</div>
@@ -69,6 +72,7 @@
         </div>
     </div>
 </template>
+
 <script>
 import {toast} from "vue3-toastify";
 
@@ -164,18 +168,25 @@ export default {
                     toast.success("Кількість товару оновлено!", {autoClose: 5000, position: 'bottom-right'});
                 })
         },
+        handleClick(event) {
+            // Handle left-click only (event.button === 0) and let middle-click, Ctrl+click work as normal
+            if (event.button === 0 && !event.ctrlKey && !event.metaKey) {
+                event.preventDefault();
+                this.showProduct();
+            }
+        },
         showProduct() {
             // Save the current state before navigating
             localStorage.setItem('productListState', JSON.stringify({
                 scrollPosition: window.scrollY
             }));
 
-            this.$router.push({name: 'product.show', params: {id: this.product.id}});
+            this.$router.push({ name: 'product.show', params: { id: this.product.id } });
         },
         onImageError(event) {
             event.target.src = this.fallbackImage;
             this.loading = false;
-        },
+        }
     }
 }
 </script>

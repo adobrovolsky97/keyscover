@@ -19,27 +19,22 @@
     "file": "assets/logo-880bb13a.png",
     "src": "public/logo.png"
   },
-  "public/no-image.png": {
-    "file": "assets/no-image-c9eb705d.png",
-    "src": "public/no-image.png"
-  },
   "resources/js/app.css": {
-    "file": "assets/app-d36825d0.css",
+    "file": "assets/app-98bb7d04.css",
     "src": "resources/js/app.css"
   },
   "resources/js/app.js": {
     "assets": [
       "assets/logo-880bb13a.png",
-      "assets/no-image-c9eb705d.png",
       "assets/dm-mono-latin-ext-400-normal-060163f1.woff2",
       "assets/dm-mono-latin-ext-400-normal-9e4605ed.woff",
       "assets/dm-mono-latin-400-normal-2ded91e0.woff2",
       "assets/dm-mono-latin-400-normal-f8592521.woff"
     ],
     "css": [
-      "assets/app-d36825d0.css"
+      "assets/app-98bb7d04.css"
     ],
-    "file": "assets/app-7743c0e4.js",
+    "file": "assets/app-1f5ca415.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   }

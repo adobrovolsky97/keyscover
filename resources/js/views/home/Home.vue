@@ -60,7 +60,8 @@
                 </button>
             </div>
             <label class="input input-bordered flex items-center gap-2 mb-6">
-                <input @input="delaySearch" v-model="search" type="text" class="grow" :placeholder="filters.categories.length > 0 ? 'Пошук по категорії' : 'Загальний пошук'"/>
+                <input @input="delaySearch" v-model="search" type="text" class="grow"
+                       :placeholder="filters.categories.length > 0 ? 'Пошук по категорії' : 'Загальний пошук'"/>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 16 16"
@@ -79,13 +80,18 @@
                     <line x1="6" y1="6" x2="18" y2="18"/>
                 </svg>
             </label>
-            <div class="flex flex-row justify-center lg:justify-end items-center mb-6 w-full gap-4">
+            <div class="flex flex-row justify-center flex-wrap lg:justify-end items-center mb-6 w-full gap-4">
                 <div class="form-control">
                     <label class="label cursor-pointer">
                         <span v-if="filters.only_available == 0" class="label-text mr-2">Показувати все</span>
                         <span v-if="filters.only_available == 1" class="label-text mr-2">Лише в наявності</span>
                         <input type="checkbox" true-value="1" false-value="0" v-model="filters.only_available"
                                class="toggle"/>
+                        <select v-model="filters.per_page" class="select select-sm ml-3">
+                            <option value="20">20 товарів</option>
+                            <option value="50">50 товарів</option>
+                            <option value="100">100 товарів</option>
+                        </select>
                     </label>
                 </div>
                 <select v-model="filters.order_by" class="select select-md select-bordered">
@@ -112,17 +118,34 @@
                     :data="data"
                     @pagination-change-page="updatePage"
                 />
-
-                <div class="flex flex-row justify-between items-center">
-                    <span>Показувати:</span>
-                    <select v-model="filters.per_page" class="select">
-                        <option value="20">20 товарів</option>
-                        <option value="50">50 товарів</option>
-                        <option value="100">100 товарів</option>
-                    </select>
-                </div>
             </div>
         </div>
+        <button
+            v-show="showScrollToTop"
+            @click="scrollToTop"
+            class="fixed bottom-16 right-4 bg-neutral text-white p-3 rounded-full shadow-lg hover:bg-neutral-focus transition-opacity duration-300"
+            aria-label="Scroll to top"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                 class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
+            </svg>
+        </button>
+
+        <button
+            v-show="showScrollToTop"
+            @click="showCart"
+            class="fixed bottom-2 right-4 bg-neutral text-white p-3 rounded-full shadow-lg hover:bg-neutral-focus transition-opacity duration-300"
+            aria-label="Scroll to top"
+        >
+            <svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                 stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z"/>
+                <circle cx="9" cy="19" r="2"/>
+                <circle cx="17" cy="19" r="2"/>
+                <path d="M3 3h2l2 12a3 3 0 0 0 3 2h7a3 3 0 0 0 3 -2l1 -7h-15.2"/>
+            </svg>
+        </button>
     </div>
 </template>
 
@@ -145,6 +168,7 @@ export default {
             mode: this.$store.state.mode,
             isDataLoaded: false,
             isInitialLoad: true,
+            showScrollToTop: false,
             filters: {
                 only_available: 1,
                 order_by: 'id_desc',
@@ -176,6 +200,12 @@ export default {
         this.resolveQueryParams();
 
         this.search = this.filters.search;
+    },
+    mounted() {
+        window.addEventListener("scroll", this.checkScrollPosition);
+    },
+    beforeDestroy() {
+        window.removeEventListener("scroll", this.checkScrollPosition);
     },
     computed: {
         classes() {
@@ -220,6 +250,15 @@ export default {
         },
         updatePage(page) {
             this.filters.page = page;
+        },
+        scrollToTop() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        },
+        checkScrollPosition() {
+            this.showScrollToTop = window.scrollY > 200;
+        },
+        showCart() {
+            this.emitter.emit('show-cart');
         },
         fetchData() {
             RouteHelper.updateQueryParams(this.queryParams);
