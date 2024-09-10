@@ -16,8 +16,8 @@
             </ul>
         </div>
         <div class="products-data bg-base-100 w-full">
-            <div class="mobile lg:hidden flex flex-row justify-between items-center mb-4">
-                <div class="drawer z-[1]">
+            <div class="mobile lg:hidden flex flex-row px-1 lg:px-0 justify-between items-center mb-4">
+                <div class="z-[1]">
                     <input id="my-drawer" type="checkbox" class="drawer-toggle"/>
                     <div class="drawer-content">
                         <label for="my-drawer" class="btn btn-sm font-medium border-gray-300 drawer-button btn-outline w-26">Категорії</label>
@@ -65,8 +65,8 @@
                     </svg>
                 </button>
             </div>
-            <div class="flex flex-row md:flex-col justify-between gap-2">
-                <label class="input input-bordered text-sm input-sm lg:input-md w-full flex items-center gap-2 mb-2">
+            <div class="flex flex-row md:flex-col px-1 lg:px-0 justify-between gap-2">
+                <label class="input input-bordered text-sm input-sm lg:input-md w-full flex items-center mb-2">
                     <input @input="delaySearch" v-model="search" type="text" class="grow"
                            :placeholder="filters.categories.length > 0 ? 'Пошук по категорії' : 'Загальний пошук'"/>
                     <svg v-if="search !== ''" @click="clearSearch" class="h-5 w-5 cursor-pointer" width="24" height="24"
@@ -102,7 +102,7 @@
                             </select>
                         </label>
                     </div>
-                    <select v-model="filters.order_by" class="select select-sm md:select-md select-bordered">
+                    <select v-model="filters.order_by" class="select select-sm md:select-md w-full lg:w-36 select-bordered">
                         <option :value="'name_asc'">За назвою</option>
                         <option :value="'id_desc'">За новизною</option>
                         <option :value="'popularity_desc'">За популярністю</option>
