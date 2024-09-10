@@ -16,11 +16,11 @@
             </ul>
         </div>
         <div class="products-data bg-base-100 w-full">
-            <div class="mobile lg:hidden flex flex-row px-1 lg:px-0 justify-between items-center mb-4">
+            <div class="mobile lg:hidden flex flex-row px-1 flex-wrap lg:px-0 justify-between items-center mb-4">
                 <div class="z-[1]">
                     <input id="my-drawer" type="checkbox" class="drawer-toggle"/>
                     <div class="drawer-content">
-                        <label for="my-drawer" class="btn btn-sm font-medium border-gray-300 drawer-button btn-outline w-26">Категорії</label>
+                        <label for="my-drawer" class="btn btn-sm font-medium border-gray-300 drawer-button btn-outline w-full">Категорії</label>
                     </div>
                     <div class="drawer-side">
                         <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
@@ -42,19 +42,19 @@
                     </div>
                 </div>
                 <select v-model="filters.only_available" class="select select-sm select-bordered">
-                    <option :value="0">Показувати все</option>
+                    <option :value="0">Всі товари</option>
                     <option :value="1">Лише в наявності</option>
                 </select>
                 <div class="form-control">
                     <label class="label cursor-pointer">
-                        <select v-model="filters.per_page" class="select select-bordered select-sm">
+                        <select v-model="filters.per_page" class="select select-bordered select-sm w-full">
                             <option value="20">20</option>
                             <option value="50">50</option>
                             <option value="100">100</option>
                         </select>
                     </label>
                 </div>
-                <button class="btn btn-sm btn-outline font-medium border-gray-300 w-12" @click="toggleMode">
+                <button class="btn btn-sm btn-outline font-medium border-gray-300 w-10" @click="toggleMode">
                     <svg class="h-6 w-6" v-if="mode === '1-row'" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
