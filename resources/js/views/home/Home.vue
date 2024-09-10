@@ -20,13 +20,7 @@
                 <div class="drawer z-[1]">
                     <input id="my-drawer" type="checkbox" class="drawer-toggle"/>
                     <div class="drawer-content">
-                        <label for="my-drawer" class="btn btn-neutral drawer-button w-64">Категорії
-                            <svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                 stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z"/>
-                                <path d="M5.5 5h13a1 1 0 0 1 0.5 1.5L14 12L14 19L10 16L10 12L5 6.5a1 1 0 0 1 0.5 -1.5"/>
-                            </svg>
-                        </label>
+                        <label for="my-drawer" class="btn btn-sm font-medium border-gray-300 drawer-button btn-outline w-26">Категорії</label>
                     </div>
                     <div class="drawer-side">
                         <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
@@ -47,8 +41,21 @@
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-outline w-20" @click="toggleMode">
-                    <svg class="h-8 w-8" v-if="mode === '1-row'" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <select v-model="filters.only_available" class="select select-sm select-bordered">
+                    <option :value="0">Показувати все</option>
+                    <option :value="1">Лише в наявності</option>
+                </select>
+                <div class="form-control">
+                    <label class="label cursor-pointer">
+                        <select v-model="filters.per_page" class="select select-bordered select-sm">
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </label>
+                </div>
+                <button class="btn btn-sm btn-outline font-medium border-gray-300 w-12" @click="toggleMode">
+                    <svg class="h-6 w-6" v-if="mode === '1-row'" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
                     </svg>
@@ -56,51 +63,53 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
                     </svg>
-
                 </button>
             </div>
-            <label class="input input-bordered flex items-center gap-2 mb-6">
-                <input @input="delaySearch" v-model="search" type="text" class="grow"
-                       :placeholder="filters.categories.length > 0 ? 'Пошук по категорії' : 'Загальний пошук'"/>
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 16 16"
-                    fill="currentColor"
-                    class="h-4 w-4 opacity-70">
-                    <path
-                        fill-rule="evenodd"
-                        d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                        clip-rule="evenodd"/>
-                </svg>
-                <svg v-if="search !== ''" @click="clearSearch" class="h-5 w-5 cursor-pointer" width="24" height="24"
-                     viewBox="0 0 24 24" stroke-width="2"
-                     stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z"/>
-                    <line x1="18" y1="6" x2="6" y2="18"/>
-                    <line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-            </label>
-            <div class="flex flex-row justify-center flex-wrap lg:justify-end items-center mb-6 w-full gap-4">
-                <div class="form-control">
-                    <label class="label cursor-pointer">
-                        <span v-if="filters.only_available == 0" class="label-text mr-2">Показувати все</span>
-                        <span v-if="filters.only_available == 1" class="label-text mr-2">Лише в наявності</span>
-                        <input type="checkbox" true-value="1" false-value="0" v-model="filters.only_available"
-                               class="toggle"/>
-                        <select v-model="filters.per_page" class="select select-sm ml-3">
-                            <option value="20">20 товарів</option>
-                            <option value="50">50 товарів</option>
-                            <option value="100">100 товарів</option>
-                        </select>
-                    </label>
+            <div class="flex flex-row md:flex-col justify-between gap-2">
+                <label class="input input-bordered text-sm input-sm lg:input-md w-full flex items-center gap-2 mb-2">
+                    <input @input="delaySearch" v-model="search" type="text" class="grow"
+                           :placeholder="filters.categories.length > 0 ? 'Пошук по категорії' : 'Загальний пошук'"/>
+                    <svg v-if="search !== ''" @click="clearSearch" class="h-5 w-5 cursor-pointer" width="24" height="24"
+                         viewBox="0 0 24 24" stroke-width="2"
+                         stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z"/>
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                    <svg
+                        v-else
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 16 16"
+                        fill="currentColor"
+                        class="h-4 w-4 opacity-70">
+                        <path
+                            fill-rule="evenodd"
+                            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                            clip-rule="evenodd"/>
+                    </svg>
+                </label>
+                <div class="flex flex-row justify-center flex-wrap lg:justify-end items-center mb-6 w-full gap-4">
+                    <div class="form-control hidden lg:block">
+                        <label class="label cursor-pointer">
+                            <span v-if="filters.only_available == 0" class="label-text mr-2">Показувати все</span>
+                            <span v-if="filters.only_available == 1" class="label-text mr-2">Лише в наявності</span>
+                            <input type="checkbox" true-value="1" false-value="0" v-model="filters.only_available"
+                                   class="toggle"/>
+                            <select v-model="filters.per_page" class="select select-bordered ml-3">
+                                <option value="20">20 товарів</option>
+                                <option value="50">50 товарів</option>
+                                <option value="100">100 товарів</option>
+                            </select>
+                        </label>
+                    </div>
+                    <select v-model="filters.order_by" class="select select-sm md:select-md select-bordered">
+                        <option :value="'name_asc'">За назвою</option>
+                        <option :value="'id_desc'">За новизною</option>
+                        <option :value="'popularity_desc'">За популярністю</option>
+                        <option :value="'price_asc'">Ціна ↑</option>
+                        <option :value="'price_desc'">Ціна ↓</option>
+                    </select>
                 </div>
-                <select v-model="filters.order_by" class="select select-md select-bordered">
-                    <option :value="'name_asc'">За назвою</option>
-                    <option :value="'id_desc'">За новизною</option>
-                    <option :value="'popularity_desc'">За популярністю</option>
-                    <option :value="'price_asc'">Ціна ↑</option>
-                    <option :value="'price_desc'">Ціна ↓</option>
-                </select>
             </div>
 
             <ContentSkeleton v-if="!isDataLoaded"/>
