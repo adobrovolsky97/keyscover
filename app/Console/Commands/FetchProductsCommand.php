@@ -120,39 +120,30 @@ class FetchProductsCommand extends Command
      */
     protected function addAttachmentsToProduct(Product $product, array $attachments): void
     {
-        $attachmentNames = [];
-
-        foreach ($attachments as $attachment) {
-            $exploded = explode('/', $attachment);
-            $attachmentNames[] = end($exploded);
-        }
-
         foreach ($product->getMedia('*') as $media) {
-//            if (!in_array($media->getCustomProperty('name'), $attachmentNames)) {
+//            if (!in_array($media->getCustomProperty('url'), $attachments)) {
 //                $media->delete();
-//                $this->warn('Attachment ' . $media->getCustomProperty('name') . ' has been removed from product ' . $product->name);
+//                $this->warn('Attachment ' . $media->getCustomProperty('url') . ' has been removed from product ' . $product->name);
 //                continue;
 //            }
 
-            if (in_array($media->getCustomProperty('name'), $attachments)) {
-                unset($attachmentNames[array_search($media->getCustomProperty('name'), $attachmentNames)]);
-                $this->warn('Attachment ' . $media->getCustomProperty('name') . ' already exists in product ' . $product->name);
+            if (in_array($media->getCustomProperty('url'), $attachments)) {
+                unset($attachments[array_search($media->getCustomProperty('url'), $attachments)]);
+                $this->warn('Attachment ' . $media->getCustomProperty('url') . ' already exists in product ' . $product->name);
             }
         }
 
         foreach ($attachments as $id => $attachment) {
             try {
-                $exploded = explode('/', $attachment);
-                $name = end($exploded);
                 /** @var \Spatie\MediaLibrary\MediaCollections\Models\Media $media */
                 $product
                     ->addMediaFromUrl($attachment)
-                    ->withCustomProperties(['name' => $name])
+                    ->withCustomProperties(['url' => $attachment])
                     ->toMediaCollection($id === 0 ? Media::COLLECTION_MAIN->value : Media::COLLECTION_ADDITIONAL->value);
 
-                $this->info('Attachment ' . $name . ' has been added to product ' . $product->name);
+                $this->info('Attachment ' . $attachment . ' has been added to product ' . $product->name);
             } catch (Throwable $exception) {
-                $this->error('Failed to add attachment ' . $name . ' to product ' . $product->name . ' ' . $exception->getMessage());
+                $this->error('Failed to add attachment ' . $attachment . ' to product ' . $product->name. ' ' . $exception->getMessage());
             }
         }
     }
