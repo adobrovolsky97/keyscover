@@ -16,11 +16,11 @@
             </ul>
         </div>
         <div class="products-data bg-base-100 w-full">
-            <div class="mobile lg:hidden flex flex-row px-1 flex-wrap lg:px-0 justify-between items-center mb-4">
+            <div class="mobile md:hidden flex flex-row px-1 md:px-0 justify-between items-center mb-4 gap-1">
                 <div class="z-[1]">
                     <input id="my-drawer" type="checkbox" class="drawer-toggle"/>
                     <div class="drawer-content">
-                        <label for="my-drawer" class="btn btn-sm font-medium border-gray-300 drawer-button btn-outline w-full">Категорії</label>
+                        <label for="my-drawer" class="btn btn-sm font-medium border-gray-300 drawer-button btn-outline md:text-md text-xs w-full">Категорії</label>
                     </div>
                     <div class="drawer-side">
                         <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
@@ -41,13 +41,13 @@
                         </div>
                     </div>
                 </div>
-                <select v-model="filters.only_available" class="select select-sm select-bordered">
+                <select v-model="filters.only_available" class="select select-sm text-xs md:text-md select-bordered w-full">
                     <option :value="0">Всі товари</option>
                     <option :value="1">Лише в наявності</option>
                 </select>
-                <div class="form-control">
+                <div class="form-control w-64">
                     <label class="label cursor-pointer">
-                        <select v-model="filters.per_page" class="select select-bordered select-sm w-full">
+                        <select v-model="filters.per_page" class="select text-xs md:text-md select-bordered select-sm w-full">
                             <option value="20">20</option>
                             <option value="50">50</option>
                             <option value="100">100</option>
@@ -65,8 +65,8 @@
                     </svg>
                 </button>
             </div>
-            <div class="flex flex-row md:flex-col px-1 lg:px-0 justify-between gap-2">
-                <label class="input input-bordered text-sm input-sm lg:input-md w-full flex items-center mb-2">
+            <div class="flex flex-row md:flex-col px-1 md:px-0 justify-between gap-2">
+                <label class="input input-bordered text-sm input-sm md:input-md w-full flex items-center mb-2">
                     <input @input="delaySearch" v-model="search" type="text" class="grow"
                            :placeholder="filters.categories.length > 0 ? 'Пошук по категорії' : 'Загальний пошук'"/>
                     <svg v-if="search !== ''" @click="clearSearch" class="h-5 w-5 cursor-pointer" width="24" height="24"
@@ -88,8 +88,8 @@
                             clip-rule="evenodd"/>
                     </svg>
                 </label>
-                <div class="flex flex-row justify-center flex-wrap lg:justify-end items-center mb-6 w-full gap-4">
-                    <div class="form-control hidden lg:block">
+                <div class="flex flex-row justify-center flex-wrap md:justify-end items-center mb-6 w-full gap-4">
+                    <div class="form-control hidden md:block">
                         <label class="label cursor-pointer">
                             <span v-if="filters.only_available == 0" class="label-text mr-2">Показувати все</span>
                             <span v-if="filters.only_available == 1" class="label-text mr-2">Лише в наявності</span>
@@ -102,7 +102,7 @@
                             </select>
                         </label>
                     </div>
-                    <select v-model="filters.order_by" class="select select-sm md:select-md w-full lg:w-36 select-bordered">
+                    <select v-model="filters.order_by" class="select select-sm md:select-md w-full md:w-36 select-bordered">
                         <option :value="'name_asc'">За назвою</option>
                         <option :value="'id_desc'">За новизною</option>
                         <option :value="'popularity_desc'">За популярністю</option>
