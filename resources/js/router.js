@@ -86,7 +86,7 @@ const router = createRouter({
             component: AdminLayout,
             children: [
                 {
-                    path: 'dashboard',
+                    path: '',
                     name: 'admin.dashboard',
                     component: Dashboard,
                     meta: {
