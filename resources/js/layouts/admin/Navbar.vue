@@ -26,7 +26,7 @@
                             v-slot="{ navigate, href }"
                         >
                             <a @click="navigate"
-                               :class="{'link-error': $route.path === '/admin/dashboard'}"
+                               :class="{'link-error': $route.path === '/admin'}"
                                class="link">Dashboard</a>
                         </router-link>
                         <router-link
