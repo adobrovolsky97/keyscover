@@ -1,23 +1,11 @@
 <template>
     <div class="card border bg-base-100 shadow-xl" :class="{'opacity-20': product.is_hidden}">
         <figure class="w-full overflow-hidden">
-            <!-- Основна картинка -->
-            <router-link
-                :to="{ name: 'product.show', params: { id: product.id } }"
-                @click="handleClick($event)"
-                class="w-full h-full object-cover cursor-pointer"
-            >
-                <img
-                    v-show="!loading"
-                    @load="loading = false"
-                    @error="onImageError"
-                    :src="product.image"
-                    :alt="product.name"
-                    class="w-full h-full object-cover cursor-pointer"
-                />
-            </router-link>
+            <Carousel :arrows-size="'15px'" :show-thumbs="false"
+                      :media="product.media.length ? product.media : [{id: null, url: product.image}]"/>
         </figure>
         <div class="card-body p-2 lg:p-4">
+
             <p class="text-xs text-gray-400">Арт. {{ product.sku }}</p>
             <p class="text-xs text-gray-400">{{ product.category.breadcrumbs }}</p>
 
@@ -75,9 +63,11 @@
 
 <script>
 import {toast} from "vue3-toastify";
+import Carousel from "./Carousel.vue";
 
 export default {
     name: 'Item',
+    components: {Carousel},
     props: ['product'],
     data() {
         return {
@@ -177,12 +167,12 @@ export default {
             }
         },
         saveScrollPosition() {
-          this.$nextTick(() => {
-              localStorage.setItem('productListState', JSON.stringify({
-                  scrollPosition: window.scrollY,
-                  productId: this.product.id
-              }));
-          });
+            this.$nextTick(() => {
+                localStorage.setItem('productListState', JSON.stringify({
+                    scrollPosition: window.scrollY,
+                    productId: this.product.id
+                }));
+            });
         },
         showProduct() {
             this.$router.push({name: 'product.show', params: {id: this.product.id}});

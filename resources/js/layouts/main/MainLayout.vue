@@ -2,7 +2,7 @@
     <section>
         <Navbar/>
         <div class="w-full container min-h-screen mx-auto py-2 bg-base-50">
-            <div class="content mt-5">
+            <div class="content mt-40">
                 <router-view v-slot="{ Component }">
                     <transition name="fade" mode="out-in">
                         <component :is="Component"/>

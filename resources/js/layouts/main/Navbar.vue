@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="fixed w-full z-50 bg-white">
         <nav
             class="navbar block py-4 w-full max-w-full rounded-none px-2 lg:px-4 border-0 top-0 shadow-xl">
             <div class="container mx-auto flex items-center justify-between">
@@ -8,14 +8,13 @@
                     custom
                     v-slot="{ navigate }"
                 >
-                    <div class="flex flex-row justify-between items-center gap-2">
+                    <div @click="navigate" class="flex flex-row justify-between items-center gap-2 cursor-pointer">
                         <div class="avatar">
                             <div class="w-8 lg:w-12 rounded-xl">
                                 <img src="../../../../public/logo.png"/>
                             </div>
                         </div>
-                        <a @click="navigate"
-                           class="block antialiased font-sans cursor-pointer text-md lg:text-lg font-bold">KeysCover</a>
+                        <a class="block antialiased font-sans text-md lg:text-lg font-bold">KeysCover</a>
                     </div>
                 </router-link>
                 <div class="hidden items-center gap-2 lg:flex">
@@ -95,15 +94,15 @@
                         </svg>
                         <span class="mt-0.5">{{ $store.state.cart?.total ?? 0 }} грн.</span>
                     </button>
-                    <div class="dropdown dropdown-end">
-                        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                    <div class="dropdown dropdown-end" ref="dropdown">
+                        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar" @click="toggleDropdown">
                             <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                       d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
-
                         </div>
-                        <ul
+
+                        <ul v-if="isOpen"
                             tabindex="0"
                             class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[2] mt-3 w-52 p-2 shadow">
                             <li>
@@ -156,6 +155,9 @@
                         </form>
                         <Cart/>
                     </div>
+                    <form method="dialog" class="modal-backdrop">
+                        <button></button>
+                    </form>
                 </dialog>
             </div>
         </nav>
@@ -195,6 +197,7 @@ export default {
     data() {
         return {
             usd: null,
+            isOpen: false
         }
     },
     created() {
@@ -203,6 +206,12 @@ export default {
         this.emitter.on('show-cart', (evt) => {
             this.$refs?.cartModal?.showModal();
         })
+    },
+    mounted() {
+        document.addEventListener('click', this.handleClickOutside);
+    },
+    beforeDestroy() {
+        document.removeEventListener('click', this.handleClickOutside);
     },
     components: {
         Cart
@@ -217,7 +226,18 @@ export default {
         }
     },
     methods: {
-
+        toggleDropdown() {
+            this.isOpen = !this.isOpen;
+        },
+        closeDropdown() {
+            this.isOpen = false;
+        },
+        handleClickOutside(event) {
+            const dropdown = this.$refs.dropdown;
+            if (dropdown && !dropdown.contains(event.target)) {
+                this.closeDropdown();
+            }
+        },
         fetchCart() {
             axios.get('/api/cart')
                 .then(response => {

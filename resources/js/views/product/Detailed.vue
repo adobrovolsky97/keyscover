@@ -3,31 +3,8 @@
                      :classes="'flex flex-row justify-between items-center gap-4'"/>
     <div v-else>
         <div class="card lg:card-side border rounded-2xl shadow-xl">
-            <div class="flex flex-col justify-center items-center w-full lg:w-1/2">
-                <figure>
-                    <div class="carousel overflow-hidden relative">
-                        <div class="flex transition-transform duration-300"
-                             :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
-                            <div v-for="(image, index) in media"
-                                 :key="index"
-                                 class="carousel-item w-full flex-shrink-0">
-                                <img :src="image.url" class="w-full object-cover"/>
-                            </div>
-                        </div>
-                        <div v-if="media.length > 1"
-                             class="absolute left-5 opacity-50 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-                            <button @click="prevSlide" class="btn btn-circle">❮</button>
-                            <button @click="nextSlide" class="btn btn-circle">❯</button>
-                        </div>
-                    </div>
-                </figure>
-                <div v-if="media.length > 1" class="flex gap-2 mt-4 overflow-x-auto mb-4">
-                    <div v-for="(image, index) in media" :key="index" @click="currentSlide = index"
-                         class="cursor-pointer border rounded-lg overflow-hidden"
-                         :class="{ 'border-red-500': currentSlide === index, 'hidden': !isThumbnailVisible(index) }">
-                        <img :src="image.url" class="w-20 h-20 object-cover"/>
-                    </div>
-                </div>
+            <div class="flex flex-col justify-center items-center w-full lg:w-1/2 p-4">
+                <Carousel :media="media"/>
             </div>
             <div class="card-body">
                 <div class="flex flex-col lg:flex-row justify-between items-start gap-4">
@@ -94,10 +71,11 @@
 <script>
 import ContentSkeleton from "../../components/skeleton/ContentSkeleton.vue";
 import {toast} from "vue3-toastify";
+import Carousel from "./Carousel.vue";
 
 export default {
     name: 'Detailed',
-    components: {ContentSkeleton},
+    components: {Carousel, ContentSkeleton},
     data() {
         return {
             isDataLoaded: false,

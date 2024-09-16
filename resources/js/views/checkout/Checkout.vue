@@ -71,17 +71,6 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-                                    <select v-model="form.paymentType" class="select select-bordered w-full">
-                                        <option v-if="deliveryType ==='new-post'" :value="'cash_on_delivery'">Розрахунок
-                                            на пошті при отриманні
-                                        </option>
-                                        <option :value="'by_requisites'">Оплата за реквізитами</option>
-                                    </select>
-                                    <error v-if="Object.keys(errors).length > 0" :errors="errors"
-                                           attribute="payment_type"></error>
-                                </div>
-
                                 <div class="form-group" v-if="deliveryType === 'new-post'">
                                     <label>Місто</label>
                                     <input type="text" class="input input-bordered w-full "
@@ -133,6 +122,17 @@
                                            attribute="warehouse_id"></error>
                                 </div>
                             </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Оплата</label>
+                            <select v-model="form.paymentType" class="select select-bordered w-full">
+                                <option v-if="deliveryType ==='new-post'" :value="'cash_on_delivery'">Розрахунок
+                                    на пошті при отриманні
+                                </option>
+                                <option :value="'by_requisites'">Оплата за реквізитами</option>
+                            </select>
+                            <error v-if="Object.keys(errors).length > 0" :errors="errors"
+                                   attribute="payment_type"></error>
                         </div>
                         <button class="btn btn-block btn-success text-white mt-4"
                                 :disabled="isDisabled || $store.state.cart?.total <= 0"
@@ -236,7 +236,7 @@ export default {
                 this.form.warehouse = this.$store.state.user?.last_order?.warehouse_name ?? null;
                 this.form.warehouseId = this.$store.state.user?.last_order?.warehouse_id ?? null;
                 this.form.paymentType = this.$store.state.user?.last_order?.payment_type ?? 'by_requisites';
-                this.deliveryType = this.$store.state.user?.last_order?.delivery_type ?? 'self-pickup';
+                this.deliveryType = this.$store.state.user?.last_order?.delivery_type ?? 'new-post';
 
                 if (this.form.cityId) {
                     this.fetchCities();

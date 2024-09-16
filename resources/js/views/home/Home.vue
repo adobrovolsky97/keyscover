@@ -1,6 +1,6 @@
 <template>
     <div class="content flex flex-row justify-between items-start gap-4 p-1">
-        <div class="filters hidden md:block border rounded-2xl shadow-xl">
+        <div class="filters hidden md:block border rounded-2xl shadow-xl fixed bg-white z-50 w-72">
             <div class="flex flex-row justify-between items-center px-6 mt-4">
                 <p class="text-lg font-bold">Категорії</p>
                 <button @click="clearFilter" class="badge badge-error text-white badge-sm p-2">Скинути фільтр</button>
@@ -15,7 +15,7 @@
                 ></category-item>
             </ul>
         </div>
-        <div class="products-data bg-base-100 w-full">
+        <div class="products-data bg-base-100 w-full ml-0 md:ml-80">
             <div class="mobile md:hidden flex flex-row px-1 md:px-0 justify-between items-center mb-4 gap-1">
                 <div class="z-[1]">
                     <input id="my-drawer" type="checkbox" class="drawer-toggle"/>
@@ -137,28 +137,12 @@
         <button
             v-show="showScrollToTop"
             @click="scrollToTop"
-            class="fixed bottom-16 right-4 bg-neutral text-white p-3 rounded-full shadow-lg hover:bg-neutral-focus transition-opacity duration-300"
+            class="fixed bottom-5 right-4 bg-neutral text-white p-3 rounded-full shadow-lg hover:bg-neutral-focus transition-opacity duration-300"
             aria-label="Scroll to top"
         >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                  class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
-            </svg>
-        </button>
-
-        <button
-            v-if="$store.state.user !== null"
-            v-show="showScrollToTop"
-            @click="showCart"
-            class="fixed bottom-2 right-4 bg-neutral text-white p-3 rounded-full shadow-lg hover:bg-neutral-focus transition-opacity duration-300"
-            aria-label="Scroll to top"
-        >
-            <svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                 stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z"/>
-                <circle cx="9" cy="19" r="2"/>
-                <circle cx="17" cy="19" r="2"/>
-                <path d="M3 3h2l2 12a3 3 0 0 0 3 2h7a3 3 0 0 0 3 -2l1 -7h-15.2"/>
             </svg>
         </button>
     </div>
@@ -274,7 +258,13 @@ export default {
             window.scrollTo({top: 0, behavior: 'smooth'});
         },
         checkScrollPosition() {
-            this.showScrollToTop = window.scrollY > 200;
+            const currentScrollY = window.scrollY;
+            if (currentScrollY > 1000 && currentScrollY < this.lastScrollY) {
+                this.showScrollToTop = true;
+            } else {
+                this.showScrollToTop = false;
+            }
+            this.lastScrollY = currentScrollY;
         },
         showCart() {
             this.emitter.emit('show-cart');

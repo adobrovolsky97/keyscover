@@ -7,10 +7,11 @@
         </button>
         <div v-if="($store.state.cart?.products ?? []).length"
              class="flex flex-col container w-full mx-auto px-4 border items-center justify-center rounded-lg shadow">
-            <ul class="flex flex-col divide-y w-full">
+            <ul class="flex flex-col divide-y w-full max-h-[44.6rem] overflow-y-auto">
                 <li v-for="product in $store.state.cart?.products ?? []" :key="product.id"
                     class="flex flex-col xl:flex-row relative">
-                    <div class="select-none cursor-pointer flex flex-col xl:flex-row items-center xl:p-4 p-0 w-full overflow-hidden break-all">
+                    <div
+                        class="select-none cursor-pointer flex flex-col xl:flex-row items-center xl:p-4 p-0 w-full overflow-hidden break-all">
                         <div class="flex flex-col w-24 h-24 justify-center items-center mb-4 xl:mb-0 xl:mr-4">
                             <div class="avatar">
                                 <div class="w-24 rounded">
@@ -30,11 +31,17 @@
                                 </router-link>
                             </div>
                             <div class="text-sm flex flex-row xl:mt-0 mt-2 justify-center xl:justify-start gap-1">
-                                <span>{{ product.total_price_usd }}$</span>
-                                <span> ~{{ product.total_price_uah }}грн.</span>
+                                <!--                                <span>{{ product.total_price_usd }}$</span>-->
+                                <!--                                <span> ~{{ product.total_price_uah }}грн.</span>-->
+                                <span>{{ product.price }}$</span>
+                                <span>~{{ product.uah_price }}грн.</span>
                             </div>
                         </div>
                         <div class="flex flex-col justify-center items-center xl:gap-2 mb-2 xl:mb-0">
+                            <div class="text-sm flex flex-row xl:mt-0 mt-2 justify-center xl:justify-start gap-1 relative md:absolute mb-2 md:mb-0 top-0 md:top-4">
+                                <span>{{ product.total_price_usd }}$</span>
+                                <span> ~{{ product.total_price_uah }}грн.</span>
+                            </div>
                             <div class="flex flex-row justify-between items-center gap-1 mb-4 xl:mb-0 xl:mr-4">
                                 <div class="join">
                                     <button @click="decrementQuantity(product)"
@@ -45,13 +52,14 @@
                                            class="input input-bordered text-center input-md join-item w-14"
                                            placeholder="" v-model="product.quantity"/>
                                     <button @click="incrementQuantity(product)"
+                                            :disabled="product.left_in_stock <= product.quantity"
                                             class="btn btn-success text-white join-item btn-md rounded-r-full">
                                         +
                                     </button>
                                 </div>
                             </div>
-                            <div v-if="productErrors[product.product_id]" class="text-error text-md">
-                                {{ productErrors[product.product_id]}}
+                            <div v-if="productErrors[product.product_id]" class="text-error text-md absolute bottom-3">
+                                {{ productErrors[product.product_id] }}
                             </div>
                         </div>
                         <!-- Delete Button Container -->

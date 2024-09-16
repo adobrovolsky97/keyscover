@@ -25,6 +25,7 @@
         "lodash": "^4.17.21",
         "mitt": "^3.0.1",
         "preline": "^2.0.2",
+        "swiper": "^11.1.14",
         "vee-validate": "^4.12.2",
         "vue": "^3.2.36",
         "vue-chartjs": "^5.3.1",
