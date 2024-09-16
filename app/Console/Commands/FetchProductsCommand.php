@@ -127,7 +127,17 @@ class FetchProductsCommand extends Command
             $attachmentNames[] = end($exploded);
         }
 
+        $productMediaNames = [];
+
         foreach ($product->getMedia('*') as $media) {
+
+            if (in_array($media->getCustomProperty('name'), $productMediaNames)) {
+                $media->delete();
+                $this->warn('Attachment ' . $media->getCustomProperty('name') . ' is a duplicate ' . $product->name);
+                continue;
+            }
+
+            $productMediaNames[] = $media->getCustomProperty('name');
 //            if (!in_array($media->getCustomProperty('name'), $attachmentNames)) {
 //                $media->delete();
 //                $this->warn('Attachment ' . $media->getCustomProperty('name') . ' has been removed from product ' . $product->name);
