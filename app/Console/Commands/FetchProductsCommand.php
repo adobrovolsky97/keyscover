@@ -133,7 +133,7 @@ class FetchProductsCommand extends Command
 
             if (in_array($media->getCustomProperty('name'), $productMediaNames)) {
                 $media->delete();
-                $this->warn('Attachment ' . $media->getCustomProperty('name') . ' is a duplicate ' . $product->name);
+                $this->error('Attachment ' . $media->getCustomProperty('name') . ' is a duplicate ' . $product->name);
                 continue;
             }
 
