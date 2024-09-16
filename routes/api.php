@@ -120,5 +120,6 @@ Route::middleware(AdminMiddleware::class)->group(function () {
     });
 
     Route::post('products/{product}', [ProductController::class, 'update']);
+    Route::delete('products/{product}', [ProductController::class, 'destroy']);
 
 });

@@ -7,6 +7,8 @@ use App\Http\Requests\Product\UpdateRequest;
 use App\Http\Resources\Product\ProductResource;
 use App\Models\Product\Product;
 use App\Services\Product\Contracts\ProductServiceInterface;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 /**
@@ -48,6 +50,8 @@ class ProductController extends Controller
     }
 
     /**
+     * Update product
+     *
      * @param Product $product
      * @param UpdateRequest $request
      * @return ProductResource
@@ -55,5 +59,19 @@ class ProductController extends Controller
     public function update(Product $product, UpdateRequest $request): ProductResource
     {
         return ProductResource::make($this->productService->update($product, $request->validated()));
+    }
+
+    /**
+     * Delete product
+     *
+     * @param Product $product
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function destroy(Product $product): JsonResponse
+    {
+        $this->productService->delete($product);
+
+        return response()->json(null, 204);
     }
 }

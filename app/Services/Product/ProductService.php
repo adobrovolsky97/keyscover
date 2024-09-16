@@ -8,6 +8,7 @@ use App\Services\Product\Contracts\ProductServiceInterface;
 use App\Repositories\Product\Contracts\ProductRepositoryInterface;
 use Adobrovolsky97\LaravelRepositoryServicePattern\Services\BaseCrudService;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
@@ -51,8 +52,14 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
 
         $product->refresh()->media()->update(['collection_name' => MediaEnum::COLLECTION_ADDITIONAL->value]);
 
+        /** @var UploadedFile $image */
         foreach ($images as $image) {
-            $product->addMedia($image)->toMediaCollection(MediaEnum::COLLECTION_ADDITIONAL->value);
+
+            if ($product->media()->where('file_name', $image->getClientOriginalName())->exists()) {
+                continue;
+            }
+
+            $product->addMedia($image)->withCustomProperties(['name' => $image->getClientOriginalName()])->toMediaCollection(MediaEnum::COLLECTION_ADDITIONAL->value);
         }
 
         $firstMedia = $product->refresh()->getFirstMedia(MediaEnum::COLLECTION_ADDITIONAL->value);
