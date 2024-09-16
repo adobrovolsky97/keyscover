@@ -47,7 +47,7 @@ class ProductResource extends JsonResource
             'is_stop_crm_update'    => $this->is_stop_crm_update,
             'left_in_stock'         => $this->left_in_stock,
             'image'                 => empty($image) ? asset('no-image.png') : $image,
-            'media'                 => $this->whenLoaded('media', MediaResource::collection($this->media)),
+            'media'                 => $this->whenLoaded('media', MediaResource::collection($this->media->sortByDesc('collection_name'))),
             'category'              => [
                 'id'          => $this->category?->id,
                 'name'        => $this->category?->name,
