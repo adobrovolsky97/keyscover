@@ -115,6 +115,8 @@ class FetchProductsCommand extends Command
                 array_column($productData['attachments'] ?? [], 'original_url'),
             ));
         }
+
+        $this->removeDuplicatedMedia($product);
     }
 
     /**
@@ -179,7 +181,14 @@ class FetchProductsCommand extends Command
                 $this->error('Failed to add attachment ' . $name . ' to product ' . $product->name . ' ' . $exception->getMessage());
             }
         }
+    }
 
+    /**
+     * @param Product $product
+     * @return void
+     */
+    protected function removeDuplicatedMedia(Product $product): void
+    {
         $mediaNames = [];
 
         foreach ($product->refresh()->media as $media) {
@@ -192,7 +201,7 @@ class FetchProductsCommand extends Command
             $mediaNames[] = $media->getCustomProperty('name');
         }
 
-        if($product->refresh()->getFirstMedia(Media::COLLECTION_MAIN->value) === null) {
+        if ($product->refresh()->getFirstMedia(Media::COLLECTION_MAIN->value) === null) {
             $product->getFirstMedia()?->update(['collection_name' => Media::COLLECTION_MAIN->value]);
         }
     }
