@@ -24,13 +24,10 @@
                         <button @click="handleFileRemove(element.id, index)"
                                 class="btn btn-sm btn-error absolute rounded-full top-0 right-0">x
                         </button>
-                        <div class="w-52 rounded-xl">
+                        <div @click="setMainImage(index)" class="w-52 rounded-xl cursor-pointer"
+                             :class="{'border border-red-500': element.collection_name === 'main'}">
                             <img class="w-52 object-cover border rounded-xl" :src="element.url"/>
                         </div>
-                        <!--                        <span class="text-error text-xs mt-2 absolute -bottom-5"-->
-                        <!--                              v-if="typeof validationErrors['images.' + (index + 1)] !== 'undefined'">{{-->
-                        <!--                                validationErrors['images.' + (index + 1)][0]-->
-                        <!--                            }}</span>-->
                     </div>
                 </div>
             </div>
@@ -91,6 +88,7 @@ export default {
                 images_to_remove: [],
                 is_stop_crm_update: false,
                 is_hidden: false,
+                main_image_index: null,
             },
             previewImages: [],
             errors: []
@@ -113,6 +111,13 @@ export default {
                         is_hidden: productResponse.is_hidden,
                     }
                     this.previewImages = productResponse.media;
+
+                    for (let i = 0; i < this.previewImages.length; i++) {
+                        if (this.previewImages[i].collection_name === 'main') {
+                            this.product.main_image_index = i;
+                            break;
+                        }
+                    }
                 })
                 .catch(error => {
                     console.log(error);
@@ -130,6 +135,13 @@ export default {
                 reader.readAsDataURL(files[i]);
             }
         },
+        setMainImage(index) {
+            this.product.main_image_index = index;
+
+            for (let i = 0; i < this.previewImages.length; i++) {
+                this.previewImages[i].collection_name = i === index ? 'main' : 'additional';
+            }
+        },
         handleFileRemove(fileId, index) {
             if (fileId === null) {
                 this.product.images.splice(index, 1);
@@ -142,15 +154,10 @@ export default {
             this.isLoading = true;
             const formData = new FormData();
             this.product.images.forEach(image => {
-                console.log(image)
                 formData.append('images[]', image);
             });
 
             for (const key in this.product) {
-
-                if (!this.product[key]) {
-                    continue;
-                }
 
                 if (key === 'images_to_remove') {
                     this.product.images_to_remove.forEach(image => {

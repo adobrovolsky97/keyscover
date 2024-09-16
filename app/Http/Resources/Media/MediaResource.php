@@ -20,8 +20,9 @@ class MediaResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'  => $this->id,
-            'url' => $this->hasGeneratedConversion('watermarked')
+            'id'              => $this->id,
+            'collection_name' => $this->collection_name,
+            'url'             => $this->hasGeneratedConversion('watermarked')
                 ? $this->getUrl('watermarked')
                 : $this->getUrl()
         ];

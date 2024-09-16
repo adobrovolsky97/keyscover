@@ -1,5 +1,5 @@
 <template>
-    <div class="card border bg-base-100 shadow-xl">
+    <div class="card border bg-base-100 shadow-xl" :class="{'opacity-20': product.is_hidden}">
         <figure class="w-full overflow-hidden">
             <!-- Основна картинка -->
             <router-link

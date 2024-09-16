@@ -21,6 +21,7 @@ class UpdateRequest extends FormRequest
             'description'        => ['nullable', 'string'],
             'is_hidden'          => ['nullable', 'boolean'],
             'is_stop_crm_update' => ['nullable', 'boolean'],
+            'main_image_index'   => ['nullable', 'integer'],
             'images'             => ['nullable', 'array'],
             'images.*'           => ['required', 'image'],
             'images_to_remove'   => ['nullable', 'array'],

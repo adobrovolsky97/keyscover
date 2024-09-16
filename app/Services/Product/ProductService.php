@@ -24,7 +24,12 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
             /** @var Product $product */
             $product = parent::update($keyOrModel, $data);
 
-            $this->handleImages($product, $data['images'] ?? [], $data['images_to_remove'] ?? []);
+            $this->handleImages(
+                $product,
+                $data['images'] ?? [],
+                $data['images_to_remove'] ?? [],
+                $data['main_image_index'] ?? null
+            );
 
             return $product->refresh();
         });
@@ -36,13 +41,14 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
      * @param Product $product
      * @param array $images
      * @param array $imagesToRemove
+     * @param int|null $mainImageIndex
      * @return void
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
-    protected function handleImages(Product $product, array $images = [], array $imagesToRemove = []): void
+    protected function handleImages(Product $product, array $images = [], array $imagesToRemove = [], int $mainImageIndex = null): void
     {
-        if (empty($images) && empty($imagesToRemove)) {
+        if (empty($images) && empty($imagesToRemove) && is_null($mainImageIndex)) {
             return;
         }
 
@@ -62,11 +68,20 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
             $product->addMedia($image)->withCustomProperties(['name' => $image->getClientOriginalName()])->toMediaCollection(MediaEnum::COLLECTION_ADDITIONAL->value);
         }
 
-        $firstMedia = $product->refresh()->getFirstMedia(MediaEnum::COLLECTION_ADDITIONAL->value);
 
-        if (!empty($firstMedia)) {
-            $firstMedia->update(['collection_name' => MediaEnum::COLLECTION_MAIN->value]);
+        if (is_null($mainImageIndex)) {
+            // Just set first media as main one
+            $product->refresh()->getFirstMedia()?->update(['collection_name' => MediaEnum::COLLECTION_MAIN->value]);
+            return;
         }
+
+        foreach ($product->media as $index => $media) {
+            if ($index === $mainImageIndex) {
+                $media->update(['collection_name' => MediaEnum::COLLECTION_MAIN->value]);
+                break;
+            }
+        }
+
     }
 
     /**
