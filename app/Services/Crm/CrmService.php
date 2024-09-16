@@ -37,6 +37,7 @@ class CrmService implements CrmServiceInterface
     public function getProductsList(int $category = null, int $page = 1): array
     {
         $response = Http::withHeader('X-Auth-Token', config('app.crm_api_key'))
+            ->timeout(10)
             ->get(self::API_URL . '/materials', [
                 urlencode('q[category_id_eq]') => $category,
                 'page'                         => $page
@@ -54,6 +55,7 @@ class CrmService implements CrmServiceInterface
     public function getCategoriesList(int $page = 1): array
     {
         $response = Http::withHeader('X-Auth-Token', config('app.crm_api_key'))
+            ->timeout(10)
             ->get(self::API_URL . '/materials/categories', [
                 'page' => $page
             ]);
@@ -130,6 +132,7 @@ class CrmService implements CrmServiceInterface
         ];
 
         $response = Http::withHeader('X-Auth-Token', config('app.crm_api_key'))
+            ->timeout(10)
             ->post(self::API_URL . '/agreements', $payload);
 
         $response->onError(function ($response) use ($order) {
