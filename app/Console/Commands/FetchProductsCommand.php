@@ -135,7 +135,7 @@ class FetchProductsCommand extends Command
 //            }
 
             if (in_array($media->getCustomProperty('name'), $attachmentNames)) {
-                unset($attachmentNames[array_search($media->getCustomProperty('name'), $attachmentNames)]);
+                unset($attachments[array_search($media->getCustomProperty('name'), $attachmentNames)]);
                 $this->warn('Attachment ' . $media->getCustomProperty('name') . ' already exists in product ' . $product->name);
             }
         }
