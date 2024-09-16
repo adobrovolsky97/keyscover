@@ -162,7 +162,7 @@ class FetchProductsCommand extends Command
                 $exploded = explode('/', $attachment);
                 $name = end($exploded);
 
-                if(in_array($name, $productMediaNames)){
+                if (in_array($name, $productMediaNames)) {
                     continue;
                 }
 
@@ -178,6 +178,18 @@ class FetchProductsCommand extends Command
             } catch (Throwable $exception) {
                 $this->error('Failed to add attachment ' . $name . ' to product ' . $product->name . ' ' . $exception->getMessage());
             }
+        }
+
+        $mediaNames = [];
+
+        foreach ($product->refresh()->media as $media) {
+            if (in_array($media->name, $mediaNames)) {
+                $media->delete();
+                $this->info('Deleted duplicate media ' . $media->name . ' from product ' . $product->name);
+                continue;
+            }
+
+            $mediaNames[] = $media->name;
         }
     }
 }
