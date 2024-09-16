@@ -183,13 +183,13 @@ class FetchProductsCommand extends Command
         $mediaNames = [];
 
         foreach ($product->refresh()->media as $media) {
-            if (in_array($media->name, $mediaNames)) {
+            if (in_array($media->getCustomProperty('name'), $mediaNames)) {
                 $media->delete();
                 $this->info('Deleted duplicate media ' . $media->name . ' from product ' . $product->name);
                 continue;
             }
 
-            $mediaNames[] = $media->name;
+            $mediaNames[] = $media->getCustomProperty('name');
         }
     }
 }
