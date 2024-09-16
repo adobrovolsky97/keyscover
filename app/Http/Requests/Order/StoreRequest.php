@@ -20,7 +20,7 @@ class StoreRequest extends FormRequest
             'surname'        => ['required', 'string', 'max:255'],
             'name'           => ['required', 'string', 'max:255'],
             'patronymic'     => ['required', 'string', 'max:255'],
-            'comment'        => ['nullable', 'string', 'max:255'],
+            'comment'        => ['nullable', 'string'],
             'phone'          => ['required', 'regex:/^(\d{10}|\d{12})$/'],
             'payment_type'   => [
                 'required',

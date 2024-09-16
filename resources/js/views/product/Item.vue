@@ -172,16 +172,20 @@ export default {
             // Handle left-click only (event.button === 0) and let middle-click, Ctrl+click work as normal
             if (event.button === 0 && !event.ctrlKey && !event.metaKey) {
                 event.preventDefault();
+                this.saveScrollPosition();
                 this.showProduct();
             }
         },
+        saveScrollPosition() {
+          this.$nextTick(() => {
+              localStorage.setItem('productListState', JSON.stringify({
+                  scrollPosition: window.scrollY,
+                  productId: this.product.id
+              }));
+          });
+        },
         showProduct() {
-            // Save the current state before navigating
-            localStorage.setItem('productListState', JSON.stringify({
-                scrollPosition: window.scrollY
-            }));
-
-            this.$router.push({ name: 'product.show', params: { id: this.product.id } });
+            this.$router.push({name: 'product.show', params: {id: this.product.id}});
         },
         onImageError(event) {
             event.target.src = this.fallbackImage;

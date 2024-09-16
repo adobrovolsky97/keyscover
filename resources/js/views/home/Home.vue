@@ -1,6 +1,6 @@
 <template>
     <div class="content flex flex-row justify-between items-start gap-4 p-1">
-        <div class="filters hidden lg:block border rounded-2xl shadow-xl">
+        <div class="filters hidden md:block border rounded-2xl shadow-xl">
             <div class="flex flex-row justify-between items-center px-6 mt-4">
                 <p class="text-lg font-bold">Категорії</p>
                 <button @click="clearFilter" class="badge badge-error text-white badge-sm p-2">Скинути фільтр</button>
@@ -20,7 +20,8 @@
                 <div class="z-[1]">
                     <input id="my-drawer" type="checkbox" class="drawer-toggle"/>
                     <div class="drawer-content">
-                        <label for="my-drawer" class="btn btn-sm font-medium border-gray-300 drawer-button btn-outline md:text-md text-xs w-full">Категорії</label>
+                        <label for="my-drawer"
+                               class="btn btn-sm font-medium border-gray-300 drawer-button btn-outline md:text-md text-xs w-full">Категорії</label>
                     </div>
                     <div class="drawer-side">
                         <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
@@ -41,13 +42,15 @@
                         </div>
                     </div>
                 </div>
-                <select v-model="filters.only_available" class="select select-sm text-xs md:text-md select-bordered w-full">
+                <select v-model="filters.only_available"
+                        class="select select-sm text-xs md:text-md select-bordered w-full">
                     <option :value="0">Всі товари</option>
                     <option :value="1">Лише в наявності</option>
                 </select>
                 <div class="form-control w-64">
                     <label class="label cursor-pointer">
-                        <select v-model="filters.per_page" class="select text-xs md:text-md select-bordered select-sm w-full">
+                        <select :value="filters.per_page" @change="changePerPage"
+                                class="select text-xs md:text-md select-bordered select-sm w-full">
                             <option value="20">20</option>
                             <option value="50">50</option>
                             <option value="100">100</option>
@@ -95,14 +98,16 @@
                             <span v-if="filters.only_available == 1" class="label-text mr-2">Лише в наявності</span>
                             <input type="checkbox" true-value="1" false-value="0" v-model="filters.only_available"
                                    class="toggle"/>
-                            <select v-model="filters.per_page" class="select select-bordered ml-3">
+                            <select :value="filters.per_page" @change="changePerPage"
+                                    class="select select-bordered ml-3">
                                 <option value="20">20 товарів</option>
                                 <option value="50">50 товарів</option>
                                 <option value="100">100 товарів</option>
                             </select>
                         </label>
                     </div>
-                    <select v-model="filters.order_by" class="select select-sm md:select-md w-full md:w-36 select-bordered">
+                    <select v-model="filters.order_by"
+                            class="select select-sm md:select-md w-full md:w-36 select-bordered">
                         <option :value="'name_asc'">За назвою</option>
                         <option :value="'id_desc'">За новизною</option>
                         <option :value="'popularity_desc'">За популярністю</option>
@@ -238,6 +243,10 @@ export default {
         this.isDataLoaded = false;
     },
     methods: {
+        changePerPage(e) {
+            this.filters.per_page = e.target.value;
+            this.filters.page = 1;
+        },
         clearSearch() {
             this.search = '';
             this.filters.search = '';
@@ -281,15 +290,16 @@ export default {
                     this.isDataLoaded = true;
 
                     if (!this.isInitialLoad) {
-                        window.scrollTo({top: 0, behavior: 'smooth'});
+                        window.scrollTo({top: 0, behavior: 'instant'});
                     } else {
                         const savedState = localStorage.getItem('productListState');
                         if (savedState) {
-                            const {scrollPosition} = JSON.parse(savedState);
-
+                            const {productId} = JSON.parse(savedState);
                             this.$nextTick(() => {
-                                //scroll to position smooth
-                                window.scrollTo({top: scrollPosition, behavior: 'smooth'});
+                                const element = document.getElementById(productId);
+                                if (element) {
+                                    element.scrollIntoView({behavior: 'instant', block: 'center'});
+                                }
                             });
                         }
                         // Clear the saved state
