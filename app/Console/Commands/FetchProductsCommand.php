@@ -86,6 +86,13 @@ class FetchProductsCommand extends Command
             ])
             : null;
 
+        $product = $this->productService->find(['external_id' => $productData['id']])->first();
+
+        if ($product?->is_stop_crm_update) {
+            $this->error('Product ' . $product->name . ' should skip update');
+            return;
+        }
+
         /** @var Product $product */
         $product = $this->productService->updateOrCreate(
             ['sku' => $productData['sku']],
