@@ -12,10 +12,6 @@
                     </div>
                     <input type="file" multiple class="file-input file-input-sm file-input-bordered w-full max-w-xs"
                            ref="fileInput" @change="handleFileUpload"/>
-                    <!--                    <div class="label">-->
-                    <!--                            <span class="text-error text-xs"-->
-                    <!--                                  v-if="validationErrors.images">{{ validationErrors.images[0] }}</span>-->
-                    <!--                    </div>-->
                 </label>
                 <div
                     class="flex flex-row justify-start items-center gap-4 flex-wrap mb-4 mt-4" v-if="previewImages">
@@ -25,7 +21,7 @@
                                 class="btn btn-sm btn-error absolute rounded-full top-0 right-0">x
                         </button>
                         <div @click="setMainImage(index)" class="w-52 rounded-xl cursor-pointer"
-                             :class="{'border border-red-500': element.collection_name === 'main'}">
+                             :class="{'border-4 border-red-500': element.collection_name === 'main'}">
                             <img class="w-52 object-cover border rounded-xl" :src="element.url"/>
                         </div>
                     </div>
