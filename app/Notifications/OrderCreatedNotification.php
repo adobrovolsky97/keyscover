@@ -15,6 +15,8 @@ class OrderCreatedNotification extends Notification implements ShouldQueue
 
     private Order $order;
 
+    public $queue = 'crm';
+
     /**
      * Create a new notification instance.
      * @param Order $order

@@ -161,6 +161,13 @@ class FetchProductsCommand extends Command
             try {
                 $exploded = explode('/', $attachment);
                 $name = end($exploded);
+
+                if(in_array($name, $productMediaNames)){
+                    continue;
+                }
+
+                $productMediaNames[] = $name;
+
                 /** @var \Spatie\MediaLibrary\MediaCollections\Models\Media $media */
                 $product
                     ->addMediaFromUrl($attachment)
