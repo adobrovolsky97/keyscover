@@ -83,8 +83,11 @@ Route::get('users/me', [UserController::class, 'me']);
 Route::get('cart', [CartController::class, 'index']);
 Route::get('categories', [CategoryController::class, 'index']);
 
-Route::get('products', [ProductController::class, 'index']);
-Route::get('products/{product}', [ProductController::class, 'show']);
+Route::group(['prefix' => 'products'], function () {
+    Route::get('', [ProductController::class, 'index']);
+    Route::get('{product}', [ProductController::class, 'show']);
+});
+
 Route::get('configs', [ConfigController::class, 'index']);
 
 /**
@@ -115,4 +118,7 @@ Route::middleware(AdminMiddleware::class)->group(function () {
         Route::get('browsers', [StatController::class, 'browsers']);
         Route::get('devices', [StatController::class, 'devices']);
     });
+
+    Route::post('products/{product}', [ProductController::class, 'update']);
+
 });

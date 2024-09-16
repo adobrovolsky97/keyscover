@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Product;
 
+use App\Enums\Role\Role;
 use App\Rules\ValidateCategories;
+use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -11,6 +13,13 @@ use Illuminate\Validation\Rule;
  */
 class SearchRequest extends FormRequest
 {
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'exclude_hidden' => Auth::user()?->role !== Role::ADMIN
+        ]);
+    }
+
     /**
      * @return array
      */
@@ -25,7 +34,8 @@ class SearchRequest extends FormRequest
                 'string',
                 Rule::in(['id_desc', 'name_asc', 'price_asc', 'price_desc', 'popularity_desc'])
             ],
-            'only_available' => ['nullable', 'boolean']
+            'only_available' => ['nullable', 'boolean'],
+            'exclude_hidden'      => ['nullable', 'boolean']
         ];
     }
 }

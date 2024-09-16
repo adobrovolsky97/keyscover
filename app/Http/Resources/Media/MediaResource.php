@@ -21,7 +21,9 @@ class MediaResource extends JsonResource
     {
         return [
             'id'  => $this->id,
-            'url' => $this->getUrl('watermarked')
+            'url' => $this->hasGeneratedConversion('watermarked')
+                ? $this->getUrl('watermarked')
+                : $this->getUrl()
         ];
     }
 }

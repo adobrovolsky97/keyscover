@@ -30,6 +30,15 @@
                                class="link">Dashboard</a>
                         </router-link>
                         <router-link
+                            :to="{name: 'admin.products'}"
+                            custom
+                            v-slot="{ navigate, href }"
+                        >
+                            <a @click="navigate"
+                               :class="{'link-error': $route.path === '/admin/products'}"
+                               class="link">Товари</a>
+                        </router-link>
+                        <router-link
                             :to="{name: 'admin.users'}"
                             custom
                             v-slot="{ navigate, href }"

@@ -39,15 +39,18 @@ class ProductResource extends JsonResource
             'id'                    => $this->id,
             'sku'                   => $this->sku,
             'name'                  => $this->name,
+            'description'           => $this->description,
             'price'                 => ceil($this->uah_price),
             'usd_price'             => $this->price, // TODO
             'is_available_in_stock' => $this->is_available_in_stock,
+            'is_hidden'             => $this->is_hidden,
+            'is_stop_crm_update'    => $this->is_stop_crm_update,
             'left_in_stock'         => $this->left_in_stock,
             'image'                 => empty($image) ? asset('no-image.png') : $image,
             'media'                 => $this->whenLoaded('media', MediaResource::collection($this->media)),
             'category'              => [
-                'id'   => $this->category?->id,
-                'name' => $this->category?->name,
+                'id'          => $this->category?->id,
+                'name'        => $this->category?->name,
                 'breadcrumbs' => $this->category?->breadcrumbs
             ],
             'custom_fields'         => $customFields

@@ -27,6 +27,9 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property integer $external_id
  * @property string $sku
  * @property string $name
+ * @property string $description
+ * @property boolean $is_stop_crm_update
+ * @property boolean $is_hidden
  * @property float $price
  * @property array $custom_fields
  * @property boolean $is_available_in_stock
@@ -50,8 +53,11 @@ class Product extends BaseModel implements HasMedia
         'name',
         'price',
         'is_available_in_stock',
+        'is_hidden',
         'left_in_stock',
         'custom_fields',
+        'is_stop_crm_update',
+        'description',
         'created_at',
         'updated_at'
     ];
@@ -115,6 +121,6 @@ class Product extends BaseModel implements HasMedia
             ->watermarkHeight(100, Manipulations::UNIT_PERCENT)
             ->watermarkOpacity(35)
             ->format(Manipulations::FORMAT_WEBP)
-            ->nonQueued();
+            ->queued();
     }
 }

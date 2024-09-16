@@ -11,7 +11,9 @@ import guest from "./middleware/guest.js";
 import admin from "./middleware/admin.js";
 import Checkout from "./views/checkout/Checkout.vue";
 import List from "./views/orders/List.vue";
+import EditForm from "./views/admin/product/Edit.vue";
 import UsersList from "./views/admin/user/List.vue";
+import ProductList from "./views/admin/product/List.vue";
 import OrdersList from "./views/admin/order/List.vue";
 import ExportsList from "./views/admin/export/List.vue";
 import AdminLayout from "./layouts/admin/AdminLayout.vue";
@@ -89,6 +91,22 @@ const router = createRouter({
                     path: '',
                     name: 'admin.dashboard',
                     component: Dashboard,
+                    meta: {
+                        middleware: [admin]
+                    }
+                },
+                {
+                    path: 'products',
+                    name: 'admin.products',
+                    component: ProductList,
+                    meta: {
+                        middleware: [admin]
+                    }
+                },
+                {
+                    path: 'products/:id',
+                    name: 'admin.products.edit',
+                    component: EditForm,
                     meta: {
                         middleware: [admin]
                     }
