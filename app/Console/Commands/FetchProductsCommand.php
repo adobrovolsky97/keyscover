@@ -191,5 +191,9 @@ class FetchProductsCommand extends Command
 
             $mediaNames[] = $media->getCustomProperty('name');
         }
+
+        if($product->refresh()->getFirstMedia(Media::COLLECTION_MAIN->value) === null) {
+            $product->getFirstMedia()?->update(['collection_name' => Media::COLLECTION_MAIN->value]);
+        }
     }
 }
