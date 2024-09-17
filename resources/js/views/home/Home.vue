@@ -17,7 +17,7 @@
         </div>
         <div class="products-data bg-base-100 w-full ml-0 md:ml-80">
             <div class="mobile md:hidden flex flex-row px-1 md:px-0 justify-between items-center mb-4 gap-1">
-                <div class="z-[1]">
+                <div class="z-[999]">
                     <input id="my-drawer" type="checkbox" class="drawer-toggle"/>
                     <div class="drawer-content">
                         <label for="my-drawer"
