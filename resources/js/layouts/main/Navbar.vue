@@ -163,7 +163,7 @@
         </nav>
         <nav
             v-if="isShowSubNavbar"
-            class="w-full shadow-xl flex flex-row gap-4 items-center justify-center bg-white">
+            class="w-full shadow-xl flex flex-row gap-4 items-center justify-center bg-base-200">
             <p class="text-center hidden lg:block">
                 Увага! Cайт в процесі розробки, помітили помилку чи бажаєте покращити зручність користування буду радий
                 почути ваші ідеї чи зауваження!

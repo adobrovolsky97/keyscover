@@ -1,6 +1,6 @@
 <template>
     <div class="content flex flex-row justify-between items-start gap-4 p-1">
-        <div class="filters hidden md:block border rounded-2xl shadow-xl fixed bg-white z-50 w-72">
+        <div class="filters hidden lg:block border rounded-2xl shadow-xl fixed bg-white z-50 w-72" :class="{'top-20': isMoveCategoriesToTop}">
             <div class="flex flex-row justify-between items-center px-6 mt-4">
                 <p class="text-lg font-bold">Категорії</p>
                 <button @click="clearFilter" class="badge badge-error text-white badge-sm p-2">Скинути фільтр</button>
@@ -15,13 +15,13 @@
                 ></category-item>
             </ul>
         </div>
-        <div class="products-data bg-base-100 w-full ml-0 md:ml-80">
-            <div class="mobile md:hidden flex flex-row px-1 md:px-0 justify-between items-center mb-4 gap-1">
+        <div class="products-data bg-base-100 w-full ml-0 lg:ml-80">
+            <div class="mobile lg:hidden flex flex-row px-1 lg:px-0 justify-between items-center mb-4 gap-1">
                 <div class="">
                     <input id="my-drawer" type="checkbox" class="drawer-toggle"/>
                     <div class="drawer-content">
                         <label for="my-drawer"
-                               class="btn btn-sm font-medium border-gray-300 drawer-button btn-outline md:text-md text-xs w-full z-[5]">Категорії</label>
+                               class="btn btn-sm font-medium border-gray-300 drawer-button btn-outline lg:text-md text-xs w-full z-[5]">Категорії</label>
                     </div>
                     <div class="drawer-side z-[100]">
                         <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
@@ -43,14 +43,14 @@
                     </div>
                 </div>
                 <select v-model="filters.only_available"
-                        class="select select-sm text-xs md:text-md select-bordered w-full">
+                        class="select select-sm text-xs lg:text-md select-bordered w-full">
                     <option :value="0">Всі товари</option>
                     <option :value="1">Лише в наявності</option>
                 </select>
                 <div class="form-control w-64">
                     <label class="label cursor-pointer">
                         <select :value="filters.per_page" @change="changePerPage"
-                                class="select text-xs md:text-md select-bordered select-sm w-full">
+                                class="select text-xs lg:text-md select-bordered select-sm w-full">
                             <option value="20">20</option>
                             <option value="50">50</option>
                             <option value="100">100</option>
@@ -68,8 +68,8 @@
                     </svg>
                 </button>
             </div>
-            <div class="flex flex-row md:flex-col px-1 md:px-0 justify-between gap-2">
-                <label class="input input-bordered text-sm input-sm md:input-md w-full flex items-center mb-2">
+            <div class="flex flex-row lg:flex-col px-1 lg:px-0 justify-between gap-2">
+                <label class="input input-bordered text-sm input-sm lg:input-md w-full flex items-center mb-2">
                     <input @input="delaySearch" v-model="search" type="text" class="grow"
                            :placeholder="filters.categories.length > 0 ? 'Пошук по категорії' : 'Загальний пошук'"/>
                     <svg v-if="search !== ''" @click="clearSearch" class="h-5 w-5 cursor-pointer" width="24" height="24"
@@ -91,8 +91,8 @@
                             clip-rule="evenodd"/>
                     </svg>
                 </label>
-                <div class="flex flex-row justify-center flex-wrap md:justify-end items-center mb-6 w-full gap-4">
-                    <div class="form-control hidden md:block">
+                <div class="flex flex-row justify-center flex-wrap lg:justify-end items-center mb-6 w-full gap-4">
+                    <div class="form-control hidden lg:block">
                         <label class="label cursor-pointer">
                             <span v-if="filters.only_available == 0" class="label-text mr-2">Показувати все</span>
                             <span v-if="filters.only_available == 1" class="label-text mr-2">Лише в наявності</span>
@@ -107,7 +107,7 @@
                         </label>
                     </div>
                     <select v-model="filters.order_by"
-                            class="select select-sm md:select-md w-full md:w-36 select-bordered">
+                            class="select select-sm lg:select-md w-full lg:w-36 select-bordered">
                         <option :value="'name_asc'">За назвою</option>
                         <option :value="'id_desc'">За новизною</option>
                         <option :value="'popularity_desc'">За популярністю</option>
@@ -137,7 +137,7 @@
         <button
             v-show="showScrollToTop"
             @click="scrollToTop"
-            class="fixed bottom-5 right-4 bg-gray-400 text-black opacity-50 p-3 rounded-full shadow-lg hover:bg-neutral-focus transition-opacity duration-300"
+            class="fixed bottom-5 right-4 z-[999] bg-gray-400 text-black opacity-50 p-3 rounded-full shadow-lg hover:bg-neutral-focus transition-opacity duration-300"
             aria-label="Scroll to top"
         >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -161,6 +161,7 @@ export default {
     name: "Home",
     data() {
         return {
+            isMoveCategoriesToTop:false,
             data: {},
             categories: [],
             search: '',
@@ -265,6 +266,12 @@ export default {
                 this.showScrollToTop = false;
             }
             this.lastScrollY = currentScrollY;
+
+            if (currentScrollY > 200) {
+                this.isMoveCategoriesToTop = true;
+            } else {
+                this.isMoveCategoriesToTop = false;
+            }
         },
         showCart() {
             this.emitter.emit('show-cart');

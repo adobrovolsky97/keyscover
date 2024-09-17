@@ -31,14 +31,12 @@
                                 </router-link>
                             </div>
                             <div class="text-sm flex flex-row xl:mt-0 mt-2 justify-center xl:justify-start gap-1">
-                                <!--                                <span>{{ product.total_price_usd }}$</span>-->
-                                <!--                                <span> ~{{ product.total_price_uah }}грн.</span>-->
                                 <span>{{ product.price }}$</span>
-                                <span>~{{ product.uah_price }}грн.</span>
+                                <span>~{{ product.uah_price }}грн. за шт.</span>
                             </div>
                         </div>
                         <div class="flex flex-col justify-center items-center xl:gap-2 mb-2 xl:mb-0">
-                            <div class="text-sm flex flex-row xl:mt-0 mt-2 justify-center xl:justify-start gap-1 relative md:absolute mb-2 md:mb-0 top-0 md:top-4">
+                            <div class="text-sm font-bold flex flex-row pb-2 md:pb-0">
                                 <span>{{ product.total_price_usd }}$</span>
                                 <span> ~{{ product.total_price_uah }}грн.</span>
                             </div>
@@ -58,9 +56,9 @@
                                     </button>
                                 </div>
                             </div>
-                            <div v-if="productErrors[product.product_id]" class="text-error text-md absolute bottom-3">
+                            <span v-if="productErrors[product.product_id]" class="text-error text-md absolute bottom-0">
                                 {{ productErrors[product.product_id] }}
-                            </div>
+                            </span>
                         </div>
                         <!-- Delete Button Container -->
                         <div
