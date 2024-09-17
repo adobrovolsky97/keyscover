@@ -1,7 +1,7 @@
 <template>
     <div class="fixed w-full z-50 bg-white">
         <nav
-            class="navbar block py-4 w-full max-w-full rounded-none px-2 lg:px-4 border-0 top-0 shadow-xl">
+            class="navbar block py-2 w-full max-w-full rounded-none px-2 lg:px-4 border-0 top-0 shadow-xl">
             <div class="container mx-auto flex items-center justify-between">
                 <router-link
                     :to="{name: 'home'}"
@@ -162,7 +162,8 @@
             </div>
         </nav>
         <nav
-            class="w-full shadow-xl flex flex-row gap-4 items-center justify-center">
+            v-if="isShowSubNavbar"
+            class="w-full shadow-xl flex flex-row gap-4 items-center justify-center bg-white">
             <p class="text-center hidden lg:block">
                 Увага! Cайт в процесі розробки, помітили помилку чи бажаєте покращити зручність користування буду радий
                 почути ваші ідеї чи зауваження!
@@ -197,7 +198,8 @@ export default {
     data() {
         return {
             usd: null,
-            isOpen: false
+            isOpen: false,
+            isShowSubNavbar: true
         }
     },
     created() {
@@ -209,9 +211,11 @@ export default {
     },
     mounted() {
         document.addEventListener('click', this.handleClickOutside);
+        window.addEventListener("scroll", this.checkScrollPosition);
     },
     beforeDestroy() {
         document.removeEventListener('click', this.handleClickOutside);
+        window.addEventListener("scroll", this.checkScrollPosition);
     },
     components: {
         Cart
@@ -267,6 +271,15 @@ export default {
                     this.$store.commit('clearUser')
                     this.$router.push({name: 'home'});
                 })
+        },
+        checkScrollPosition() {
+            const currentScrollY = window.scrollY;
+            console.log(currentScrollY)
+            if (currentScrollY > 200) {
+                this.isShowSubNavbar = false;
+            } else {
+                this.isShowSubNavbar = true;
+            }
         },
         goToProducts() {
             localStorage.removeItem('productListState');

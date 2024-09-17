@@ -17,13 +17,13 @@
         </div>
         <div class="products-data bg-base-100 w-full ml-0 md:ml-80">
             <div class="mobile md:hidden flex flex-row px-1 md:px-0 justify-between items-center mb-4 gap-1">
-                <div class="z-[999]">
+                <div class="">
                     <input id="my-drawer" type="checkbox" class="drawer-toggle"/>
                     <div class="drawer-content">
                         <label for="my-drawer"
-                               class="btn btn-sm font-medium border-gray-300 drawer-button btn-outline md:text-md text-xs w-full">Категорії</label>
+                               class="btn btn-sm font-medium border-gray-300 drawer-button btn-outline md:text-md text-xs w-full z-[5]">Категорії</label>
                     </div>
-                    <div class="drawer-side">
+                    <div class="drawer-side z-[100]">
                         <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
                         <div class="menu bg-base-100 text-base-content border shadow-xl min-h-full w-80 p-2">
                             <div class="flex flex-row justify-between items-center">
@@ -137,7 +137,7 @@
         <button
             v-show="showScrollToTop"
             @click="scrollToTop"
-            class="fixed bottom-5 right-4 bg-neutral text-white p-3 rounded-full shadow-lg hover:bg-neutral-focus transition-opacity duration-300"
+            class="fixed bottom-5 right-4 bg-gray-400 text-black opacity-50 p-3 rounded-full shadow-lg hover:bg-neutral-focus transition-opacity duration-300"
             aria-label="Scroll to top"
         >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
