@@ -274,7 +274,6 @@ export default {
         },
         checkScrollPosition() {
             const currentScrollY = window.scrollY;
-            console.log(currentScrollY)
             if (currentScrollY > 200) {
                 this.isShowSubNavbar = false;
             } else {
