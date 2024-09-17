@@ -15,8 +15,6 @@ class OrderCreatedNotification extends Notification implements ShouldQueue
 
     private Order $order;
 
-    public $queue = 'crm';
-
     /**
      * Create a new notification instance.
      * @param Order $order
@@ -24,6 +22,7 @@ class OrderCreatedNotification extends Notification implements ShouldQueue
     public function __construct(Order $order)
     {
         $this->order = $order;
+        $this->queue = 'crm';
     }
 
     /**
