@@ -4,29 +4,26 @@
         <div class="flex md:flex-row flex-col p-1 justify-between items-start gap-4" v-else>
 
             <div class="hero bg-base-100 rounded-xl shadow-lg border lg:sticky top-24 w-full md:w-2/5">
-                <div class="hero-content w-full">
-                    <div class="card-body">
-                        <h2 class="text-center">Замовлення</h2>
+                <div class="content px-8 py-2 w-full">
+                    <div class="py-2">
+                        <h2 class="text-start text-lg mb-2 font-bold">Замовлення</h2>
                         <div class="row">
-                            <div class="flex flex-col gap-4">
+                            <div class="flex flex-col gap-2">
                                 <div class="form-group">
-                                    <label>Прізвище</label>
-                                    <input type="text" class="input input-bordered w-full" placeholder="Прізвище"
+                                    <input type="text" class="input input-sm input-bordered w-full" placeholder="Прізвище"
                                            v-model="form.surname">
                                     <error v-if="Object.keys(errors).length > 0" :errors="errors"
                                            attribute="surname"></error>
                                 </div>
                                 <div class="form-group">
-                                    <label>Ім'я</label>
-                                    <input type="text" class="input input-bordered w-full " placeholder="Ім'я"
+                                    <input type="text" class="input input-sm input-bordered w-full " placeholder="Ім'я"
                                            v-model="form.name">
                                     <error v-if="Object.keys(errors).length > 0" :errors="errors"
                                            attribute="name"></error>
                                 </div>
 
                                 <div class="form-group">
-                                    <label>По-батькові</label>
-                                    <input type="text" class="input input-bordered w-full " placeholder="По-батькові"
+                                    <input type="text" class="input input-sm input-bordered w-full " placeholder="По-батькові"
                                            v-model="form.patronymic">
                                     <error v-if="Object.keys(errors).length > 0" :errors="errors"
                                            attribute="patronymic"></error>
@@ -34,30 +31,26 @@
 
 
                                 <div class="form-group">
-                                    <label>Номер телефону</label>
                                     <label class="form-control w-full">
-                                        <label class="input input-bordered flex items-center gap-2">
+                                        <label class="input input-bordered input-sm flex text-sm items-center gap-2">
                                             +38
-                                            <input type="tel" autocomplete="off" v-model="form.phone"
+                                            <input type="tel" class="text-sm left-0" autocomplete="off" v-model="form.phone"
                                                    placeholder="975231231"/>
                                         </label>
                                         <error v-if="Object.keys(errors).length > 0" :errors="errors"
                                                attribute="phone"></error>
                                     </label>
                                 </div>
-                                <div class="form-group">
-                                    <label for="">Коментар</label>
-                                    <textarea v-model="form.comment"
-                                              class="textarea input-bordered w-full "></textarea>
-                                    <error v-if="Object.keys(errors).length > 0" :errors="errors"
-                                           attribute="comment"></error>
-                                </div>
-                                <div class="form-group">
+                                <textarea v-model="form.comment"
+                                          class="textarea textarea-bordered textarea-xs w-full" rows="3" placeholder="Коментар"></textarea>
+                                <error v-if="Object.keys(errors).length > 0" :errors="errors"
+                                       attribute="comment"></error>
+                                <div class="form-group -pt-4">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio"
                                                v-model="deliveryType" :value="'new-post'"
                                                name="delivery_subtype" id="delivery_subtype_1">
-                                        <label class="form-check-label" for="delivery_subtype_1">
+                                        <label class="form-check-label text-sm" for="delivery_subtype_1">
                                             Доставка у відділення або поштомат
                                         </label>
                                     </div>
@@ -65,15 +58,14 @@
                                         <input class="form-check-input" v-model="deliveryType"
                                                :value="'self-pickup'" type="radio" name="delivery_subtype"
                                                id="delivery_subtype_2">
-                                        <label class="form-check-label" for="delivery_subtype_2">
+                                        <label class="form-check-label text-sm" for="delivery_subtype_2">
                                             Самовивіз
                                         </label>
                                     </div>
                                 </div>
 
-                                <div class="form-group" v-if="deliveryType === 'new-post'">
-                                    <label>Місто</label>
-                                    <input type="text" class="input input-bordered w-full "
+                                <div class="form-group max-w-sm" v-if="deliveryType === 'new-post'">
+                                    <input type="text" placeholder="Місто" class="input input-sm input-bordered w-full "
                                            @focusin="isCityFocused=true"
                                            v-model="form.city"
                                            @input="fetchCities">
@@ -83,7 +75,7 @@
                                                         <ul>
                                                             <li
                                                                 v-for="item in cityVariants" :key="item.id"
-                                                                class="variant-item bg-base-100 mb-2 cursor-pointer hover:bg-gray-100"
+                                                                class="variant-item text-sm bg-base-100 mb-2 cursor-pointer hover:bg-gray-100"
                                                                 role="treeitem"
                                                                 @click="selectCity(item)"
                                                             >{{ item.name }}</li>
@@ -95,14 +87,12 @@
 
                                 <div class="form-group flex flex-col gap-2"
                                      v-if="deliveryType === 'new-post' && isWarehouseLoading">
-                                    <label>Відділення</label>
                                     <span class="loading loading-spinner mx-auto loading-md"></span>
                                 </div>
 
-                                <div class="form-group"
-                                     v-if="deliveryType === 'new-post' && (filteredWarehouses.length > 0 || form.warehouseId)">
-                                    <label>Відділення</label>
-                                    <input type="text" class="input input-bordered w-full "
+                                <div class="form-group max-w-sm"
+                                     v-if="deliveryType === 'new-post' && !isWarehouseLoading">
+                                    <input type="text" placeholder="Відділення" class="input input-sm max-w-sm input-bordered w-full "
                                            @focusin="isWarehouseFocused=true"
                                            v-model="form.warehouse"
                                            @input="filterWarehouses">
@@ -112,7 +102,7 @@
                                                         <ul>
                                                             <li
                                                                 v-for="item in filteredWarehouses" :key="item.id"
-                                                                class="variant-item bg-base-100 mb-2 cursor-pointer hover:bg-gray-100"
+                                                                class="variant-item bg-base-100 mb-2 text-sm cursor-pointer hover:bg-gray-100"
                                                                 role="treeitem"
                                                                 @click="selectWarehouse(item)"
                                                             >{{ item.name }}</li>
@@ -124,8 +114,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Оплата</label>
-                            <select v-model="form.paymentType" class="select select-bordered w-full">
+                            <select v-model="form.paymentType" class="select select-sm mt-4 select-bordered w-full">
                                 <option v-if="deliveryType ==='new-post'" :value="'cash_on_delivery'">Розрахунок
                                     на пошті при отриманні
                                 </option>
@@ -298,6 +287,15 @@ export default {
             this.isWarehouseFocused = false;
         },
         fetchCities() {
+
+            if(!this.form.city){
+                this.cityVariants = [];
+                this.warehouseVariants = [];
+                this.form.warehouse = null;
+                this.form.warehouseId = null;
+                return false;
+            }
+
             if (this.citiesTimer) {
                 clearTimeout(this.citiesTimer);
                 this.citiesTimer = null;
