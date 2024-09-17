@@ -7,7 +7,7 @@
         </button>
         <div v-if="($store.state.cart?.products ?? []).length"
              class="flex flex-col container w-full mx-auto px-4 border items-center justify-center rounded-lg shadow">
-            <ul class="flex flex-col divide-y w-full max-h-[44.6rem] overflow-y-auto">
+            <ul class="flex flex-col divide-y w-full">
                 <li v-for="product in $store.state.cart?.products ?? []" :key="product.id"
                     class="flex flex-col xl:flex-row relative">
                     <div

@@ -3,7 +3,7 @@
         <TableSkeleton v-if="!isDataLoaded"/>
         <div class="flex md:flex-row flex-col p-1 justify-between items-start gap-4" v-else>
 
-            <div class="hero bg-base-100 rounded-xl shadow-lg border">
+            <div class="hero bg-base-100 rounded-xl shadow-lg border lg:sticky top-24 w-full md:w-2/5">
                 <div class="hero-content w-full">
                     <div class="card-body">
                         <h2 class="text-center">Замовлення</h2>
