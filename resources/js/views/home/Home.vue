@@ -1,6 +1,6 @@
 <template>
     <div class="content flex flex-row justify-between items-start gap-4 p-1">
-        <div class="filters hidden lg:block border rounded-2xl shadow-xl fixed bg-white z-50 w-72" :class="{'top-20': isMoveCategoriesToTop}">
+        <div class="filters hidden lg:block border rounded-2xl shadow-xl bg-white w-72" :class="{'top-20': isMoveCategoriesToTop}">
             <div class="flex flex-row justify-between items-center px-6 mt-4">
                 <p class="text-lg font-bold">Категорії</p>
                 <button @click="clearFilter" class="badge badge-error text-white badge-sm p-2">Скинути фільтр</button>
@@ -15,7 +15,7 @@
                 ></category-item>
             </ul>
         </div>
-        <div class="products-data bg-base-100 w-full ml-0 lg:ml-80">
+        <div class="products-data relative bg-base-100 w-full">
             <div class="mobile lg:hidden flex flex-row px-1 lg:px-0 justify-between items-center mb-4 gap-1">
                 <div class="">
                     <input id="my-drawer" type="checkbox" class="drawer-toggle"/>
@@ -133,18 +133,18 @@
                     @pagination-change-page="updatePage"
                 />
             </div>
+            <button
+                v-show="showScrollToTop"
+                @click="scrollToTop"
+                class="fixed bottom-0 right-3 z-[999] bg-gray-400 text-black opacity-50 p-3 rounded-full shadow-lg hover:bg-neutral-focus transition-opacity duration-300"
+                aria-label="Scroll to top"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                     class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
+                </svg>
+            </button>
         </div>
-        <button
-            v-show="showScrollToTop"
-            @click="scrollToTop"
-            class="fixed bottom-5 right-4 z-[999] bg-gray-400 text-black opacity-50 p-3 rounded-full shadow-lg hover:bg-neutral-focus transition-opacity duration-300"
-            aria-label="Scroll to top"
-        >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                 class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
-            </svg>
-        </button>
     </div>
 </template>
 
@@ -208,6 +208,9 @@ export default {
         window.removeEventListener("scroll", this.checkScrollPosition);
     },
     computed: {
+        contentWidth() {
+            return this.$refs.content?.clientWidth;
+        },
         classes() {
             return {
                 'grid-cols-1': this.mode === '1-row',
