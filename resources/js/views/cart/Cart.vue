@@ -23,7 +23,7 @@
                             <div class="text-sm text-gray-400">{{ product.sku }}</div>
                             <div class="font-medium">
                                 <router-link
-                                    :to="{ name: 'product.show', params: { id: product.id } }"
+                                    :to="{ name: 'product.show', params: { id: product.product_id } }"
                                     @click="handleClick($event)"
                                     class="w-full h-full object-cover cursor-pointer"
                                 >
