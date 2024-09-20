@@ -7,6 +7,15 @@
         <div class="flex flex-col w-full m-auto p-4">
             <label class="form-control w-full">
                 <div class="label">
+                    <span class="label-text">Прізвище</span>
+                </div>
+                <input type="text" v-model="form.surname" placeholder="Прізвище"
+                       class="input input-bordered w-full"/>
+                <span class="text-red-600 text-xs" v-if="errors?.surname">{{ errors.surname[0] }}</span>
+            </label>
+
+            <label class="form-control w-full">
+                <div class="label">
                     <span class="label-text">Ім'я</span>
                 </div>
                 <input type="text" v-model="form.name" placeholder="Ім'я"
@@ -78,6 +87,7 @@ export default {
             },
             auth: Auth,
             form: {
+                surname: null,
                 name: null,
                 phone: null,
                 email: null,

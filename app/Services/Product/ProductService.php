@@ -18,6 +18,66 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
  */
 class ProductService extends BaseCrudService implements ProductServiceInterface
 {
+    const ACTION_DELETE = 'delete';
+    const ACTION_HIDE = 'hide';
+    const ACTION_SHOW = 'show';
+
+    /**
+     * Handle mass action
+     *
+     * @param array $ids
+     * @param string $action
+     * @return void
+     */
+    public function handleMassAction(array $ids, string $action): void
+    {
+        DB::transaction(function () use ($ids, $action) {
+            match ($action) {
+                self::ACTION_DELETE => $this->deleteMany($ids),
+                self::ACTION_HIDE => $this->massHide($ids),
+                self::ACTION_SHOW => $this->massShow($ids),
+                default => null,
+            };
+        });
+    }
+
+    /**
+     * Mass hide products
+     *
+     * @param array $ids
+     * @return void
+     */
+    public function massHide(array $ids): void
+    {
+        $this->repository
+            ->findMany([['id', 'IN', $ids]])
+            ->where('is_hidden', false)
+            ->each(function ($product) {
+                $product->update(['is_hidden' => true]);
+            });
+    }
+
+    /**
+     * Mass show products
+     *
+     * @param array $ids
+     * @return void
+     */
+    public function massShow(array $ids): void
+    {
+        $this->repository
+            ->findMany([['id', 'IN', $ids]])
+            ->where('is_hidden', true)
+            ->each(function ($product) {
+                $product->update(['is_hidden' => false]);
+            });
+    }
+
+    /**
+     * @param $keyOrModel
+     * @param array $data
+     * @return Model|null
+     */
     public function update($keyOrModel, array $data): ?Model
     {
         return DB::transaction(function () use ($keyOrModel, $data) {

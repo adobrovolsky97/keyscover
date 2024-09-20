@@ -125,6 +125,7 @@ Route::middleware(AdminMiddleware::class)->group(function () {
         Route::get('devices', [StatController::class, 'devices']);
     });
 
+    Route::post('products/mass-actions', [ProductController::class, 'handleMassActions']);
     Route::post('products/{product}', [ProductController::class, 'update']);
     Route::delete('products/{product}', [ProductController::class, 'destroy']);
 

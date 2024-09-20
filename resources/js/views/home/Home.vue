@@ -208,9 +208,6 @@ export default {
         window.removeEventListener("scroll", this.checkScrollPosition);
     },
     computed: {
-        contentWidth() {
-            return this.$refs.content?.clientWidth;
-        },
         classes() {
             return {
                 'grid-cols-1': this.mode === '1-row',
@@ -275,9 +272,6 @@ export default {
             } else {
                 this.isMoveCategoriesToTop = false;
             }
-        },
-        showCart() {
-            this.emitter.emit('show-cart');
         },
         fetchData() {
             RouteHelper.updateQueryParams(this.queryParams);

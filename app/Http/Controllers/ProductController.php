@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Product\MassActionRequest;
 use App\Http\Requests\Product\SearchRequest;
 use App\Http\Requests\Product\UpdateRequest;
 use App\Http\Resources\Product\ProductResource;
@@ -47,6 +48,19 @@ class ProductController extends Controller
     public function show(Product $product): ProductResource
     {
         return ProductResource::make($product->load('media'));
+    }
+
+    /**
+     * Handle mass actions
+     *
+     * @param MassActionRequest $request
+     * @return JsonResponse
+     */
+    public function handleMassActions(MassActionRequest $request): JsonResponse
+    {
+        $this->productService->handleMassAction($request->input('ids'), $request->input('action'));
+
+        return response()->json(null, 204);
     }
 
     /**

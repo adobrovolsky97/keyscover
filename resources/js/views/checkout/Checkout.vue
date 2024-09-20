@@ -216,8 +216,8 @@ export default {
 
         this.fetchUser()
             .then(() => {
-                this.form.surname = this.$store.state.user?.last_order?.surname ?? null;
-                this.form.name = this.$store.state.user?.last_order?.name ?? null;
+                this.form.surname = this.$store.state.user?.last_order?.surname ?? this.$store.state.user?.surname ?? null;
+                this.form.name = this.$store.state.user?.last_order?.name ?? this.$store.state.user?.name ?? null;;
                 this.form.patronymic = this.$store.state.user?.last_order?.patronymic ?? null;
                 this.form.phone = this.$store.state.user?.last_order?.phone ?? this.$store.state.user.phone;
                 this.form.city = this.$store.state.user?.last_order?.city_name ?? null;

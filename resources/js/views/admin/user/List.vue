@@ -25,7 +25,7 @@
                 <!-- row 1 -->
                 <tr v-for="user in data.data" :key="user.id">
                     <th>{{ user.id }}</th>
-                    <th>{{ user.name }}</th>
+                    <th>{{user.surname}} {{ user.name }}</th>
                     <th>{{ user.phone }}</th>
                     <th>{{ user.email }}</th>
                     <th>{{ user.orders_count }}</th>

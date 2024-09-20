@@ -1,10 +1,19 @@
 <template>
     <div class="border rounded-2xl shadow-xl p-4">
-        <div class="flex flex-row justify-between items-center">
-            <h3 class="font-bold text-lg mb-4">Товари <span v-if="data.meta?.total">({{ data.meta.total }})</span></h3>
+        <div class="flex flex-row justify-between items-center mb-4">
+            <h3 class="font-bold text-lg">Товари <span v-if="data.meta?.total">({{ data.meta.total }})</span></h3>
+            <div v-if="selectedProducts.length" class="flex flex-row justify-end items-center gap-2">
+                <select v-model="action" class="select select-sm select-bordered">
+                    <option :value="null">Обрати дію</option>
+                    <option value="delete">Видалити</option>
+                    <option value="hide">Приховати</option>
+                    <option value="show">Відображати</option>
+                </select>
+                <button @click="runMassAction" class="btn btn-sm text-white btn-success">Виконати</button>
+            </div>
         </div>
         <TableSkeleton v-if="!isDataLoaded"/>
-        <div class="flex flex-row md:flex-col px-1 md:px-0 justify-between gap-2">
+        <div class="flex md:flex-row flex-col px-1 md:px-0 justify-between gap-2">
             <label class="input input-bordered text-sm input-sm md:input-md w-full flex items-center mb-2">
                 <input @input="delaySearch" v-model="search" type="text" class="grow"
                        placeholder="Пошук"/>
@@ -27,15 +36,44 @@
                         clip-rule="evenodd"/>
                 </svg>
             </label>
+            <div>
+                <input id="my-drawer" type="checkbox" class="drawer-toggle"/>
+                <div class="drawer-content">
+                    <label for="my-drawer"
+                           class="btn font-medium md:btn-md btn-sm border-gray-300 drawer-button btn-outline  w-full z-[5]">Категорії</label>
+                </div>
+                <div class="drawer-side z-[100]">
+                    <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+                    <div class="menu bg-base-100 text-base-content border shadow-xl min-h-full w-80 p-2">
+                        <div class="flex flex-row justify-between items-center">
+                            <p class="px-4 py-2 text-lg font-bold">Категорії</p>
+                            <button @click="clearFilter" class="badge text-white badge-error badge-sm p-2">Скинути
+                                фільтр
+                            </button>
+                        </div>
+                        <category-item
+                            :selected-categories="categoriesArray"
+                            v-on:category-clicked="handleCategoryClicked"
+                            v-for="category in categories"
+                            :key="category.id"
+                            :category="category"
+                        ></category-item>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="overflow-x-auto" v-if="isDataLoaded && data.data.length">
             <table class="table">
                 <thead>
                 <tr>
+                    <th>
+                        <input @click="selectAll" type="checkbox" class="checkbox checkbox-primary">
+                    </th>
                     <th></th>
                     <th>ID</th>
                     <th>Назва</th>
                     <th>SKU</th>
+                    <th>Залишок</th>
                     <th>CRM синхр. припинено</th>
                     <th>Прихований</th>
                     <th></th>
@@ -44,10 +82,15 @@
                 <tbody>
                 <!-- row 1 -->
                 <tr v-for="product in data.data" :key="product.id">
+                    <td>
+                        <input @click="toggleCheckbox(product.id)" :checked="selectedProducts.includes(product.id)"
+                               type="checkbox" class="checkbox checkbox-primary">
+                    </td>
                     <th><img :src="product.image" class="w-52" alt=""></th>
                     <th>{{ product.id }}</th>
                     <th>{{ product.name }}</th>
                     <th>{{ product.sku }}</th>
+                    <th>{{ product.left_in_stock }}</th>
                     <th>
                         <span v-if="product.is_stop_crm_update" class="badge badge-error text-white badge-sm">Так</span>
                         <span v-else class="badge badge-success text-white badge-sm">Ні</span>
@@ -57,20 +100,28 @@
                         <span v-else class="badge badge-success text-white badge-sm">Ні</span>
                     </th>
                     <th>
-                       <div class="flex flex-row justify-between items-center">
-                           <router-link
-                               :to="{name: 'admin.products.edit', params: {id: product.id}}"
-                               class="btn btn-ghost"
-                           >
-                               <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                         d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                               </svg>
+                        <div class="flex flex-row justify-between items-center">
+                            <router-link
+                                :to="{name: 'admin.products.edit', params: {id: product.id}}"
+                                class="btn btn-ghost"
+                            >
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
 
-                           </router-link>
+                            </router-link>
 
-                           <svg @click="destroyProduct(product.id)" class="h-6 w-6 text-red-500 cursor-pointer"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="3 6 5 6 21 6" />  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" /></svg>
-                       </div>
+                            <svg @click="destroyProduct(product.id)" class="h-6 w-6 text-red-500 cursor-pointer"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="3 6 5 6 21 6"/>
+                                <path
+                                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                <line x1="10" y1="11" x2="10" y2="17"/>
+                                <line x1="14" y1="11" x2="14" y2="17"/>
+                            </svg>
+                        </div>
                     </th>
                 </tr>
                 </tbody>
@@ -97,6 +148,7 @@ import Pagination from "../../../components/pagination/Pagination.vue";
 import TableSkeleton from "../../../components/skeleton/TableSkeleton.vue";
 import RouteHelper from "../../../helpers/Route/RouteHelper.js";
 import {toast} from "vue3-toastify";
+import CategoryItem from "../../../components/CategoryItem.vue";
 
 export default {
     data() {
@@ -104,15 +156,20 @@ export default {
             isDataLoaded: false,
             isExportDisabled: false,
             data: {},
+            action: null,
+            selectedProducts: [],
+            categories: [],
             search: '',
             filters: {
                 page: 1,
                 search: '',
+                categories: '',
             },
             route: useRoute()
         }
     },
     components: {
+        CategoryItem,
         Pagination,
         TableSkeleton
     },
@@ -130,15 +187,101 @@ export default {
         },
         user() {
             return this.$store.state.user;
-        }
+        },
+        categoriesArray() {
+            return this.filters.categories.split(',');
+        },
     },
     beforeRouteLeave() {
         this.isDataLoaded = false;
     },
     mounted() {
         this.resolveQueryParams();
+        this.fetchCategories();
+    },
+    created() {
+        this.fetchCategories();
+        this.resolveQueryParams();
+
+        this.search = this.filters.search;
     },
     methods: {
+        fetchCategories() {
+            axios.get('/api/categories')
+                .then((response) => {
+                    this.categories = response.data.data;
+                })
+        },
+        selectAll() {
+            if (this.selectedProducts.length === this.data.data.length) {
+                this.selectedProducts = [];
+            } else {
+                this.selectedProducts = this.data.data.map(item => item.id);
+            }
+        },
+        toggleCheckbox(id) {
+            if (this.selectedProducts.includes(id)) {
+                this.selectedProducts = this.selectedProducts.filter(item => item !== id);
+            } else {
+                this.selectedProducts.push(id);
+            }
+        },
+        handleCategoryClicked(category) {
+            let categoriesArray = this.filters.categories.split(',');
+
+            if (categoriesArray.includes(category.slug)) {
+                categoriesArray = this.processAllChildCategories(category, categoriesArray, 'remove');
+            } else {
+                categoriesArray = this.processAllChildCategories(category, categoriesArray, 'add');
+            }
+
+            categoriesArray = this.updateParentCategories(this.categories, categoriesArray);
+
+            this.filters.categories = categoriesArray.filter((category) => category !== '').join(',');
+            this.filters.page = 1;
+        },
+        processAllChildCategories(category, categoriesArray, operation) {
+            const processCategory = (category, categoriesArray, operation) => {
+                if (operation === 'remove') {
+                    categoriesArray = categoriesArray.filter(cat => cat !== category.slug);
+                } else {
+                    categoriesArray.push(category.slug);
+                }
+
+                if (category.children && category.children.length) {
+                    category.children.forEach((child) => {
+                        categoriesArray = processCategory(child, categoriesArray, operation);
+                    });
+                }
+
+                return categoriesArray;
+            };
+
+            return processCategory(category, categoriesArray, operation);
+        },
+        updateParentCategories(categories, selectedCategories) {
+            const processParentCategories = (categories, selectedCategories) => {
+                categories.forEach(category => {
+                    if (category.children && category.children.length) {
+                        const allChildrenSelected = category.children.every(child => selectedCategories.includes(child.slug));
+
+                        if (allChildrenSelected) {
+                            if (!selectedCategories.includes(category.slug)) {
+                                selectedCategories.push(category.slug);
+                            }
+                        } else {
+                            selectedCategories = selectedCategories.filter(cat => cat !== category.slug);
+                        }
+
+                        selectedCategories = processParentCategories(category.children, selectedCategories);
+                    }
+                });
+
+                return selectedCategories;
+            };
+
+            return processParentCategories(categories, selectedCategories);
+        },
         updatePage(page) {
             this.filters.page = page;
         },
@@ -160,6 +303,36 @@ export default {
                     this.data = response.data;
                     this.isDataLoaded = true;
                 })
+        },
+        clearSearch() {
+            this.search = '';
+            this.filters.search = '';
+            this.filters.page = 1;
+        },
+        runMassAction() {
+
+            if (!this.action) {
+                toast.error('Оберіть дію');
+                return;
+            }
+
+            axios.post('/api/products/mass-actions', {
+                action: this.action,
+                ids: this.selectedProducts
+            })
+                .then(response => {
+                    this.selectedProducts = [];
+                    this.action = null;
+                    this.fetchProducts();
+                    toast.success('Дія успішно виконана');
+                })
+                .catch(error => {
+                    toast.error('Помилка виконання дії');
+                })
+        },
+        clearFilter() {
+            this.filters.categories = '';
+            this.filters.page = 1;
         },
         destroyProduct(id) {
             if (confirm('Підтвердіть видалення')) {
