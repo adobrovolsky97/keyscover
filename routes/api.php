@@ -100,7 +100,10 @@ Route::middleware(AdminMiddleware::class)->group(function () {
     /**
      * Users
      */
-    Route::get('users', [UserController::class, 'index']);
+    Route::group(['prefix' => 'users'], function () {
+        Route::get('', [UserController::class, 'index']);
+        Route::delete('{user}', [UserController::class, 'destroy']);
+    });
 
     /**
      * Exports

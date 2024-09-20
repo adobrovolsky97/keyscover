@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Enums\Role\Role;
 use App\Http\Resources\User\UserResource;
+use App\Models\User\User;
 use App\Services\User\Contracts\UserServiceInterface;
 use Auth;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 /**
@@ -48,7 +51,21 @@ class UserController extends Controller
             $this->userService->withCount(['orders'])->getAllPaginated([
                 'except' => [Auth::id()],
                 'role'   => Role::USER->value
-            ])
+            ], 50)
         );
+    }
+
+    /**
+     * Delete user
+     *
+     * @param User $user
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function destroy(User $user): JsonResponse
+    {
+        $this->userService->delete($user);
+
+        return response()->json(null, 204);
     }
 }

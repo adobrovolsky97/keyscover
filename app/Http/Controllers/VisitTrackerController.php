@@ -28,6 +28,7 @@ class VisitTrackerController extends Controller
 
     /**
      * @param VisitTrackerRequest $request
+     * @param Agent $agent
      * @return JsonResponse
      */
     public function track(VisitTrackerRequest $request, Agent $agent): JsonResponse
@@ -44,6 +45,8 @@ class VisitTrackerController extends Controller
             'user_id'    => $request->user()?->id,
             'date'       => today()
         ]);
+
+        $request->user()?->update(['last_activity_at' => now()]);
 
         return \Response::json(null, Response::HTTP_NO_CONTENT);
     }

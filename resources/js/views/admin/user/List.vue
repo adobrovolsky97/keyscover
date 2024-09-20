@@ -1,8 +1,10 @@
 <template>
     <div class="border rounded-2xl shadow-xl p-4">
         <div class="flex flex-row justify-between items-center">
-            <h3 class="font-bold text-lg mb-4">Користувачі <span v-if="data.meta?.total">({{data.meta.total}})</span></h3>
-            <button @click="exportUsers" :disabled="isExportDisabled" class="btn btn-success btn-outline">Експортувати</button>
+            <h3 class="font-bold text-lg mb-4">Користувачі <span v-if="data.meta?.total">({{ data.meta.total }})</span>
+            </h3>
+            <button @click="exportUsers" :disabled="isExportDisabled" class="btn btn-success btn-outline">Експортувати
+            </button>
         </div>
         <TableSkeleton v-if="!isDataLoaded"/>
         <div class="overflow-x-auto" v-if="isDataLoaded && data.data.length">
@@ -14,7 +16,9 @@
                     <th>Номер телефону</th>
                     <th>Email</th>
                     <th>Кількість замовлень</th>
+                    <th>Остання активність</th>
                     <th>Дата реєстрації</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -25,7 +29,18 @@
                     <th>{{ user.phone }}</th>
                     <th>{{ user.email }}</th>
                     <th>{{ user.orders_count }}</th>
+                    <th>{{ user.last_activity_at }}</th>
                     <th>{{ user.created_at }}</th>
+                    <th>
+                        <svg @click="deleteUser(user)" class="h-6 w-6 cursor-pointer text-red-500" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                             stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            <line x1="10" y1="11" x2="10" y2="17"/>
+                            <line x1="14" y1="11" x2="14" y2="17"/>
+                        </svg>
+                    </th>
                 </tr>
                 </tbody>
             </table>
@@ -119,6 +134,15 @@ export default {
             setTimeout(() => {
                 this.isExportDisabled = false;
             }, 5000);
+        },
+        deleteUser(user) {
+            if (confirm('Ви впевнені, що хочете видалити користувача?')) {
+                axios.delete(`/api/users/${user.id}`)
+                    .then(response => {
+                        this.fetchUsers();
+                        toast.success('Користувача видалено');
+                    })
+            }
         }
     }
 }
