@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
+use App\Http\Requests\Auth\SetNewPasswordRequest;
+use App\Http\Requests\Auth\ValidateResetCodeRequest;
 use App\Services\Auth\Contracts\AuthServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Response;
@@ -24,6 +27,51 @@ class AuthController extends Controller
     public function __construct(AuthServiceInterface $authService)
     {
         $this->authService = $authService;
+    }
+
+    /**
+     * Reset password
+     *
+     * @param ResetPasswordRequest $request
+     * @return JsonResponse
+     */
+    public function resetPassword(ResetPasswordRequest $request): JsonResponse
+    {
+        $this->authService->generateResetCode($request->input('email'));
+
+        return Response::json(null, Status::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * Validate reset code
+     *
+     * @param ValidateResetCodeRequest $request
+     * @return JsonResponse
+     */
+    public function validateCode(ValidateResetCodeRequest $request): JsonResponse
+    {
+        if(!$this->authService->validateResetCode($request->input('email'), $request->input('code'))) {
+            return Response::json(null, Status::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        return Response::json(null, Status::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * Set new password
+     *
+     * @param SetNewPasswordRequest $request
+     * @return JsonResponse
+     */
+    public function setNewPassword(SetNewPasswordRequest $request): JsonResponse
+    {
+        $this->authService->setNewPassword(
+            $request->input('email'),
+            $request->input('password'),
+            $request->input('code')
+        );
+
+        return Response::json(null, Status::HTTP_NO_CONTENT);
     }
 
     /**

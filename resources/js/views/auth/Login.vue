@@ -25,6 +25,11 @@
             </button>
         </div>
         <div>
+            <router-link to="/forgot-password" class="link">
+                Забули пароль?
+            </router-link>
+        </div>
+        <div>
             Не зареєстровані?
             <router-link to="/sign-up" class="link">
                 Створіть обліковий запис

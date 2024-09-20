@@ -4,6 +4,7 @@ namespace App\Models\User;
 
 use App\Enums\Role\Role;
 use App\Models\Order\Order;
+use App\Models\ResetPasswordCode\ResetPasswordCode;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -57,5 +58,10 @@ class User extends Authenticatable
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class, 'user_id');
+    }
+
+    public function resetPasswordCodes(): HasMany
+    {
+        return $this->hasMany(ResetPasswordCode::class, 'user_id');
     }
 }

@@ -20,6 +20,7 @@ import AdminLayout from "./layouts/admin/AdminLayout.vue";
 import Dashboard from "./views/admin/Dashboard.vue";
 import NotFound from "./views/errors/NotFound.vue";
 import Detailed from "./views/product/Detailed.vue";
+import ForgotPassword from "./views/auth/ForgotPassword.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -64,6 +65,14 @@ const router = createRouter({
                     path: '/login',
                     name: 'login',
                     component: Login,
+                    meta: {
+                        middleware: [guest]
+                    }
+                },
+                {
+                    path: '/forgot-password',
+                    name: 'forgot-password',
+                    component: ForgotPassword,
                     meta: {
                         middleware: [guest]
                     }

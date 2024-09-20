@@ -30,6 +30,9 @@ use Illuminate\Support\Facades\Route;
  */
 Route::group(['middleware' => 'guest:api'], function () {
     Route::post('auth/register', [AuthController::class, 'register']);
+    Route::post('auth/reset-password', [AuthController::class, 'resetPassword']);
+    Route::post('auth/validate-code', [AuthController::class, 'validateCode']);
+    Route::post('auth/set-new-password', [AuthController::class, 'setNewPassword']);
 });
 
 /**
