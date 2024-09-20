@@ -1,6 +1,7 @@
 <template>
     <div class="content flex flex-row justify-between items-start gap-4 p-1">
-        <div class="filters hidden lg:block border rounded-2xl shadow-xl bg-white w-72" :class="{'top-20': isMoveCategoriesToTop}">
+        <div class="filters hidden lg:block border rounded-2xl shadow-xl bg-white w-72"
+             :class="{'top-20': isMoveCategoriesToTop}">
             <div class="flex flex-row justify-between items-center px-6 mt-4">
                 <p class="text-lg font-bold">Категорії</p>
                 <button @click="clearFilter" class="badge badge-error text-white badge-sm p-2">Скинути фільтр</button>
@@ -28,10 +29,17 @@
                         <div class="menu bg-base-100 text-base-content border shadow-xl min-h-full w-80 p-2">
                             <div class="flex flex-row justify-between items-center">
                                 <p class="px-4 py-2 text-lg font-bold">Категорії</p>
-                                <button @click="clearFilter" class="badge text-white badge-error badge-sm p-2">Скинути
-                                    фільтр
-                                </button>
+                                <svg class="h-8 w-8" @click="closeFilters" viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                     stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"/>
+                                    <line x1="6" y1="6" x2="18" y2="18"/>
+                                </svg>
                             </div>
+                            <button @click="clearFilter" class="badge ml-3 mb-4 text-white badge-error badge-sm p-2">
+                                Скинути
+                                фільтр
+                            </button>
                             <category-item
                                 :selected-categories="categoriesArray"
                                 v-on:category-clicked="handleCategoryClicked"
@@ -161,7 +169,7 @@ export default {
     name: "Home",
     data() {
         return {
-            isMoveCategoriesToTop:false,
+            isMoveCategoriesToTop: false,
             data: {},
             categories: [],
             search: '',
@@ -228,6 +236,9 @@ export default {
         this.isDataLoaded = false;
     },
     methods: {
+        closeFilters() {
+            document.getElementById('my-drawer').checked = false;
+        },
         changePerPage(e) {
             this.filters.per_page = e.target.value;
             this.filters.page = 1;
