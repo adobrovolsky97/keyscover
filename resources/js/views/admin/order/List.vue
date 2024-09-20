@@ -9,6 +9,7 @@
             <table class="table">
                 <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Номер</th>
                     <th>ПІБ</th>
                     <th>Номер телефону</th>
@@ -24,6 +25,7 @@
                 </thead>
                 <tbody>
                 <tr v-for="order in data.data" :key="order.id">
+                    <td>{{ order.id }}</td>
                     <td>{{ order.number }}</td>
                     <td>{{ order.surname }} {{ order.name }} {{ order.patronymic }}</td>
                     <td>+38{{ order.phone }}</td>
