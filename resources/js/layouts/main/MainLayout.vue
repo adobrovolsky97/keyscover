@@ -3,7 +3,7 @@
         <Navbar/>
         <div class="w-full container min-h-screen mx-auto py-2 bg-base-50">
             <div class="content mt-32">
-                <router-view :key="$route.fullPath" v-slot="{ Component }">
+                <router-view v-slot="{ Component }">
                     <transition name="fade" mode="out-in">
                         <component :is="Component"/>
                     </transition>
