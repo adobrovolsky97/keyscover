@@ -62,6 +62,17 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        <div class="related-products w-full mt-4" v-if="activeRelatedProducts.length">
+                            <hr>
+                            <p class="font-bold text-lg mt-4">
+                                Пов'язані товари:
+                            </p>
+                            <div class="grid grid-cols-1 mt-2 bg-base-50">
+                                <RelatedProducts :products="activeRelatedProducts"/>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -72,10 +83,12 @@
 import ContentSkeleton from "../../components/skeleton/ContentSkeleton.vue";
 import {toast} from "vue3-toastify";
 import Carousel from "./Carousel.vue";
+import Item from "./Item.vue";
+import RelatedProducts from "./RelatedProducts.vue";
 
 export default {
     name: 'Detailed',
-    components: {Carousel, ContentSkeleton},
+    components: {RelatedProducts, Item, Carousel, ContentSkeleton},
     data() {
         return {
             isDataLoaded: false,
@@ -100,6 +113,9 @@ export default {
         media() {
             return this.product?.media?.length ? this.product.media : [{url: this.product.image}];
         },
+        activeRelatedProducts() {
+            return this.product?.related_products?.filter(product => !product.is_hidden);
+        }
     },
     mounted() {
         this.fetchProduct();

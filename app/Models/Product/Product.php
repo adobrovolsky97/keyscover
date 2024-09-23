@@ -12,6 +12,7 @@ use App\Models\Category\Category;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Adobrovolsky97\LaravelRepositoryServicePattern\Models\BaseModel;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use League\Glide\Filesystem\FileNotFoundException;
 use Spatie\Image\Exceptions\InvalidManipulation;
@@ -38,6 +39,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property Carbon $updated_at
  * @property Category $category
  * @property OrderProduct[]|Collection $orderProducts
+ * @property Product[]|Collection $relatedProducts
  */
 class Product extends BaseModel implements HasMedia
 {
@@ -105,6 +107,14 @@ class Product extends BaseModel implements HasMedia
     {
         $this->addMediaCollection(Media::COLLECTION_MAIN->name);
         $this->addMediaCollection(Media::COLLECTION_ADDITIONAL->name);
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function relatedProducts(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'related_products', 'product_id', 'related_product_id');
     }
 
     /**

@@ -15,12 +15,20 @@
     "file": "assets/dm-mono-latin-ext-400-normal-060163f1.woff2",
     "src": "node_modules/@fontsource/dm-mono/files/dm-mono-latin-ext-400-normal.woff2"
   },
+  "public/arr-left.png": {
+    "file": "assets/arr-left-af5a14fa.png",
+    "src": "public/arr-left.png"
+  },
+  "public/arr-right.png": {
+    "file": "assets/arr-right-443a4724.png",
+    "src": "public/arr-right.png"
+  },
   "public/logo.png": {
     "file": "assets/logo-880bb13a.png",
     "src": "public/logo.png"
   },
   "resources/js/app.css": {
-    "file": "assets/app-bd7d5736.css",
+    "file": "assets/app-2b7ce626.css",
     "src": "resources/js/app.css"
   },
   "resources/js/app.js": {
@@ -29,12 +37,14 @@
       "assets/dm-mono-latin-ext-400-normal-060163f1.woff2",
       "assets/dm-mono-latin-ext-400-normal-9e4605ed.woff",
       "assets/dm-mono-latin-400-normal-2ded91e0.woff2",
-      "assets/dm-mono-latin-400-normal-f8592521.woff"
+      "assets/dm-mono-latin-400-normal-f8592521.woff",
+      "assets/arr-right-443a4724.png",
+      "assets/arr-left-af5a14fa.png"
     ],
     "css": [
-      "assets/app-bd7d5736.css"
+      "assets/app-2b7ce626.css"
     ],
-    "file": "assets/app-a4644cbf.js",
+    "file": "assets/app-2c130fb1.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   }

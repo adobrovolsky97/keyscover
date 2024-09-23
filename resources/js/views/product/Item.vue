@@ -1,26 +1,27 @@
 <template>
-    <div class="card border bg-base-100 shadow-xl" :class="{'opacity-20': product.is_hidden}">
-        <figure class="w-full overflow-hidden">
+    <div class="card border bg-base-100 shadow-xl" :class="{'opacity-20': product.is_hidden, '!shadow-none': noShadow}">
+        <figure class="w-full overflow-hidden p-1">
             <Carousel :arrows-size="'15px'" :show-thumbs="false"
+                      :show-arrows="showArrows"
                       :media="product.media.length ? product.media : [{id: null, url: product.image}]"/>
         </figure>
         <div class="card-body p-2 lg:p-4">
 
             <p class="text-xs text-gray-400">Арт. {{ product.sku }}</p>
-            <p class="text-xs text-gray-400">{{ product.category.breadcrumbs }}</p>
+            <p v-if="!minified" class="text-xs text-gray-400">{{ product.category.breadcrumbs }}</p>
 
             <!-- Product name -->
-            <router-link
-                :to="{ name: 'product.show', params: { id: product.id } }"
+            <a
                 @click="handleClick($event)"
                 class="font-bold lg:text-lg text-xs product-name hover:text-gray-400 cursor-pointer overflow-x-auto"
+                :class="{'!text-xs': minified}"
             >
                 {{ product.name }}
-            </router-link>
+            </a>
 
             <div class="flex flex-row justify-between items-center">
-                <div class="badge badge-outline badge-neutral badge-sm lg:badge-md">{{ product.usd_price }}$</div>
-                <div class="badge badge-outline badge-neutral badge-sm lg:badge-md">{{ product.price }} грн.</div>
+                <div class="badge badge-outline badge-neutral badge-sm lg:badge-md" :class="{'!badge-sm': minified}">{{ product.usd_price }}$</div>
+                <div class="badge badge-outline badge-neutral badge-sm lg:badge-md" :class="{'!badge-sm': minified}">{{ product.price }} грн.</div>
             </div>
             <div v-if="$store.state.user !== null" class="card-actions justify-center">
 
@@ -28,14 +29,14 @@
                     <div class="flex flex-row justify-between items-center gap-1 mb-4 md:mb-0">
                         <div class="join">
                             <button :disabled="product.left_in_stock <= 0" @click="decrementQuantity"
-                                    class="btn btn-neutral join-item btn-sm lg:btn-md">
+                                    class="btn btn-neutral join-item btn-sm lg:btn-md" :class="{'!btn-xs': minified}">
                                 -
                             </button>
                             <input :disabled="product.left_in_stock <= 0"
                                    class="input input-bordered text-center input-sm lg:input-md join-item w-16"
-                                   placeholder="" v-model="cartQty"/>
+                                   placeholder="" v-model="cartQty" :class="{'!input-xs': minified}"/>
                             <button :disabled="product.left_in_stock <= 0" @click="incrementQuantity"
-                                    class="btn btn-neutral join-item btn-sm lg:btn-md">
+                                    class="btn btn-neutral join-item btn-sm lg:btn-md" :class="{'!btn-xs': minified}">
                                 +
                             </button>
                         </div>
@@ -44,16 +45,16 @@
                 </div>
 
                 <button v-if="!cartProduct && product.left_in_stock > 0" @click="addItemToCart(product)"
-                        class="btn btn-neutral btn-block btn-sm lg:btn-md">
+                        class="btn btn-neutral btn-block btn-sm lg:btn-md" :class="{'!btn-xs': minified}">
                     Додати до кошика
                 </button>
 
                 <button v-if="!cartProduct && product.left_in_stock <= 0" disabled
-                        class="btn btn-neutral btn-block btn-sm lg:btn-md">
+                        class="btn btn-neutral btn-block btn-sm lg:btn-md" :class="{'!btn-xs': minified}">
                     Немає в наявності
                 </button>
                 <button v-if="cartProduct && product.left_in_stock > 0" @click="updateProductQuantity"
-                        class="btn btn-success btn-block btn-sm lg:btn-md">
+                        class="btn btn-success btn-block btn-sm lg:btn-md" :class="{'!btn-xs': minified}">
                     Оновити кількість
                 </button>
             </div>
@@ -68,7 +69,24 @@ import Carousel from "./Carousel.vue";
 export default {
     name: 'Item',
     components: {Carousel},
-    props: ['product'],
+    props: {
+        product: {
+            type: Object,
+            required: true
+        },
+        minified: {
+            type: Boolean,
+            default: false
+        },
+        showArrows: {
+            type: Boolean,
+            default: true
+        },
+        noShadow: {
+            type: Boolean,
+            default: false
+        }
+    },
     data() {
         return {
             productErrors: {},
@@ -175,7 +193,10 @@ export default {
             });
         },
         showProduct() {
+            // force navigate to product page
             this.$router.push({name: 'product.show', params: {id: this.product.id}});
+
+            // this.$router.replace({name: 'product.show', params: {id: this.product.id}});
         },
         onImageError(event) {
             event.target.src = this.fallbackImage;

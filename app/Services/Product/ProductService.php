@@ -84,6 +84,8 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
             /** @var Product $product */
             $product = parent::update($keyOrModel, $data);
 
+            $product->relatedProducts()->sync($data['related_products'] ?? []);
+
             $this->handleImages(
                 $product,
                 $data['images'] ?? [],
