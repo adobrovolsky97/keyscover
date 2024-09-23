@@ -1,4 +1,4 @@
-<template :key="$route.params.id">
+<template>
     <ContentSkeleton v-if="!isDataLoaded" :items="['h-80 w-full']"
                      :classes="'flex flex-row justify-between items-center gap-4'"/>
     <div v-else>
@@ -127,24 +127,6 @@ export default {
         this.fetchProduct();
     },
     methods: {
-        isThumbnailVisible(index) {
-            const totalThumbnails = 5;
-            const half = Math.floor(totalThumbnails / 2);
-
-            let start = this.currentSlide - half;
-            let end = this.currentSlide + half;
-
-            // Ensure start and end are within bounds
-            if (start < 0) {
-                start = 0;
-                end = totalThumbnails - 1;
-            } else if (end >= this.media.length) {
-                start = this.media.length - totalThumbnails;
-                end = this.media.length - 1;
-            }
-
-            return index >= start && index <= end;
-        },
         fetchProduct() {
             axios.get('/api/products/' + this.$route.params.id)
                 .then((response) => {
@@ -163,12 +145,6 @@ export default {
                 .catch((error) => {
                     console.log(error);
                 });
-        },
-        prevSlide() {
-            this.currentSlide = (this.currentSlide === 0) ? this.media.length - 1 : this.currentSlide - 1;
-        },
-        nextSlide() {
-            this.currentSlide = (this.currentSlide === this.media.length - 1) ? 0 : this.currentSlide + 1;
         },
         getCartQuantityForCurrentProduct() {
             if (!this.product) {

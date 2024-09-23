@@ -2,10 +2,12 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\Config\Key;
 use App\Enums\Product\Media;
 use App\Models\Category\Category;
 use App\Models\Product\Product;
 use App\Services\Category\Contracts\CategoryServiceInterface;
+use App\Services\Config\Contracts\ConfigServiceInterface;
 use App\Services\Crm\Contracts\CrmServiceInterface;
 use App\Services\Product\Contracts\ProductServiceInterface;
 use Illuminate\Console\Command;
@@ -52,6 +54,11 @@ class FetchProductsCommand extends Command
      */
     public function handle(CrmServiceInterface $crmService): void
     {
+        if (!app(ConfigServiceInterface::class)->getValue(Key::IS_CRM_ENABLED->value)) {
+            $this->error('CRM sync is disabled');
+            return;
+        }
+
         $page = 1;
         $data = $crmService->getProductsList(page: $page);
         $lastPage = $data['pagination']['total_pages'] ?? null;

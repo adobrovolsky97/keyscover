@@ -106,6 +106,15 @@ Route::middleware(AdminMiddleware::class)->group(function () {
     });
 
     /**
+     * Configs
+     */
+    Route::group(['prefix' => 'configs'], function () {
+        Route::get('list', [ConfigController::class, 'list']);
+        Route::get('{config}', [ConfigController::class, 'show']);
+        Route::put('{config}', [ConfigController::class, 'update']);
+    });
+
+    /**
      * Exports
      */
     Route::get('export', [ExportController::class, 'export']);

@@ -26,7 +26,7 @@
             </div>
             <div v-if="$store.state.user !== null" class="card-actions justify-center">
 
-                <div class="flex flex-col items-center justify-center">
+                <div class="flex flex-col items-center justify-center mb-2 relative">
                     <div class="flex flex-row justify-between items-center gap-1 mb-4 md:mb-0">
                         <div class="join">
                             <button :disabled="product.left_in_stock <= 0" @click="decrementQuantity"
@@ -36,13 +36,13 @@
                             <input :disabled="product.left_in_stock <= 0"
                                    class="input input-bordered text-center input-sm lg:input-md join-item w-16"
                                    placeholder="" v-model="cartQty" :class="{'!input-xs': minified}"/>
-                            <button :disabled="product.left_in_stock <= 0" @click="incrementQuantity"
+                            <button :disabled="product.left_in_stock <= cartQty" @click="incrementQuantity"
                                     class="btn btn-neutral join-item btn-sm lg:btn-md" :class="{'!btn-xs': minified}">
                                 +
                             </button>
                         </div>
                     </div>
-                    <span class="text-error" v-if="productErrors[product.id]">{{ productErrors[product.id] }}</span>
+                    <span class="text-error text-xs absolute -bottom-2 md:-bottom-4" v-if="product.left_in_stock <= cartQty">В наявності: {{product.left_in_stock}} шт.</span>
                 </div>
 
                 <button v-if="!cartProduct && product.left_in_stock > 0" @click="addItemToCart(product)"

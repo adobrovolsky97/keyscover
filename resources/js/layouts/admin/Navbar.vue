@@ -66,6 +66,15 @@
                                class="link">Експорти</a>
                         </router-link>
                         <router-link
+                            :to="{name: 'admin.configs'}"
+                            custom
+                            v-slot="{ navigate, href }"
+                        >
+                            <a @click="navigate"
+                               :class="{'link-error': $route.path === '/admin/configs'}"
+                               class="link">Налаштування</a>
+                        </router-link>
+                        <router-link
                             :to="{name: 'home'}"
                             custom
                             v-slot="{ navigate, href }"
@@ -142,6 +151,15 @@
                                     <a @click="navigate"
                                        :class="{'link-error': $route.path === '/admin/exports'}"
                                        class="link">Експорти</a>
+                                </router-link>
+                                <router-link
+                                    :to="{name: 'admin.configs'}"
+                                    custom
+                                    v-slot="{ navigate, href }"
+                                >
+                                    <a @click="navigate"
+                                       :class="{'link-error': $route.path === '/admin/configs'}"
+                                       class="link">Налаштування</a>
                                 </router-link>
                                 <router-link
                                     :to="{name: 'home'}"

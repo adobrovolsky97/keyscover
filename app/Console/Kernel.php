@@ -8,6 +8,7 @@ use App\Console\Commands\FetchCategoriesCommand;
 use App\Console\Commands\FetchDollarCommand;
 use App\Console\Commands\FetchProductsCommand;
 use App\Console\Commands\ReSyncOrderToCrm;
+use App\Console\Commands\SendCrmDisabledNotificationCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -24,6 +25,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(BackupCommand::class)->daily();
         $schedule->command(CleanBackupsCommand::class)->daily();
         $schedule->command(ReSyncOrderToCrm::class)->hourly();
+        $schedule->command(SendCrmDisabledNotificationCommand::class)->twiceDaily();
     }
 
     /**

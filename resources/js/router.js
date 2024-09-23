@@ -13,6 +13,8 @@ import Checkout from "./views/checkout/Checkout.vue";
 import List from "./views/orders/List.vue";
 import EditForm from "./views/admin/product/Edit.vue";
 import UsersList from "./views/admin/user/List.vue";
+import ConfigsList from "./views/admin/config/List.vue";
+import ConfigEdit from "./views/admin/config/Edit.vue";
 import ProductList from "./views/admin/product/List.vue";
 import OrdersList from "./views/admin/order/List.vue";
 import ExportsList from "./views/admin/export/List.vue";
@@ -124,6 +126,22 @@ const router = createRouter({
                     path: 'users',
                     name: 'admin.users',
                     component: UsersList,
+                    meta: {
+                        middleware: [admin]
+                    }
+                },
+                {
+                    path: 'configs',
+                    name: 'admin.configs',
+                    component: ConfigsList,
+                    meta: {
+                        middleware: [admin]
+                    }
+                },
+                {
+                    path: 'configs/:id',
+                    name: 'admin.configs.edit',
+                    component: ConfigEdit,
                     meta: {
                         middleware: [admin]
                     }
