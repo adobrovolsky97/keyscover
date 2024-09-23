@@ -15,7 +15,7 @@
             }"
         >
             <swiper-slide v-for="(product, index) in products" :key="index">
-                <Item :no-shadow="true" :show-arrows="false" :product="product" class="md:h-96" :minified="true" :key="product.id"/>
+                <Item :no-shadow="true" :show-arrows="false" :product="product" :minified="true" :key="product.id"/>
             </swiper-slide>
         </swiper>
     </div>

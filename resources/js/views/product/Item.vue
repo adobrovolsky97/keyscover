@@ -7,17 +7,18 @@
         </figure>
         <div class="card-body p-2 lg:p-4">
 
-            <p class="text-xs text-gray-400">Арт. {{ product.sku }}</p>
+            <p v-if="!minified" class="text-xs text-gray-400">Арт. {{ product.sku }}</p>
             <p v-if="!minified" class="text-xs text-gray-400">{{ product.category.breadcrumbs }}</p>
 
             <!-- Product name -->
-            <a
+            <router-link
+                :to="{ name: 'product.show', params: { id: product.id } }"
                 @click="handleClick($event)"
                 class="font-bold lg:text-lg text-xs product-name hover:text-gray-400 cursor-pointer overflow-x-auto"
-                :class="{'!text-xs': minified}"
+                :class="{'!text-xs !overflow-hidden !text-ellipsis !whitespace-nowrap': minified}"
             >
                 {{ product.name }}
-            </a>
+            </router-link>
 
             <div class="flex flex-row justify-between items-center">
                 <div class="badge badge-outline badge-neutral badge-sm lg:badge-md" :class="{'!badge-sm': minified}">{{ product.usd_price }}$</div>
@@ -193,10 +194,7 @@ export default {
             });
         },
         showProduct() {
-            // force navigate to product page
-            this.$router.push({name: 'product.show', params: {id: this.product.id}});
-
-            // this.$router.replace({name: 'product.show', params: {id: this.product.id}});
+            return this.$router.push({name: 'product.show', params: {id: this.product.id}});
         },
         onImageError(event) {
             event.target.src = this.fallbackImage;

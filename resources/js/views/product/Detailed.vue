@@ -1,4 +1,4 @@
-<template>
+<template :key="$route.params.id">
     <ContentSkeleton v-if="!isDataLoaded" :items="['h-80 w-full']"
                      :classes="'flex flex-row justify-between items-center gap-4'"/>
     <div v-else>
@@ -68,7 +68,7 @@
                             <p class="font-bold text-lg mt-4">
                                 Пов'язані товари:
                             </p>
-                            <div class="grid grid-cols-1 mt-2 bg-base-50">
+                            <div class="grid grid-cols-1 mt-2">
                                 <RelatedProducts :products="activeRelatedProducts"/>
                             </div>
                         </div>
@@ -107,6 +107,12 @@ export default {
                 this.cartQty = this.getCartQuantityForCurrentProduct();
             },
             deep: true
+        },
+        '$route.params.id': {
+            handler: function () {
+                this.isDataLoaded = false;
+                this.fetchProduct();
+            }
         }
     },
     computed: {
