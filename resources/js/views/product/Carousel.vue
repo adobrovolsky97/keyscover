@@ -1,6 +1,6 @@
 <template>
     <!-- Main Image with Transition -->
-    <div class="relative w-full rounded-lg">
+    <div class="relative w-full images-carousel rounded-lg">
         <swiper
             :spaceBetween="10"
             :navigation="showArrows"
@@ -79,30 +79,20 @@ watch(() => thumbsSwiper.value, (newSwiper) => {
 });
 </script>
 <style>
-.swiper-button-next,
-.swiper-button-prev {
-    background-position: center;
-    background-size: 40px;
-    background-repeat: no-repeat;
-    padding: 16px 16px;
-    border-radius: 100%;
-    border: 2px solid black;
-}
-
-.swiper-button-next {
-    background-image: url("../../../../public/arr-right.png") !important;
-}
-
-.swiper-button-prev {
-    background-image: url("../../../../public/arr-left.png") !important;
-}
-
-.swiper-button-next::after, .swiper-button-prev::after {
-    content: "";
+.images-carousel .swiper-button-next::after, .images-carousel .swiper-button-prev::after {
+    color: #1f2937 !important;
+    border: 1px solid #f2f2f2 !important;
+    border-radius: 50% !important;
+    padding: 8px !important;
+    background-color: #f2f2f2 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 70% !important;
 }
 
 
-.swiper-slide-thumb-active {
+.images-carousel .swiper-slide-thumb-active {
     border: 2px solid #e17c7c;
     border-radius: 5px;
 }

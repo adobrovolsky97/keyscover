@@ -1,5 +1,5 @@
 <template>
-    <div class="rounded-lg w-full">
+    <div class="rounded-lg related-products w-full">
         <swiper
             v-if="products.length > 1 && showThumbs"
             @swiper="setThumbsSwiper"
@@ -82,14 +82,28 @@ watch(() => thumbsSwiper.value, (newSwiper) => {
 </script>
 <style>
 
-.swiper-wrapper {
-    background: white !important;
+.related-products .swiper-button-next,
+.related-products .swiper-button-prev {
+    background-position: center;
+    background-size: 40px;
+    background-repeat: no-repeat;
+    padding: 16px 16px;
+    border-radius: 100%;
+    border: 2px solid black;
 }
 
-.swiper-slide-thumb-active {
-    border: 2px solid #e17c7c;
-    border-radius: 5px;
+.related-products .swiper-button-next {
+    background-image: url("../../../../public/arr-right.png") !important;
 }
+
+.related-products .swiper-button-prev {
+    background-image: url("../../../../public/arr-left.png") !important;
+}
+
+.related-products .swiper-button-next::after, .related-products .swiper-button-prev::after {
+    content: "";
+}
+
 
 </style>
 
