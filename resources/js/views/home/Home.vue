@@ -176,6 +176,7 @@ export default {
             mode: this.$store.state.mode,
             isDataLoaded: false,
             isInitialLoad: true,
+            isScrollToTop: false,
             showScrollToTop: false,
             filters: {
                 only_available: 1,
@@ -264,6 +265,7 @@ export default {
                 })
         },
         updatePage(page) {
+            this.isScrollToTop = true;
             this.filters.page = page;
         },
         scrollToTop() {
@@ -294,7 +296,8 @@ export default {
                 .then(() => {
                     this.isDataLoaded = true;
 
-                    if (!this.isInitialLoad) {
+                    if (!this.isInitialLoad && this.isScrollToTop) {
+                        this.isScrollToTop = false;
                         window.scrollTo({top: 0, behavior: 'instant'});
                     } else {
                         const savedState = localStorage.getItem('productListState');
