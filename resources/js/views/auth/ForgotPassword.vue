@@ -3,7 +3,7 @@
         <div class="flex-cell self-center pb-2">
             <a v-if="!isCodeSent && !isCodeValidated" class="link lg:absolute left-0 lg:top-2.5 text-md" @click="goBack">< Назад</a>
             <h3 v-if="!isCodeSent && !isCodeValidated" class="title text-4xl font-bold">Скинути пароль</h3>
-            <h3 v-if="isCodeSent && !isCodeValidated" class="title text-4xl font-bold">Введіть код</h3>
+            <h3 v-if="isCodeSent && !isCodeValidated" class="title text-4xl font-bold">Скидання пароля</h3>
             <h3 v-if="isCodeSent && isCodeValidated" class="title text-4xl font-bold">Новий пароль</h3>
         </div>
 
@@ -27,7 +27,7 @@
         <div v-if="isCodeSent && !isCodeValidated" class="flex flex-col w-full m-auto p-4">
             <label class="form-control w-full">
                 <div class="label">
-                    <span class="label-text">Введіть код</span>
+                    <span class="label-text">Введіть код з листа вказаного e-mail</span>
                 </div>
                 <input type="text" required v-model="code" placeholder="123456" class="input input-bordered w-full"/>
                 <div class="label" v-if="isError">
