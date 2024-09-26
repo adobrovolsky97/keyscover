@@ -71,11 +71,57 @@
                     </th>
                     <th></th>
                     <th>ID</th>
-                    <th>Назва</th>
-                    <th>SKU</th>
-                    <th>Залишок</th>
-                    <th>CRM синхр. припинено</th>
-                    <th>Прихований</th>
+                    <th>
+                        <span @click="toggleOrder('name')" class="cursor-pointer">
+                            Назва <span v-if="filters.sort_by === 'name' && filters.order_dir === 'asc'">↑</span>
+                             <span v-if="filters.sort_by === 'name' && filters.order_dir === 'desc'">↓</span>
+                        </span>
+                    </th>
+                    <th>
+                        <span @click="toggleOrder('sku')" class="cursor-pointer">
+                            SKU <span v-if="filters.sort_by === 'sku' && filters.order_dir === 'asc'">↑</span>
+                             <span v-if="filters.sort_by === 'sku' && filters.order_dir === 'desc'">↓</span>
+                        </span>
+                    </th>
+                    <th>
+                        <span @click="toggleOrder('last_sync_at')" class="cursor-pointer">
+                            Синхронізовано в
+                            <span v-if="filters.sort_by === 'last_sync_at' && filters.order_dir === 'asc'">↑</span>
+                             <span v-if="filters.sort_by === 'last_sync_at' && filters.order_dir === 'desc'">↓</span>
+                        </span>
+                        <div class="tooltip tooltip-bottom z-[99999999]"
+                             data-tip="Час останної синхронізації позиції з СРМ">
+                            <button class="btn btn-circle btn-xs">?</button>
+                        </div>
+                    </th>
+                    <th>
+                         <span @click="toggleOrder('left_in_stock')" class="cursor-pointer">
+                            Залишок <span v-if="filters.sort_by === 'left_in_stock' && filters.order_dir === 'asc'">↑</span>
+                             <span v-if="filters.sort_by === 'left_in_stock' && filters.order_dir === 'desc'">↓</span>
+                        </span>
+                        <div class="tooltip tooltip-bottom z-[99999999]"
+                             data-tip="Кількість товарів синхронізованих з СРМ">
+                            <button class="btn btn-circle btn-xs">?</button>
+                        </div>
+                    </th>
+                    <th>
+                        <span @click="toggleOrder('is_stop_crm_update')" class="cursor-pointer">
+                            CRM синхр. припинено
+                            <span v-if="filters.sort_by === 'is_stop_crm_update' && filters.order_dir === 'asc'">↑</span>
+                             <span v-if="filters.sort_by === 'is_stop_crm_update' && filters.order_dir === 'desc'">↓</span>
+                        </span>
+                        <div class="tooltip tooltip-bottom z-[99999999]"
+                             data-tip="Чи припинена синхронізація товару з СРМ">
+                            <button class="btn btn-circle btn-xs">?</button>
+                        </div>
+                    </th>
+                    <th>
+                         <span @click="toggleOrder('is_hidden')" class="cursor-pointer">
+                            Прихований
+                            <span v-if="filters.sort_by === 'is_hidden' && filters.order_dir === 'asc'">↑</span>
+                             <span v-if="filters.sort_by === 'is_hidden' && filters.order_dir === 'desc'">↓</span>
+                        </span>
+                    </th>
                     <th></th>
                 </tr>
                 </thead>
@@ -86,10 +132,18 @@
                         <input @click="toggleCheckbox(product.id)" :checked="selectedProducts.includes(product.id)"
                                type="checkbox" class="checkbox checkbox-primary">
                     </td>
-                    <th><img :src="product.image" class="w-52" alt=""></th>
+                    <th class="w-32"><img :src="product.image" class="object-contain" alt=""></th>
                     <th>{{ product.id }}</th>
-                    <th>{{ product.name }}</th>
+                    <th>
+                        <router-link
+                            :to="{ name: 'product.show', params: { id: product.id } }"
+                            class="font-bold product-name hover:text-gray-400 cursor-pointer overflow-x-auto"
+                        >
+                            {{ product.name }}
+                        </router-link>
+                    </th>
                     <th>{{ product.sku }}</th>
+                    <th>{{ product.last_sync_at }}</th>
                     <th>{{ product.left_in_stock }}</th>
                     <th>
                         <span v-if="product.is_stop_crm_update" class="badge badge-error text-white badge-sm">Так</span>
@@ -163,6 +217,8 @@ export default {
             filters: {
                 page: 1,
                 search: '',
+                sort_by: null,
+                order_dir: 'asc',
                 categories: '',
             },
             route: useRoute()
@@ -206,6 +262,11 @@ export default {
         this.search = this.filters.search;
     },
     methods: {
+        toggleOrder(orderBy) {
+            this.filters.order_dir = this.filters.order_dir === 'asc' ? 'desc' : 'asc';
+            this.filters.sort_by = orderBy;
+            this.filters.page = 1;
+        },
         fetchCategories() {
             axios.get('/api/categories')
                 .then((response) => {

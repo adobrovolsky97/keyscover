@@ -2,6 +2,12 @@
     <div class="border rounded-2xl shadow-xl p-4">
         <div class="flex flex-row justify-between items-center">
             <h3 class="font-bold text-lg mb-4">Оновлення товару</h3>
+            <router-link
+                :to="{ name: 'product.show', params: { id: product.id } }"
+                class="font-bold product-name hover:text-gray-400 cursor-pointer overflow-x-auto"
+            >
+                <button class="btn btn-success btn-outline">Показати на сайті</button>
+            </router-link>
         </div>
         <div class="form">
 
@@ -35,6 +41,27 @@
                     </div>
                     <input type="text" placeholder="Назва" v-model="product.name" class="input input-bordered w-full"/>
                 </label>
+
+               <div class="flex flex-row justify-between items-center gap-2 w-full">
+                   <label class="form-control w-full">
+                       <div class="label">
+                           <span class="label-text">SKU</span>
+                       </div>
+                       <input type="text" readonly placeholder="SKU" v-model="product.sku" class="input input-bordered w-full"/>
+                   </label>
+                   <label class="form-control w-full">
+                       <div class="label">
+                           <span class="label-text">Залишок</span>
+                       </div>
+                       <input type="text" readonly placeholder="Залишок" v-model="product.left_in_stock" class="input input-bordered w-full"/>
+                   </label>
+                   <label class="form-control w-full">
+                       <div class="label">
+                           <span class="label-text">Остання синхронізація</span>
+                       </div>
+                       <input type="text" readonly placeholder="Остання синхронізація" v-model="product.last_sync_at" class="input input-bordered w-full"/>
+                   </label>
+               </div>
 
                 <label class="form-control w-full">
                     <div class="label">
@@ -148,6 +175,9 @@ export default {
             products: [],
             product: {
                 name: '',
+                sku: '',
+                left_in_stock: 0,
+                last_sync_at: null,
                 description: '',
                 price: '',
                 images: [],
@@ -211,6 +241,9 @@ export default {
                     let productResponse = response.data.data;
                     this.product = {
                         name: productResponse.name,
+                        sku: productResponse.sku,
+                        left_in_stock: productResponse.left_in_stock,
+                        last_sync_at: productResponse.last_sync_at,
                         description: productResponse.description,
                         images: [],
                         images_to_remove: [],

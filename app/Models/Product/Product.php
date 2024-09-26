@@ -35,6 +35,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property array $custom_fields
  * @property boolean $is_available_in_stock
  * @property integer $left_in_stock
+ * @property Carbon $last_sync_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Category $category
@@ -59,13 +60,15 @@ class Product extends BaseModel implements HasMedia
         'left_in_stock',
         'custom_fields',
         'is_stop_crm_update',
+        'last_sync_at',
         'description',
         'created_at',
         'updated_at'
     ];
 
     protected $casts = [
-        'custom_fields' => 'array'
+        'custom_fields' => 'array',
+        'last_sync_at'  => 'datetime'
     ];
 
     /**

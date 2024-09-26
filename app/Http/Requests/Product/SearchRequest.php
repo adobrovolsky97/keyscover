@@ -29,6 +29,12 @@ class SearchRequest extends FormRequest
             'search'         => ['nullable', 'string'],
             'categories'     => ['nullable', 'string', new ValidateCategories()],
             'per_page'       => ['nullable', 'integer', Rule::in([20, 50, 100])],
+            'sort_by' => [
+                'nullable', 'string', Rule::in(['name', 'sku', 'last_sync_at', 'left_in_stock', 'is_stop_crm_update', 'is_hidden'])
+            ],
+            'order_dir' => [
+                'nullable', 'string', Rule::in(['asc', 'desc'])
+            ],
             'order_by'       => [
                 'nullable',
                 'string',

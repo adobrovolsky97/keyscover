@@ -103,14 +103,14 @@
             </div>
 
             <div class="discount-text mb-4">
-                <p v-if="freeDeliveryRemaining > 0">Для безкоштовної доставки додайте товарів на <span
+                <p v-if="freeDeliveryRemaining > 0">Для безкоштовної доставки додайте товарів ще на <span
                     class="text-success font-bold">{{ freeDeliveryRemaining }} $</span></p>
                 <p v-if="fivePercentDiscountRemaining > 0">Для знижки в <span
-                    class="text-success font-bold">5%</span> додайте товарів на <span
+                    class="text-success font-bold">5%</span> додайте товарів ще на <span
                     class="text-success font-bold">{{ fivePercentDiscountRemaining }} $ </span>
                 </p>
                 <p v-if="tenPercentDiscountRemaining > 0">Для знижки в <span
-                    class="text-success font-bold">10%</span> додайте товарів на <span
+                    class="text-success font-bold">10%</span> додайте товарів ще на <span
                     class="text-success font-bold">{{ tenPercentDiscountRemaining }} $</span></p>
             </div>
 

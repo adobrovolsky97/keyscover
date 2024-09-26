@@ -124,6 +124,8 @@ class FetchProductsCommand extends Command
         }
 
         $this->removeDuplicatedMedia($product);
+
+        $product->update(['last_sync_at' => now()]);
     }
 
     /**
