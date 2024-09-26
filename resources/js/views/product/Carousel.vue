@@ -13,7 +13,14 @@
             }"
         >
             <swiper-slide v-for="(image, index) in media" :key="index">
-                <img class="w-full object-cover" :src="image.url" alt=""/>
+                <router-link
+                    v-if="id"
+                    :to="{ name: 'product.show', params: { id: id } }"
+                    @click="linkClicked($event)"
+                >
+                    <img class="w-full object-cover" :src="image.url" alt=""/>
+                </router-link>
+                <img v-else class="w-full object-cover" :src="image.url" alt=""/>
             </swiper-slide>
         </swiper>
         <swiper
@@ -43,11 +50,17 @@ import 'swiper/css/thumbs';
 
 const modules = [FreeMode, Navigation, Thumbs];
 
+const emit = defineEmits(['link-clicked']);
+
 const props = defineProps({
     media: {
         type: Array,
         required: true,
         default: () => [],
+    },
+    id: {
+        type: Number,
+        required: false,
     },
     showThumbs: {
         type: Boolean,
@@ -71,6 +84,10 @@ const thumbsSwiper = ref(null);
  */
 const setThumbsSwiper = (swiper) => {
     thumbsSwiper.value = swiper;
+};
+
+const linkClicked = (event) => {
+    emit('link-clicked', event);
 };
 
 // Watch for changes in thumbsSwiper.value to ensure it updates properly

@@ -2,7 +2,9 @@
     <div class="card border bg-base-100 shadow-xl" :class="{'opacity-20': product.is_hidden, '!shadow-none': noShadow}">
         <figure class="w-full overflow-hidden p-1">
             <Carousel :arrows-size="'15px'" :show-thumbs="false"
+                      :id="product.id"
                       :show-arrows="showArrows"
+                      @link-clicked="handleClick"
                       :media="product.media.length ? product.media : [{id: null, url: product.image}]"/>
         </figure>
 
