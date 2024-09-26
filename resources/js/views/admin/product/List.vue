@@ -216,6 +216,7 @@ export default {
             search: '',
             filters: {
                 page: 1,
+                per_page:100,
                 search: '',
                 sort_by: null,
                 order_dir: 'asc',
