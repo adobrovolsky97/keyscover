@@ -47,19 +47,19 @@
                        <div class="label">
                            <span class="label-text">SKU</span>
                        </div>
-                       <input type="text" readonly placeholder="SKU" v-model="product.sku" class="input input-bordered w-full"/>
+                       <input type="text" disabled readonly placeholder="SKU" v-model="product.sku" class="input input-bordered w-full"/>
                    </label>
                    <label class="form-control w-full">
                        <div class="label">
                            <span class="label-text">Залишок</span>
                        </div>
-                       <input type="text" readonly placeholder="Залишок" v-model="product.left_in_stock" class="input input-bordered w-full"/>
+                       <input type="text" disabled readonly placeholder="Залишок" v-model="product.left_in_stock" class="input input-bordered w-full"/>
                    </label>
                    <label class="form-control w-full">
                        <div class="label">
                            <span class="label-text">Остання синхронізація</span>
                        </div>
-                       <input type="text" readonly placeholder="Остання синхронізація" v-model="product.last_sync_at" class="input input-bordered w-full"/>
+                       <input type="text" disabled readonly placeholder="Остання синхронізація" v-model="product.last_sync_at" class="input input-bordered w-full"/>
                    </label>
                </div>
 
