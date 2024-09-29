@@ -28,7 +28,7 @@
     "src": "public/logo.png"
   },
   "resources/js/app.css": {
-    "file": "assets/app-9b626dae.css",
+    "file": "assets/app-96c6b206.css",
     "src": "resources/js/app.css"
   },
   "resources/js/app.js": {
@@ -42,9 +42,9 @@
       "assets/arr-left-af5a14fa.png"
     ],
     "css": [
-      "assets/app-9b626dae.css"
+      "assets/app-96c6b206.css"
     ],
-    "file": "assets/app-437d9c45.js",
+    "file": "assets/app-af9bdf98.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   }

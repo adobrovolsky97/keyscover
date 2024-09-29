@@ -18,7 +18,7 @@
                             <span class="text-error font-bold text-2xl">{{ product.usd_price }} $ / {{ product.price }} грн.</span>
                         </p>
                         <hr class="mt-2">
-                        <div v-if="$store.state.user !== null" class="flex flex-row-reverse md:flex-row w-full gap-1 justify-center lg:justify-start mt-5">
+                        <div v-if="$store.state.user !== null" class="flex flex-row w-full gap-1 justify-center lg:justify-start mt-5">
                             <div class="flex flex-col items-center justify-center">
                                 <div class="flex flex-row justify-between items-center gap-1 mb-4 md:mb-0">
                                     <div class="join">

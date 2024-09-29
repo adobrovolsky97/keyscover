@@ -8,13 +8,14 @@
                       :media="product.media.length ? product.media : [{id: null, url: product.image}]"/>
         </figure>
 
-        <svg v-if="product.is_hidden" class="h-24 w-24 absolute z-[100] m-auto left-0 right-0 top-0 bottom-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        <svg v-if="product.is_hidden" class="h-24 w-24 absolute z-[100] m-auto left-0 right-0 top-0 bottom-0"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
              stroke-linecap="round" stroke-linejoin="round">
             <path
                 d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
             <line x1="1" y1="1" x2="23" y2="23"/>
         </svg>
-        <div class="card-body p-2 lg:p-4">
+        <div class="card-body p-2 lg:p-4" :class="{'!p-4 lg:!p-2': minified}">
 
             <p v-if="!minified" class="text-xs text-gray-400">Арт. {{ product.sku }}</p>
             <p v-if="!minified" class="text-xs text-gray-400">{{ product.category.breadcrumbs }}</p>
@@ -37,7 +38,7 @@
                     {{ product.price }} грн.
                 </div>
             </div>
-            <div v-if="$store.state.user !== null" class="card-actions justify-center">
+            <div v-if="$store.state.user !== null && !minified" class="card-actions justify-center">
 
                 <div class="flex flex-col items-center justify-center mb-2 relative">
                     <div class="flex flex-row justify-between items-center gap-1 mb-0 md:mb-0">
@@ -70,9 +71,44 @@
                     Немає в наявності
                 </button>
                 <button v-if="cartProduct && product.left_in_stock > 0" @click="updateProductQuantity"
-                        class="btn btn-success btn-block btn-sm lg:btn-md" :class="{'!btn-xs': minified}">
+                        class="btn btn-success btn-block btn-sm lg:btn-md text-white" :class="{'!btn-xs': minified}">
                     Оновити кількість
                 </button>
+            </div>
+
+            <div v-if="$store.state.user !== null && minified" class="card-actions justify-center">
+
+                <div class="flex flex-row justify-between items-center gap-1">
+                    <div class="flex flex-row justify-between items-center gap-1 mb-0 md:mb-0">
+                        <div class="join">
+                            <button :disabled="product.left_in_stock <= 0" @click="decrementQuantity"
+                                    class="btn btn-neutral join-item btn-sm lg:btn-md" :class="{'btn-sm lg:!btn-xs': minified}">
+                                -
+                            </button>
+                            <input :disabled="product.left_in_stock <= 0"
+                                   class="input input-bordered text-center input-sm lg:input-md join-item"
+                                   placeholder="" v-model="cartQty" :class="{'input-sm lg:!input-xs w-12 lg:w-8': minified}"/>
+                            <button :disabled="product.left_in_stock <= cartQty" @click="incrementQuantity"
+                                    class="btn btn-neutral join-item btn-sm lg:btn-md" :class="{'btn-sm lg:!btn-xs': minified}">
+                                +
+                            </button>
+                        </div>
+                    </div>
+
+                    <button v-if="!cartProduct && product.left_in_stock > 0" @click="addItemToCart(product)"
+                            class="btn btn-neutral btn-sm lg:btn-md" :class="{'btn-sm lg:!btn-xs': minified}">
+                        Додати
+                    </button>
+
+                    <button v-if="!cartProduct && product.left_in_stock <= 0" disabled
+                            class="btn btn-neutral btn-sm lg:btn-md" :class="{'btn-sm lg:!btn-xs': minified}">
+                        Немає
+                    </button>
+                    <button v-if="cartProduct && product.left_in_stock > 0" @click="updateProductQuantity"
+                            class="btn btn-success btn-sm lg:btn-md text-white" :class="{'btn-sm lg:!btn-xs': minified}">
+                        Оновити
+                    </button>
+                </div>
             </div>
         </div>
     </div>
