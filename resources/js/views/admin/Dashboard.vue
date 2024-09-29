@@ -310,7 +310,10 @@ export default {
                     let data = [];
 
                     response.data.data.forEach(item => {
-                        labels.push(item.date);
+                        let date = new Date(item.date);
+                        let month = date.getMonth() + 1;
+                        let dateWithoutYear = date.getDate() + '/' + (month < 10 ? '0' + month : month);
+                        labels.push(dateWithoutYear);
                         data.push(item.count);
                     });
 
@@ -339,7 +342,16 @@ export default {
                     let data = [];
 
                     response.data.data.forEach(item => {
-                        labels.push(item.label);
+
+                        // if label is not int
+                        if (isNaN(item.label)) {
+                            let date = new Date(item.label);
+                            let month = date.getMonth() + 1;
+                            let dateWithoutYear = date.getDate() + '/' + (month < 10 ? '0' + month : month);
+                            labels.push(dateWithoutYear);
+                        } else {
+                            labels.push(item.label);
+                        }
                         data.push(item.count);
                     });
 
