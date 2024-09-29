@@ -73,6 +73,12 @@
                             </div>
                         </div>
 
+                        <div class="description mt-4" v-if="product.description">
+                            <hr>
+                            <p class="font-bold text-lg mt-4">Опис</p>
+                            <p class="whitespace-break-spaces">{{product.description}}</p>
+                        </div>
+
                     </div>
                 </div>
             </div>

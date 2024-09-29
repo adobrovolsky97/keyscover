@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Stat\StatRequest;
 use App\Services\Visit\Contracts\VisitServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Response;
@@ -27,60 +28,65 @@ class StatController extends Controller
     /**
      * Get unique visits count for date range
      *
+     * @param StatRequest $request
      * @return JsonResponse
      */
-    public function uniqueVisits(): JsonResponse
+    public function uniqueVisits(StatRequest $request): JsonResponse
     {
         return Response::json([
-            'data' => $this->visitService->getUniqueVisitsCountForDateRange(today()->subDays(6), today())
+            'data' => $this->visitService->getUniqueVisitsCountForDateRange($request->validated())
         ]);
     }
 
     /**
-     * Get visits count for today by hour
+     * Get non-unique visits count for date range
      *
+     * @param StatRequest $request
      * @return JsonResponse
      */
-    public function visitsByHour(): JsonResponse
+    public function nonUniqueVisits(StatRequest $request): JsonResponse
     {
         return Response::json([
-            'data' => $this->visitService->getVisitsCountForTodayByHour()
+            'data' => $this->visitService->getVisitsCountForDateRange($request->validated())
         ]);
     }
 
     /**
      * Get platform statistics
      *
+     * @param StatRequest $request
      * @return JsonResponse
      */
-    public function platforms(): JsonResponse
+    public function platforms(StatRequest $request): JsonResponse
     {
         return Response::json([
-            'data' => $this->visitService->getPlatformStatistics()
+            'data' => $this->visitService->getPlatformStatistics($request->validated())
         ]);
     }
 
     /**
      * Get device statistics
      *
+     * @param StatRequest $request
      * @return JsonResponse
      */
-    public function devices(): JsonResponse
+    public function devices(StatRequest $request): JsonResponse
     {
         return Response::json([
-            'data' => $this->visitService->getDeviceStatistics()
+            'data' => $this->visitService->getDeviceStatistics($request->validated())
         ]);
     }
 
     /**
      * Get browser statistics
      *
+     * @param StatRequest $request
      * @return JsonResponse
      */
-    public function browsers(): JsonResponse
+    public function browsers(StatRequest $request): JsonResponse
     {
         return Response::json([
-            'data' => $this->visitService->getBrowserStatistics()
+            'data' => $this->visitService->getBrowserStatistics($request->validated())
         ]);
     }
 }

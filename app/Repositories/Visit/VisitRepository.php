@@ -18,11 +18,11 @@ class VisitRepository extends BaseRepository implements VisitRepositoryInterface
      * Get unique visits count for date range
      *
      * @param Carbon $dateFrom
-     * @param Carbon $dateTo
+     * @param Carbon|null $dateTo
      * @return Collection
      * @throws RepositoryException
      */
-    public function getUniqueVisitsCountForDateRange(Carbon $dateFrom, Carbon $dateTo): Collection
+    public function getUniqueVisitsCountForDateRange(Carbon $dateFrom, Carbon $dateTo = null): Collection
     {
         return $this
             ->applyFilterConditions([])
@@ -36,17 +36,28 @@ class VisitRepository extends BaseRepository implements VisitRepositoryInterface
     /**
      * Get visits count for today by hour
      *
+     * @param array $dates
      * @return Collection
      * @throws RepositoryException
      */
-    public function getVisitsCountForTodayByHour(): Collection
+    public function getVisitsCountForDateRange(array $dates): Collection
     {
+        // if range is 1 day - then by hour, else by day
+        $groupBy = Carbon::parse($dates['start_date'])->diffInDays(Carbon::parse($dates['end_date'])) < 2 ? 'HOUR' : 'DAY';
+
         return $this
             ->applyFilterConditions([])
-            ->where('date', today()->format('Y-m-d'))
-            ->selectRaw('count(id) as count, HOUR(created_at) as hour')
-            ->groupBy('hour')
-            ->orderBy('hour')
+            ->whereBetween('date', [
+                Carbon::parse($dates['start_date']),
+                !empty($dates['end_date']) ? Carbon::parse($dates['end_date']) : Carbon::now()
+            ])
+            ->when($groupBy === 'HOUR', function ($query) {
+                return $query->selectRaw('count(id) as count, HOUR(created_at) as label');
+            }, function ($query) {
+                return $query->selectRaw('count(id) as count, date as label');
+            })
+            ->groupBy('label')
+            ->orderBy('label')
             ->get();
     }
 
@@ -54,12 +65,17 @@ class VisitRepository extends BaseRepository implements VisitRepositoryInterface
      * Get grouped statistic by column
      *
      * @param string $column
+     * @param array $dates
      * @return Collection
      */
-    public function getGroupedStatisticByColumn(string $column): Collection
+    public function getGroupedStatisticByColumn(string $column, array $dates): Collection
     {
         return $this->getQuery()
             ->selectRaw("count(*) as count, $column")
+            ->whereBetween('date', [
+                Carbon::parse($dates['start_date']),
+                !empty($dates['end_date']) ? Carbon::parse($dates['end_date']) : Carbon::now()
+            ])
             ->groupBy($column)
             ->whereNotNull($column)
             ->get();

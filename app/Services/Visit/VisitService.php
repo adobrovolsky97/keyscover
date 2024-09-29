@@ -16,61 +16,70 @@ class VisitService extends BaseCrudService implements VisitServiceInterface
     /**
      * Get unique visits count for date range
      *
-     * @param Carbon $dateFrom
-     * @param Carbon $dateTo
+     * @param array $dates
      * @return array
      */
-    public function getUniqueVisitsCountForDateRange(Carbon $dateFrom, Carbon $dateTo): array
+    public function getUniqueVisitsCountForDateRange(array $dates): array
     {
-        return $this->repository->getUniqueVisitsCountForDateRange($dateFrom, $dateTo)->toArray();
+        $startDate = Carbon::parse($dates['start_date']);
+        $endDate = !empty($dates['end_date']) ? Carbon::parse($dates['end_date']) : Carbon::now();
+        return $this->repository->getUniqueVisitsCountForDateRange($startDate, $endDate)->toArray();
     }
 
     /**
      * Get visits count for today by hour
      *
+     * @param array $dates
      * @return array
      */
-    public function getVisitsCountForTodayByHour(): array
+    public function getVisitsCountForDateRange(array $dates): array
     {
-        return $this->repository->getVisitsCountForTodayByHour()->toArray();
+        return $this->repository->getVisitsCountForDateRange($dates)->toArray();
     }
 
     /**
      * Get platform statistics
      *
+     * @param array $dates
      * @return array
      */
-    public function getPlatformStatistics(): array
+    public function getPlatformStatistics(array $dates): array
     {
         return $this->calculatePercentage(
-            $this->repository->getGroupedStatisticByColumn('os')->toArray()
+            $this->repository->getGroupedStatisticByColumn('os', $dates)->toArray()
         );
     }
 
     /**
      * Get device statistics
      *
+     * @param array $dates
      * @return array
      */
-    public function getDeviceStatistics(): array
+    public function getDeviceStatistics(array $dates): array
     {
         return $this->calculatePercentage(
-            $this->repository->getGroupedStatisticByColumn('device')->toArray()
+            $this->repository->getGroupedStatisticByColumn('device', $dates)->toArray()
         );
     }
 
     /**
      * Get browser statistics
      *
+     * @param array $dates
      * @return array
      */
-    public function getBrowserStatistics(): array
+    public function getBrowserStatistics(array $dates): array
     {
         return $this->calculatePercentage(
-            $this->repository->getGroupedStatisticByColumn('browser')->toArray()
+            $this->repository->getGroupedStatisticByColumn('browser', $dates)->toArray()
         );
     }
 
+    /**
+     * @param array $data
+     * @return array
+     */
     protected function calculatePercentage(array $data): array
     {
         $total = array_sum(array_column($data, 'count'));

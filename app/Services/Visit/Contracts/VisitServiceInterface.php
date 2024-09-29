@@ -13,37 +13,40 @@ interface VisitServiceInterface extends BaseCrudServiceInterface
     /**
      * Get unique visits count for date range
      *
-     * @param Carbon $dateFrom
-     * @param Carbon $dateTo
+     * @param array $dates
      * @return array
      */
-    public function getUniqueVisitsCountForDateRange(Carbon $dateFrom, Carbon $dateTo): array;
+    public function getUniqueVisitsCountForDateRange(array $dates): array;
 
     /**
      * Get visits count for today by hour
      *
+     * @param array $dates
      * @return array
      */
-    public function getVisitsCountForTodayByHour(): array;
+    public function getVisitsCountForDateRange(array $dates): array;
 
     /**
      * Get platform statistics
      *
+     * @param array $dates
      * @return array
      */
-    public function getPlatformStatistics(): array;
+    public function getPlatformStatistics(array $dates): array;
 
     /**
      * Get device statistics
      *
+     * @param array $dates
      * @return array
      */
-    public function getDeviceStatistics(): array;
+    public function getDeviceStatistics(array $dates): array;
 
     /**
      * Get browser statistics
      *
+     * @param array $dates
      * @return array
      */
-    public function getBrowserStatistics(): array;
+    public function getBrowserStatistics(array $dates): array;
 }
