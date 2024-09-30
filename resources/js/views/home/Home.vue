@@ -114,7 +114,7 @@
                             </select>
                         </label>
                     </div>
-                    <select v-model="filters.order_by"
+                    <select v-model="order_by"
                             class="select select-sm lg:select-md w-full lg:w-36 select-bordered">
                         <option :value="'name_asc'">За назвою</option>
                         <option :value="'id_desc'">За новизною</option>
@@ -172,6 +172,7 @@ export default {
             isMoveCategoriesToTop: false,
             data: {},
             categories: [],
+            order_by: 'id_desc',
             search: '',
             mode: this.$store.state.mode,
             isDataLoaded: false,
@@ -202,6 +203,12 @@ export default {
                 this.fetchData();
             },
             deep: true
+        },
+        order_by: {
+            handler: function () {
+                this.filters.order_by = this.order_by;
+                this.filters.page = 1;
+            }
         }
     },
     created() {
