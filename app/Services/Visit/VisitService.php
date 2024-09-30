@@ -58,9 +58,21 @@ class VisitService extends BaseCrudService implements VisitServiceInterface
      */
     public function getDeviceStatistics(array $dates): array
     {
-        return $this->calculatePercentage(
+        $data = $this->calculatePercentage(
             $this->repository->getGroupedStatisticByColumn('device', $dates)->toArray()
         );
+
+        foreach ($data as &$item) {
+            $item['device'] = match ($item['device']) {
+                'Nexus' => 'Android',
+                '0' => 'Bot',
+                'WebKit' => 'Windows PC',
+                'Macintosh' => 'Mac',
+                default => $item['device'],
+            };
+        }
+
+        return $data;
     }
 
     /**
