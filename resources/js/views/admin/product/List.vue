@@ -69,7 +69,7 @@
                     <th>
                         <input @click="selectAll" type="checkbox" class="checkbox checkbox-primary">
                     </th>
-                    <th class="w-32"></th>
+                    <th></th>
                     <th>ID</th>
                     <th>
                         <span @click="toggleOrder('name')" class="cursor-pointer">
@@ -132,28 +132,28 @@
                         <input @click="toggleCheckbox(product.id)" :checked="selectedProducts.includes(product.id)"
                                type="checkbox" class="checkbox checkbox-primary">
                     </td>
-                    <th class="w-32"><img :src="product.image" class="object-contain" alt=""></th>
-                    <th>{{ product.id }}</th>
-                    <th>
+                    <td class="w-32"><img :src="product.image" class="object-contain" alt=""></td>
+                    <td>{{ product.id }}</td>
+                    <td>
                         <router-link
                             :to="{ name: 'product.show', params: { id: product.id } }"
                             class="font-bold product-name hover:text-gray-400 cursor-pointer overflow-x-auto"
                         >
                             {{ product.name }}
                         </router-link>
-                    </th>
-                    <th>{{ product.sku }}</th>
-                    <th>{{ product.last_sync_at }}</th>
-                    <th>{{ product.left_in_stock }}</th>
-                    <th>
+                    </td>
+                    <td>{{ product.sku }}</td>
+                    <td>{{ product.last_sync_at }}</td>
+                    <td>{{ product.left_in_stock }}</td>
+                    <td>
                         <span v-if="product.is_stop_crm_update" class="badge badge-error text-white badge-sm">Так</span>
                         <span v-else class="badge badge-success text-white badge-sm">Ні</span>
-                    </th>
-                    <th>
+                    </td>
+                    <td>
                         <span v-if="product.is_hidden" class="badge badge-error text-white badge-sm">Так</span>
                         <span v-else class="badge badge-success text-white badge-sm">Ні</span>
-                    </th>
-                    <th>
+                    </td>
+                    <td>
                         <div class="flex flex-row justify-between items-center">
                             <router-link
                                 :to="{name: 'admin.products.edit', params: {id: product.id}}"
@@ -176,7 +176,7 @@
                                 <line x1="14" y1="11" x2="14" y2="17"/>
                             </svg>
                         </div>
-                    </th>
+                    </td>
                 </tr>
                 </tbody>
             </table>
