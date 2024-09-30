@@ -96,7 +96,8 @@
                     </th>
                     <th>
                          <span @click="toggleOrder('left_in_stock')" class="cursor-pointer">
-                            Залишок <span v-if="filters.sort_by === 'left_in_stock' && filters.order_dir === 'asc'">↑</span>
+                            Залишок <span
+                             v-if="filters.sort_by === 'left_in_stock' && filters.order_dir === 'asc'">↑</span>
                              <span v-if="filters.sort_by === 'left_in_stock' && filters.order_dir === 'desc'">↓</span>
                         </span>
                         <div class="tooltip tooltip-bottom z-[99999999]"
@@ -107,8 +108,10 @@
                     <th>
                         <span @click="toggleOrder('is_stop_crm_update')" class="cursor-pointer">
                             CRM синхр. припинено
-                            <span v-if="filters.sort_by === 'is_stop_crm_update' && filters.order_dir === 'asc'">↑</span>
-                             <span v-if="filters.sort_by === 'is_stop_crm_update' && filters.order_dir === 'desc'">↓</span>
+                            <span
+                                v-if="filters.sort_by === 'is_stop_crm_update' && filters.order_dir === 'asc'">↑</span>
+                             <span
+                                 v-if="filters.sort_by === 'is_stop_crm_update' && filters.order_dir === 'desc'">↓</span>
                         </span>
                         <div class="tooltip tooltip-bottom z-[99999999]"
                              data-tip="Чи припинена синхронізація товару з СРМ">
@@ -132,7 +135,15 @@
                         <input @click="toggleCheckbox(product.id)" :checked="selectedProducts.includes(product.id)"
                                type="checkbox" class="checkbox checkbox-primary">
                     </td>
-                    <td><img :src="product.image" class="object-contain w-32" alt=""></td>
+                    <td>
+                        <div class="avatar">
+                            <div class="mask mask-squircle h-32 w-32">
+                                <img
+                                    :src="product.image"
+                                />
+                            </div>
+                        </div>
+                    </td>
                     <td>{{ product.id }}</td>
                     <td>
                         <router-link
@@ -216,7 +227,7 @@ export default {
             search: '',
             filters: {
                 page: 1,
-                per_page:100,
+                per_page: 100,
                 search: '',
                 sort_by: null,
                 order_dir: 'asc',
