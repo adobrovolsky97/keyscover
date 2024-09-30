@@ -132,7 +132,7 @@
                         <input @click="toggleCheckbox(product.id)" :checked="selectedProducts.includes(product.id)"
                                type="checkbox" class="checkbox checkbox-primary">
                     </td>
-                    <td class="w-32"><img :src="product.image" class="object-contain" alt=""></td>
+                    <td><img :src="product.image" class="object-contain w-32" alt=""></td>
                     <td>{{ product.id }}</td>
                     <td>
                         <router-link
