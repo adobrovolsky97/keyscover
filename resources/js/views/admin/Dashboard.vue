@@ -51,7 +51,7 @@
                 />
             </div>
             <div class="border rounded-2xl p-4 w-full">
-                <p>Кількість не унікальних кліків</p>
+                <p>Кількість кліків</p>
                 <Bar
                     v-if="isHourlyVisitsLoaded"
                     :options="chartOptions"
@@ -318,7 +318,7 @@ export default {
                     });
 
                     this.uniqueVisitsChartData.datasets[0] = {
-                        label: 'Візити за тиждень',
+                        label: 'Унікальні візити',
                         backgroundColor: '#f87979',
                         data: data
                     };

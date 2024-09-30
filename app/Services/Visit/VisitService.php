@@ -23,7 +23,18 @@ class VisitService extends BaseCrudService implements VisitServiceInterface
     {
         $startDate = Carbon::parse($dates['start_date']);
         $endDate = !empty($dates['end_date']) ? Carbon::parse($dates['end_date']) : Carbon::now();
-        return $this->repository->getUniqueVisitsCountForDateRange($startDate, $endDate)->toArray();
+        $data =  $this->repository->getUniqueVisitsCountForDateRange($startDate, $endDate)->toArray();
+
+        foreach ($data as &$item) {
+            $item['device'] = match ($item['device']) {
+                'Nexus' => 'Android',
+                '0' => 'Bot',
+                'WebKit' => 'Windows PC',
+                default => $item['device'],
+            };
+        }
+
+        return $data;
     }
 
     /**
