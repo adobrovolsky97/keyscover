@@ -69,7 +69,7 @@
                     <th>
                         <input @click="selectAll" type="checkbox" class="checkbox checkbox-primary">
                     </th>
-                    <th></th>
+                    <th class="w-32"></th>
                     <th>ID</th>
                     <th>
                         <span @click="toggleOrder('name')" class="cursor-pointer">
@@ -251,10 +251,6 @@ export default {
     },
     beforeRouteLeave() {
         this.isDataLoaded = false;
-    },
-    mounted() {
-        this.resolveQueryParams();
-        this.fetchCategories();
     },
     created() {
         this.fetchCategories();
