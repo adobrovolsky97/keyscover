@@ -18,7 +18,8 @@
                             <span class="text-error font-bold text-2xl">{{ product.usd_price }} $ / {{ product.price }} грн.</span>
                         </p>
                         <hr class="mt-2">
-                        <div v-if="$store.state.user !== null" class="flex flex-row w-full gap-1 justify-center lg:justify-start mt-5">
+                        <div v-if="$store.state.user !== null"
+                             class="flex flex-row w-full gap-1 justify-center lg:justify-start mt-5">
                             <div class="flex flex-col items-center justify-center">
                                 <div class="flex flex-row justify-between items-center gap-1 mb-4 md:mb-0">
                                     <div class="join">
@@ -73,10 +74,10 @@
                             </div>
                         </div>
 
-                        <div class="description mt-4" v-if="product.description">
+                        <div class="description mt-4" v-if="parsedDescription">
                             <hr>
                             <p class="font-bold text-lg mt-4">Опис</p>
-                            <p class="whitespace-break-spaces">{{product.description}}</p>
+                            <MdPreview :modelValue="product.description"/>
                         </div>
 
                     </div>
@@ -86,15 +87,18 @@
     </div>
 </template>
 <script>
+import {marked} from 'marked';
 import ContentSkeleton from "../../components/skeleton/ContentSkeleton.vue";
 import {toast} from "vue3-toastify";
 import Carousel from "./Carousel.vue";
 import Item from "./Item.vue";
 import RelatedProducts from "./RelatedProducts.vue";
+import 'md-editor-v3/lib/preview.css';
+import {MdPreview} from "md-editor-v3";
 
 export default {
     name: 'Detailed',
-    components: {RelatedProducts, Item, Carousel, ContentSkeleton},
+    components: {RelatedProducts, Item, Carousel, ContentSkeleton, MdPreview},
     data() {
         return {
             isDataLoaded: false,
@@ -127,6 +131,9 @@ export default {
         },
         activeRelatedProducts() {
             return this.product?.related_products?.filter(product => !product.is_hidden);
+        },
+        parsedDescription() {
+            return marked(this.product.description || '');
         }
     },
     mounted() {

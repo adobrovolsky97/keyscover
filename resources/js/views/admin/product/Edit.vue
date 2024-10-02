@@ -63,13 +63,12 @@
                    </label>
                </div>
 
-                <label class="form-control w-full">
+                <div class="form-control w-full">
                     <div class="label">
                         <span class="label-text">Опис</span>
                     </div>
-                    <textarea placeholder="Опис" v-model="product.description"
-                              class="textarea textarea-bordered w-full"></textarea>
-                </label>
+                    <MdEditor :language="'en_EN'" v-model="product.description" />
+                </div>
 
                 <div class="form-control">
                     <label class="label cursor-pointer">
@@ -157,7 +156,8 @@
 <script>
 import Pagination from "../../../components/pagination/Pagination.vue";
 import {toast} from "vue3-toastify";
-import * as sea from "node:sea";
+import 'md-editor-v3/lib/style.css';
+import {MdEditor} from "md-editor-v3";
 
 export default {
     computed: {
@@ -165,7 +165,7 @@ export default {
             return this.product.related_products?.map(product => product.id) ?? [];
         }
     },
-    components: {Pagination},
+    components: {MdEditor, Pagination},
     data() {
         return {
             isLoading: false,
