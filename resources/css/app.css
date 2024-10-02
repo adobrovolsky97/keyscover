@@ -26,3 +26,11 @@
 .v-toast {
     z-index: 9999 ! important
 }
+
+ .md-editor-preview > ul{
+     list-style: disc !important;
+ }
+
+.md-editor-preview > ol{
+    list-style: auto !important;
+}
