@@ -90,11 +90,26 @@
                 </div>
 
                 <hr class="mt-4 mb-4 w-full">
-                <RelatedProducts v-if="isProductLoaded" title="Додаткові товари" v-model="product.related_products"/>
+                <div class="w-full">
+                    <RelatedProducts v-if="isProductLoaded" :id="product.id" title="Додаткові товари"
+                                     v-model="product.related_products"/>
+                    <span v-for="(prd, index) in product.related_products" class="text-error text-sm"
+                    ><span
+                        v-if="errors['related_products.' + index]">Строка {{ index + 1 }}: {{
+                            errors['related_products.' + index][0]
+                        }}</span></span>
+                </div>
 
                 <hr class="mt-4 mb-4 w-full">
-                <RelatedProducts v-if="isProductLoaded" title="Схожі товари" v-model="product.similar_products"/>
-
+                <div class="w-full">
+                    <RelatedProducts v-if="isProductLoaded" :id="product.id" title="Схожі товари"
+                                     v-model="product.similar_products"/>
+                    <span v-for="(prd, index) in product.similar_products" class="text-error text-sm"
+                    ><span
+                        v-if="errors['similar_products.' + index]">Строка {{ index + 1 }}: {{
+                            errors['similar_products.' + index][0]
+                        }}</span></span>
+                </div>
 
                 <button :disabled="isLoading" class="btn btn-success self-end text-white" @click="updateProduct">
                     Зберегти
@@ -118,6 +133,7 @@ export default {
             isProductLoaded: false,
             products: [],
             product: {
+                id: null,
                 name: '',
                 sku: '',
                 left_in_stock: 0,
@@ -146,6 +162,7 @@ export default {
                 .then(response => {
                     let productResponse = response.data.data;
                     this.product = {
+                        id: productResponse.id,
                         name: productResponse.name,
                         sku: productResponse.sku,
                         left_in_stock: productResponse.left_in_stock,
@@ -215,7 +232,7 @@ export default {
                     continue;
                 }
 
-                if (key !== 'images' && key !== 'related_products' && key !== 'similar_products') {
+                if (key !== 'images' && key !== 'related_products' && key !== 'similar_products' && key !== 'id') {
                     formData.append(key, this.product[key]);
                 }
 

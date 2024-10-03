@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Product;
 
 use App\Enums\Role\Role;
+use App\Models\Product\Product;
 use App\Rules\ValidateCategories;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
@@ -29,11 +30,15 @@ class SearchRequest extends FormRequest
             'search'         => ['nullable', 'string'],
             'categories'     => ['nullable', 'string', new ValidateCategories()],
             'per_page'       => ['nullable', 'integer', Rule::in([20, 50, 100])],
-            'sort_by' => [
-                'nullable', 'string', Rule::in(['name', 'sku', 'last_sync_at', 'left_in_stock', 'is_stop_crm_update', 'is_hidden'])
+            'sort_by'        => [
+                'nullable',
+                'string',
+                Rule::in(['name', 'sku', 'last_sync_at', 'left_in_stock', 'is_stop_crm_update', 'is_hidden'])
             ],
-            'order_dir' => [
-                'nullable', 'string', Rule::in(['asc', 'desc'])
+            'order_dir'      => [
+                'nullable',
+                'string',
+                Rule::in(['asc', 'desc'])
             ],
             'order_by'       => [
                 'nullable',
@@ -41,7 +46,9 @@ class SearchRequest extends FormRequest
                 Rule::in(['id_desc', 'name_asc', 'price_asc', 'price_desc', 'popularity_desc'])
             ],
             'only_available' => ['nullable', 'boolean'],
-            'exclude_hidden'      => ['nullable', 'boolean']
+            'exclude_hidden' => ['nullable', 'boolean'],
+            'exclude'        => ['nullable', 'array'],
+            'exclude.*'      => ['string', 'distinct', Rule::exists(Product::getTableName(), 'id')]
         ];
     }
 }

@@ -19,6 +19,9 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     {
         return $this
             ->applyFilterConditions($searchParams)
+            ->when(!empty($searchParams['exclude']), function (Builder $query) use ($searchParams) {
+                $query->whereNotIn('id', $searchParams['exclude']);
+            })
             ->when(!empty($searchParams['search']), function (Builder $query) use ($searchParams) {
                 $search = strtolower($searchParams['search']);
                 $query->where(function (Builder $query) use ($search) {

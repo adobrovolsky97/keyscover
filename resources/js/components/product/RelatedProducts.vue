@@ -62,6 +62,10 @@
 <script>
 export default {
     props: {
+        id: {
+            type: Number,
+            required: true
+        },
         title: {
             type: String,
             default: 'Додаткові товари'
@@ -130,7 +134,7 @@ export default {
             }
 
             this.timer = setTimeout(() => {
-                axios.get('/api/products', {params: {search: this.search}})
+                axios.get('/api/products', {params: {search: this.search, exclude: [this.id]}})
                     .then((response) => {
                         this.productsData = response.data.data;
                         this.isShowSearchContainer = true;
