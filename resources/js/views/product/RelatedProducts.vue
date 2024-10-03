@@ -1,7 +1,7 @@
 <template>
     <div class="rounded-lg related-products w-full">
         <swiper
-            v-if="products.length > 1 && showThumbs"
+            v-if="products.length >= 1 && showThumbs"
             @swiper="setThumbsSwiper"
             :space-between="5"
             :breakpoints="breakpoints"
@@ -49,7 +49,6 @@ const props = defineProps({
         default: '25px',
     },
 });
-
 const thumbsSwiper = ref(null);
 
 const breakpoints = {

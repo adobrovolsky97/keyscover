@@ -70,7 +70,7 @@
                                 Додаткові товари:
                             </p>
                             <div class="grid grid-cols-1 mt-2">
-                                <RelatedProducts :products="activeRelatedProducts"/>
+                                <RelatedProducts :key="'related'" :products="activeRelatedProducts"/>
                             </div>
                         </div>
 
@@ -80,7 +80,7 @@
                                 Схожі товари:
                             </p>
                             <div class="grid grid-cols-1 mt-2">
-                                <RelatedProducts :products="activeSimilarProducts"/>
+                                <RelatedProducts :key="'similar'" :products="activeSimilarProducts"/>
                             </div>
                         </div>
 
