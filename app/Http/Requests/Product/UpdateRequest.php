@@ -24,6 +24,8 @@ class UpdateRequest extends FormRequest
             'main_image_index'   => ['nullable', 'integer'],
             'related_products'   => ['nullable', 'array', 'distinct'],
             'related_products.*' => ['required', 'integer', Rule::exists('products', 'id')],
+            'similar_products'   => ['nullable', 'array', 'distinct'],
+            'similar_products.*' => ['required', 'integer', Rule::exists('products', 'id')],
             'images'             => ['nullable', 'array'],
             'images.*'           => ['required', 'image'],
             'images_to_remove'   => ['nullable', 'array'],

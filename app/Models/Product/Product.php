@@ -41,6 +41,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property Category $category
  * @property OrderProduct[]|Collection $orderProducts
  * @property Product[]|Collection $relatedProducts
+ * @property Product[]|Collection $similarProducts
  */
 class Product extends BaseModel implements HasMedia
 {
@@ -118,6 +119,14 @@ class Product extends BaseModel implements HasMedia
     public function relatedProducts(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'related_products', 'product_id', 'related_product_id');
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function similarProducts(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'similar_products', 'product_id', 'similar_product_id');
     }
 
     /**

@@ -48,6 +48,7 @@ class ProductResource extends JsonResource
             'left_in_stock'         => $this->left_in_stock,
             'last_sync_at'          => $this->last_sync_at?->format('Y-m-d H:i:s'),
             'related_products'      => ProductResource::collection($this->relatedProducts),
+            'similar_products'      => ProductResource::collection($this->similarProducts),
             'image'                 => empty($image) ? asset('no-image.png') : $image,
             'media'                 => $this->whenLoaded('media', MediaResource::collection($this->media->sortByDesc('collection_name'))),
             'category'              => [

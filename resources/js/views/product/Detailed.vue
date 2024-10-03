@@ -67,10 +67,20 @@
                         <div class="related-products w-full mt-4" v-if="activeRelatedProducts.length">
                             <hr>
                             <p class="font-bold text-lg mt-4">
-                                Пов'язані товари:
+                                Додаткові товари:
                             </p>
                             <div class="grid grid-cols-1 mt-2">
                                 <RelatedProducts :products="activeRelatedProducts"/>
+                            </div>
+                        </div>
+
+                        <div class="related-products w-full mt-4" v-if="activeSimilarProducts.length">
+                            <hr>
+                            <p class="font-bold text-lg mt-4">
+                                Схожі товари:
+                            </p>
+                            <div class="grid grid-cols-1 mt-2">
+                                <RelatedProducts :products="activeSimilarProducts"/>
                             </div>
                         </div>
 
@@ -131,6 +141,9 @@ export default {
         },
         activeRelatedProducts() {
             return this.product?.related_products?.filter(product => !product.is_hidden);
+        },
+        activeSimilarProducts() {
+            return this.product?.similar_products?.filter(product => !product.is_hidden);
         },
         parsedDescription() {
             return marked(this.product.description || '');

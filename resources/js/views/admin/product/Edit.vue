@@ -42,32 +42,35 @@
                     <input type="text" placeholder="Назва" v-model="product.name" class="input input-bordered w-full"/>
                 </label>
 
-               <div class="flex flex-row justify-between items-center gap-2 w-full">
-                   <label class="form-control w-full">
-                       <div class="label">
-                           <span class="label-text">SKU</span>
-                       </div>
-                       <input type="text" disabled readonly placeholder="SKU" v-model="product.sku" class="input input-bordered w-full"/>
-                   </label>
-                   <label class="form-control w-full">
-                       <div class="label">
-                           <span class="label-text">Залишок</span>
-                       </div>
-                       <input type="text" disabled readonly placeholder="Залишок" v-model="product.left_in_stock" class="input input-bordered w-full"/>
-                   </label>
-                   <label class="form-control w-full">
-                       <div class="label">
-                           <span class="label-text">Остання синхронізація</span>
-                       </div>
-                       <input type="text" disabled readonly placeholder="Остання синхронізація" v-model="product.last_sync_at" class="input input-bordered w-full"/>
-                   </label>
-               </div>
+                <div class="flex flex-row justify-between items-center gap-2 w-full">
+                    <label class="form-control w-full">
+                        <div class="label">
+                            <span class="label-text">SKU</span>
+                        </div>
+                        <input type="text" disabled readonly placeholder="SKU" v-model="product.sku"
+                               class="input input-bordered w-full"/>
+                    </label>
+                    <label class="form-control w-full">
+                        <div class="label">
+                            <span class="label-text">Залишок</span>
+                        </div>
+                        <input type="text" disabled readonly placeholder="Залишок" v-model="product.left_in_stock"
+                               class="input input-bordered w-full"/>
+                    </label>
+                    <label class="form-control w-full">
+                        <div class="label">
+                            <span class="label-text">Остання синхронізація</span>
+                        </div>
+                        <input type="text" disabled readonly placeholder="Остання синхронізація"
+                               v-model="product.last_sync_at" class="input input-bordered w-full"/>
+                    </label>
+                </div>
 
                 <div class="form-control w-full">
                     <div class="label">
                         <span class="label-text">Опис</span>
                     </div>
-                    <MdEditor :language="'en_EN'" v-model="product.description" />
+                    <MdEditor :language="'en_EN'" v-model="product.description"/>
                 </div>
 
                 <div class="form-control">
@@ -86,65 +89,12 @@
                     </label>
                 </div>
 
-                <div class="py-4 px-2 border rounded-lg w-full">
-                    <p class="font-bold text-lg">Супутні товари</p>
-                    <div ref="searchContainer">
-                        <label class="form-control w-full">
-                            <div class="label">
-                                <span class="label-text">Пошук товара за назвою чи артикулом</span>
-                            </div>
-                            <input type="text" @focusin="isShowSearchContainer=true" @input="searchProducts"
-                                   v-model="search" placeholder="Пошук"
-                                   class="input input-bordered w-full"/>
-                        </label>
-                        <div class="results" v-if="isShowSearchContainer">
-                            <ul class="bg-base-50 max-h-52 overflow-y-scroll p-4 border rounded-l">
-                                <li @click="toggleProduct(product)" v-if="products.length" v-for="product in products"
-                                    :key="product.id" class="hover:bg-base-300 cursor-pointer p-1"
-                                    :class="{'bg-base-300' : relatedProductIds?.includes(product.id)}">
-                                    <a>{{ product.sku }} / {{ product.name }}</a>
-                                </li>
-                                <li v-else>
-                                    <a>Товарів не знайдено</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                <hr class="mt-4 mb-4 w-full">
+                <RelatedProducts v-if="isProductLoaded" title="Додаткові товари" v-model="product.related_products"/>
 
+                <hr class="mt-4 mb-4 w-full">
+                <RelatedProducts v-if="isProductLoaded" title="Схожі товари" v-model="product.similar_products"/>
 
-                <div v-if="product.related_products" class="overflow-x-auto w-full border rounded-lg mt-4">
-                    <table class="table">
-                        <!-- head -->
-                        <thead>
-                        <tr>
-                            <th></th>
-                            <th>SKU</th>
-                            <th>Назва</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr v-for="product in product.related_products" :key="product.id">
-                            <th>{{ product.id }}</th>
-                            <td>{{ product.sku }}</td>
-                            <td>{{ product.name }}</td>
-                            <td>
-                                <svg class="h-6 w-6 cursor-pointer text-red-500"
-                                     @click="removeRelatedProduct(product.id)" viewBox="0 0 24 24" fill="none"
-                                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                     stroke-linejoin="round">
-                                    <polyline points="3 6 5 6 21 6"/>
-                                    <path
-                                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                                    <line x1="10" y1="11" x2="10" y2="17"/>
-                                    <line x1="14" y1="11" x2="14" y2="17"/>
-                                </svg>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
 
                 <button :disabled="isLoading" class="btn btn-success self-end text-white" @click="updateProduct">
                     Зберегти
@@ -158,20 +108,14 @@ import Pagination from "../../../components/pagination/Pagination.vue";
 import {toast} from "vue3-toastify";
 import 'md-editor-v3/lib/style.css';
 import {MdEditor} from "md-editor-v3";
+import RelatedProducts from "../../../components/product/RelatedProducts.vue";
 
 export default {
-    computed: {
-        relatedProductIds() {
-            return this.product.related_products?.map(product => product.id) ?? [];
-        }
-    },
-    components: {MdEditor, Pagination},
+    components: {RelatedProducts, MdEditor, Pagination},
     data() {
         return {
             isLoading: false,
-            isShowSearchContainer: false,
-            timer: null,
-            search: null,
+            isProductLoaded: false,
             products: [],
             product: {
                 name: '',
@@ -185,6 +129,8 @@ export default {
                 is_stop_crm_update: false,
                 is_hidden: false,
                 main_image_index: null,
+                related_products: [],
+                similar_products: []
             },
             previewImages: [],
             errors: []
@@ -192,50 +138,10 @@ export default {
     },
     mounted() {
         this.fetchProduct();
-        document.addEventListener('click', this.handleClickOutside);
-    },
-    beforeUnmount() {
-        document.removeEventListener('click', this.handleClickOutside);
     },
     methods: {
-        handleClickOutside(event) {
-            const searchContainer = this.$refs.searchContainer;
-            if (searchContainer && !searchContainer.contains(event.target)) {
-                this.isShowSearchContainer = false;
-            }
-        },
-        toggleProduct(product) {
-            if (!this.product.related_products) {
-                this.product.related_products = [];
-            }
-
-            // I want to push whole product object
-            if (this.product.related_products.some(productModel => productModel.id === product.id)) {
-                this.product.related_products = this.product.related_products.filter(productModel => productModel.id !== product.id);
-            } else {
-                this.product.related_products.push(product);
-            }
-        },
-        removeRelatedProduct(id) {
-            this.product.related_products = this.product.related_products.filter(product => product.id !== id);
-        },
-        searchProducts() {
-            clearTimeout(this.timer);
-
-            if (!this.search) {
-                this.products = [];
-                return;
-            }
-
-            this.timer = setTimeout(() => {
-                axios.get('/api/products', {params: {search: this.search}})
-                    .then((response) => {
-                        this.products = response.data.data;
-                        this.isShowSearchContainer = true;
-                    })
-            }, 800);
-        },
         fetchProduct() {
+            this.isProductLoaded = false;
             axios.get(`/api/products/${this.$route.params.id}`)
                 .then(response => {
                     let productResponse = response.data.data;
@@ -250,6 +156,7 @@ export default {
                         is_stop_crm_update: productResponse.is_stop_crm_update,
                         is_hidden: productResponse.is_hidden,
                         related_products: productResponse.related_products,
+                        similar_products: productResponse.similar_products,
                     }
                     this.previewImages = productResponse.media;
 
@@ -259,6 +166,7 @@ export default {
                             break;
                         }
                     }
+                    this.isProductLoaded = true;
                 })
                 .catch(error => {
                     console.log(error);
@@ -307,13 +215,19 @@ export default {
                     continue;
                 }
 
-                if (key !== 'images') {
+                if (key !== 'images' && key !== 'related_products' && key !== 'similar_products') {
                     formData.append(key, this.product[key]);
                 }
 
-                if(key === 'related_products') {
+                if (key === 'related_products') {
                     this.product.related_products.forEach(product => {
                         formData.append('related_products[]', product.id);
+                    });
+                }
+
+                if (key === 'similar_products') {
+                    this.product.similar_products.forEach(product => {
+                        formData.append('similar_products[]', product.id);
                     });
                 }
             }

@@ -59,10 +59,10 @@ const breakpoints = {
     768: {
         slidesPerView: 2, // Show 2 slides
     },
-    1024: {
+    1280: {
         slidesPerView: 3, // Show 4 slides
     },
-    1200: {
+    1550: {
         slidesPerView: 4, // Show 4 slides
     },
 };
