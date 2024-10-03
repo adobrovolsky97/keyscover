@@ -3,7 +3,7 @@
                      :classes="'flex flex-row justify-between items-center gap-4'"/>
     <div v-else>
         <div class="card lg:card-side border rounded-2xl shadow-xl">
-            <div class="flex flex-col justify-center items-center w-full lg:w-1/2 p-4">
+            <div class="flex flex-col justify-start items-center w-full lg:w-1/2 p-4">
                 <Carousel :media="media"/>
             </div>
             <div class="card-body">
