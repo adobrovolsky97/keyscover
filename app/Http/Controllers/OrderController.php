@@ -6,11 +6,14 @@ use App\Enums\Role\Role;
 use App\Http\Requests\Order\StoreRequest;
 use App\Http\Resources\Order\OrderResource;
 use App\Jobs\SendOrderToCrmJob;
+use App\Mail\NewOrderMail;
+use App\Models\Order\Order;
 use App\Notifications\OrderCreatedNotification;
 use App\Services\Order\Contracts\OrderServiceInterface;
 use Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Mail;
 use Notification;
 
 /**
@@ -51,9 +54,12 @@ class OrderController extends Controller
      */
     public function store(StoreRequest $request): JsonResponse
     {
+        /** @var Order $order */
         $order = $this->orderService->create($request->validated());
 
         if (!app()->isLocal()) {
+            Mail::to($order->user->email)->send(new NewOrderMail($order));
+
             Notification::route('telegram', config('services.telegram-bot-api.recipient'))
                 ->notify(new OrderCreatedNotification($order));
 
