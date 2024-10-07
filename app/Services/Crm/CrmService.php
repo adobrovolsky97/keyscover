@@ -39,8 +39,7 @@ class CrmService implements CrmServiceInterface
         $response = Http::withHeader('X-Auth-Token', config('app.crm_api_key'))
             ->timeout(30)
             ->get(self::API_URL . '/materials', [
-                urlencode('q[category_id_eq]') => $category,
-                'page'                         => $page
+                'page' => $page
             ]);
 
         return $response->json();

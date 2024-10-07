@@ -73,8 +73,8 @@ class FetchProductsCommand extends Command
                 $this->processProduct($product);
             }
 
-            $page++;
             $data = $crmService->getProductsList(page: $page);
+            $page++;
         }
     }
 
