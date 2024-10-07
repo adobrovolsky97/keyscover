@@ -50,12 +50,18 @@ class OrderService extends BaseCrudService implements OrderServiceInterface
 
             /** @var CartProduct $product */
             foreach ($cart->products as $product) {
+                if($product->product->left_in_stock < $product->quantity) {
+                    throw new BadRequestHttpException(__('Товар :product_name недоступний в такій кількості', ['product_name' => $product->product->name]));
+                }
+
                 $order->products()->create([
                     'product_id'      => $product->product_id,
                     'quantity'        => $product->quantity,
                     'total_price'     => $product->quantity * $product->product->price,
                     'total_price_uah' => round(($product->quantity * $product->product->price) * $data['dollar_rate']),
                 ]);
+
+                $product->product->update(['left_in_stock' => $product->product->left_in_stock - $product->quantity]);
             }
 
             $cartService->clearCart();
