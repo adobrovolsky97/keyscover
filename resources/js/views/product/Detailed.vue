@@ -1,8 +1,8 @@
 <template>
     <ContentSkeleton v-if="!isDataLoaded" :items="['h-80 w-full']"
                      :classes="'flex flex-row justify-between items-center gap-4'"/>
-    <div v-else>
-        <div class="card lg:card-side border rounded-2xl shadow-xl">
+    <div class="border rounded-2xl shadow-xl" v-else>
+        <div class="card lg:card-side">
             <div class="flex flex-col justify-start items-center w-full lg:w-1/2 p-4">
                 <Carousel :media="media"/>
             </div>
@@ -83,16 +83,14 @@
                                 <RelatedProducts :key="'similar'" :products="activeSimilarProducts"/>
                             </div>
                         </div>
-
-                        <div class="description mt-4" v-if="parsedDescription">
-                            <hr>
-                            <p class="font-bold text-lg mt-4">Опис</p>
-                            <MdPreview :modelValue="product.description"/>
-                        </div>
-
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="description px-6" v-if="parsedDescription">
+            <hr>
+            <p class="font-bold text-lg mt-4">Опис</p>
+            <MdPreview :modelValue="product.description"/>
         </div>
     </div>
 </template>
