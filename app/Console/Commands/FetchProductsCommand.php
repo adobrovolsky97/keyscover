@@ -74,6 +74,7 @@ class FetchProductsCommand extends Command
             }
 
             $data = $crmService->getProductsList(page: $page);
+            $this->info('Processed page ' . $page . ' of ' . $lastPage);
             $page++;
         }
     }
