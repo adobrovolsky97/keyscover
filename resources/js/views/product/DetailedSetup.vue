@@ -159,7 +159,7 @@ const fetchProduct = async () => {
                     {property: 'og:image', content: media.value[0]?.url},
                     {property: 'og:url', content: window.location.href},
                     {property: 'og:type', content: 'product'},
-                    {property: 'og:site_name', content: 'KeysCoder'},
+                    {property: 'og:site_name', content: 'KeysCover'},
                     {property: 'og:locale', content: 'ua_UA'},
                 ]
             });
