@@ -3,9 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Оптовий продаж автомобільних ключів та все що з ними повязано. Співпраця виключно з майстрами!">
     <link rel="icon" href="{{asset('logo.png')}}">
-    <title>KeysCover</title>
     @vite('resources/js/app.js')
 </head>
 <body>

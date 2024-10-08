@@ -164,8 +164,18 @@ import {useRoute} from "vue-router";
 import Item from "../product/Item.vue";
 import CategoryItem from "../../components/CategoryItem.vue";
 import ContentSkeleton from "../../components/skeleton/ContentSkeleton.vue";
+import {useHead} from "@vueuse/head";
 
 export default {
+    setup() {
+        // This is where you set the page title and meta tags
+        useHead({
+            title: 'Каталог',
+            meta: [
+                { name: 'description', content: 'Оптовий продаж автомобільних ключів та все що з ними повязано. Співпраця виключно з майстрами!' },
+            ]
+        });
+    },
     name: "Home",
     data() {
         return {

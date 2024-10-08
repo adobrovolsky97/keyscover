@@ -35,10 +35,14 @@ const emitter = mitt()
 
 import App from './views/App.vue';
 import mitt from "mitt";
+import {createHead} from "@vueuse/head";
+
+const head = createHead()
 
 const app = createApp(App);
 app.use(router);
 app.use(store);
+app.use(head)
 
 app.config.globalProperties.emitter = emitter
 
