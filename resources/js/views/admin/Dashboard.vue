@@ -90,11 +90,17 @@
 <script>
 import {Bar, Pie} from 'vue-chartjs'
 import {Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement} from 'chart.js';
-import ChartDataLabels from 'chartjs-plugin-datalabels'; // Import the plugin
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+import {useHead} from "@vueuse/head"; // Import the plugin
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement, ChartDataLabels); // Register the plugin
 
 export default {
+    setup() {
+        useHead({
+            title: 'Dashboard',
+        });
+    },
     name: "Dashboard",
     components: {Bar, Pie},
     data() {

@@ -75,8 +75,18 @@ import { useRoute } from "vue-router";
 import Pagination from "../../components/pagination/Pagination.vue";
 import TableSkeleton from "../../components/skeleton/TableSkeleton.vue";
 import RouteHelper from "../../helpers/Route/RouteHelper.js";
+import {useHead} from "@vueuse/head";
 
 export default {
+    setup() {
+        // This is where you set the page title and meta tags
+        useHead({
+            title: 'Історія замовлень',
+            meta: [
+                { name: 'description', content: 'Оптовий продаж автомобільних ключів та все що з ними повязано. Співпраця виключно з майстрами!' },
+            ]
+        });
+    },
     data() {
         return {
             isDataLoaded: false,

@@ -24,8 +24,14 @@
 import Pagination from "../../../components/pagination/Pagination.vue";
 import {toast} from "vue3-toastify";
 import * as sea from "node:sea";
+import {useHead} from "@vueuse/head";
 
 export default {
+    setup() {
+        useHead({
+            title: 'Зміна налаштування',
+        });
+    },
     data() {
         return {
             isLoading: false,

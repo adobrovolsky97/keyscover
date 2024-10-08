@@ -143,9 +143,19 @@ import Error from "../../components/Validation/Error.vue";
 import {toast} from "vue3-toastify";
 import 'vue3-toastify/dist/index.css';
 import Cart from "../cart/Cart.vue";
+import {useHead} from "@vueuse/head";
 
 
 export default {
+    setup() {
+        // This is where you set the page title and meta tags
+        useHead({
+            title: 'Замовлення',
+            meta: [
+                { name: 'description', content: 'Оптовий продаж автомобільних ключів та все що з ними повязано. Співпраця виключно з майстрами!' },
+            ]
+        });
+    },
     name: "Checkout",
     data() {
         return {

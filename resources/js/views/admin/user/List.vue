@@ -66,8 +66,14 @@ import Pagination from "../../../components/pagination/Pagination.vue";
 import TableSkeleton from "../../../components/skeleton/TableSkeleton.vue";
 import RouteHelper from "../../../helpers/Route/RouteHelper.js";
 import {toast} from "vue3-toastify";
+import {useHead} from "@vueuse/head";
 
 export default {
+    setup() {
+        useHead({
+            title: 'Користувачі',
+        });
+    },
     data() {
         return {
             isDataLoaded: false,

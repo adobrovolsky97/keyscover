@@ -124,8 +124,14 @@ import {toast} from "vue3-toastify";
 import 'md-editor-v3/lib/style.css';
 import {MdEditor} from "md-editor-v3";
 import RelatedProducts from "../../../components/product/RelatedProducts.vue";
+import {useHead} from "@vueuse/head";
 
 export default {
+    setup() {
+        useHead({
+            title: 'Оновлення товару',
+        });
+    },
     components: {RelatedProducts, MdEditor, Pagination},
     data() {
         return {
