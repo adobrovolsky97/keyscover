@@ -116,6 +116,10 @@ const cart = ref(store.state.cart);
 const cartProduct = ref(null);
 const route = useRoute();
 
+onMounted(async () => {
+    await fetchProduct();
+});
+
 const productTitle = computed(() => {
     return product.value?.name || 'Завантаження...';
 });
@@ -124,20 +128,10 @@ const productDescription = computed(() => {
     return product.value?.description || 'Оптовий продаж автомобільних ключів та все що з ними повязано. Співпраця виключно з майстрами!'
 });
 
-useHead({
-    title: productTitle,
-    meta: [
-        { name: 'description', content: productDescription },
-    ]
-})
-
-onMounted(() => {
-    fetchProduct();
-});
-
 const media = computed(() => {
     return product.value?.media?.length ? product.value.media : [{url: product.value.image}];
 });
+
 
 const activeRelatedProducts = computed(() => {
     return product.value?.related_products?.filter(product => !product.is_hidden);
@@ -151,10 +145,24 @@ const parsedDescription = computed(() => {
     return marked(product.value.description || '');
 });
 
-const fetchProduct = () => {
+const fetchProduct = async () => {
     axios.get('/api/products/' + route.params.id)
         .then((response) => {
             product.value = response.data.data;
+
+            useHead({
+                title: productTitle,
+                meta: [
+                    {name: 'description', content: productDescription},
+                    {property: 'og:title', content: productTitle},
+                    {property: 'og:description', productDescription},
+                    {property: 'og:image', content: media.value[0]?.url},
+                    {property: 'og:url', content: window.location.href},
+                    {property: 'og:type', content: 'product'},
+                    {property: 'og:site_name', content: 'KeysCoder'},
+                    {property: 'og:locale', content: 'ua_UA'},
+                ]
+            });
         })
         .then(() => {
             if (store.state.user !== null) {
