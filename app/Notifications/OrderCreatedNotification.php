@@ -41,15 +41,18 @@ class OrderCreatedNotification extends Notification implements ShouldQueue
      */
     public function toTelegram(object $notifiable): TelegramMessage
     {
+        $totalWithDiscountUah = round($this->order->total_price_uah - $this->order->discount_uah);
+        $totalWithDiscountUsd = round($this->order->total_price_usd - $this->order->discount_usd, 2);
+
         return TelegramMessage::create()
             ->to($notifiable->routeNotificationFor('telegram'))
             ->line("Клієнт: *{$this->order->full_name}*")
-            ->line("Вартість: *{$this->order->total_price_usd} $ / {$this->order->total_price_uah} грн*")
-            ->lineIf($this->order->delivery_type === Order::DELIVERY_TYPE_SELF_PICKUP, "Доставка: *{$this->order->delivery_type_text}*")
-            ->lineIf($this->order->delivery_type === Order::DELIVERY_TYPE_NEW_POST, "Доставка: *{$this->order->city_name}*, *{$this->order->warehouse_name}*")
-            ->line("Оплата: *{$this->order->payment_type_text}*")
-            ->lineIf(!empty($this->order->comment), "Коментар: *{$this->order->comment}*")
-            ->line("Замовлення: *{$this->order->number}*");
+            ->line("Вартість: {$totalWithDiscountUsd} $ / {$totalWithDiscountUah} грн")
+            ->lineIf($this->order->delivery_type === Order::DELIVERY_TYPE_SELF_PICKUP, "Доставка: {$this->order->delivery_type_text}")
+            ->lineIf($this->order->delivery_type === Order::DELIVERY_TYPE_NEW_POST, "Доставка: {$this->order->city_name}, {$this->order->warehouse_name}")
+            ->line("Оплата: {$this->order->payment_type_text}")
+            ->line("Замовлення: _{$this->order->number}_")
+            ->lineIf(!empty($this->order->comment), "Коментар: *{$this->order->comment}*");
 
     }
 }
