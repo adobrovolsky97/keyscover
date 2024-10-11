@@ -17,7 +17,7 @@
         </svg>
         <div class="card-body p-2 lg:p-4" :class="{'!p-4 lg:!p-2': minified}">
 
-            <p v-if="!minified" class="text-xs text-gray-400">Арт. {{ product.sku }}</p>
+            <p v-if="!minified" class="text-xs text-gray-400 hover:font-bold cursor-pointer hover:text-black">Арт. {{ product.sku }}</p>
             <p v-if="!minified" class="text-xs text-gray-400">{{ product.category.breadcrumbs }}</p>
 
             <!-- Product name -->
