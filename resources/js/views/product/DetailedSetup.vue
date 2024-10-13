@@ -13,7 +13,7 @@
                         <p class="text-lg">
                             {{ product.category.breadcrumbs }}
                             <br>
-                            <span class="text-gray-400">Арт.: {{ product.sku }}</span>
+                            <span class="text-gray-400 hover:font-bold hover:text-black cursor-pointer">Арт.: {{ product.sku }}</span>
                             <br>
                             <span class="text-error font-bold text-2xl">{{ product.usd_price }} $ / {{ product.price }} грн.</span>
                         </p>

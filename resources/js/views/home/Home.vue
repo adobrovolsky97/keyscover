@@ -77,28 +77,6 @@
                 </button>
             </div>
             <div class="flex flex-row lg:flex-col px-1 lg:px-0 justify-between gap-2">
-                <label class="input input-bordered text-sm input-sm lg:input-md w-full flex items-center mb-2">
-                    <input @input="delaySearch" v-model="search" type="text" class="grow"
-                           :placeholder="filters.categories.length > 0 ? 'Пошук по категорії' : 'Загальний пошук'"/>
-                    <svg v-if="search !== ''" @click="clearSearch" class="h-5 w-5 cursor-pointer" width="24" height="24"
-                         viewBox="0 0 24 24" stroke-width="2"
-                         stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z"/>
-                        <line x1="18" y1="6" x2="6" y2="18"/>
-                        <line x1="6" y1="6" x2="18" y2="18"/>
-                    </svg>
-                    <svg
-                        v-else
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 16 16"
-                        fill="currentColor"
-                        class="h-4 w-4 opacity-70">
-                        <path
-                            fill-rule="evenodd"
-                            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                            clip-rule="evenodd"/>
-                    </svg>
-                </label>
                 <div class="flex flex-row justify-center flex-wrap lg:justify-end items-center mb-6 w-full gap-4">
                     <div class="form-control hidden lg:block">
                         <label class="label cursor-pointer">
@@ -172,7 +150,10 @@ export default {
         useHead({
             title: 'Каталог',
             meta: [
-                { name: 'description', content: 'Оптовий продаж автомобільних ключів та все що з ними повязано. Співпраця виключно з майстрами!' },
+                {
+                    name: 'description',
+                    content: 'Оптовий продаж автомобільних ключів та все що з ними повязано. Співпраця виключно з майстрами!'
+                },
             ]
         });
     },
@@ -219,7 +200,15 @@ export default {
                 this.filters.order_by = this.order_by;
                 this.filters.page = 1;
             }
-        }
+        },
+
+        '$route.query.search': {
+            handler: function (value) {
+                this.search = value;
+                this.filters.search = value;
+                this.filters.page = 1;
+            }
+        },
     },
     created() {
         this.fetchCategories();

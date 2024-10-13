@@ -1,6 +1,7 @@
 <template>
     <div class="w-full">
         <h3 class="text-lg font-bold mb-4">Ваш кошик</h3>
+        <p class="font-bold" v-if="usd">USD {{ usd }}</p>
         <button v-if="($store.state.cart?.products ?? []).length"
                 class="btn btn-warning btn-outline rounded-full float-start mb-4 btn-sm"
                 @click="clearCart">Очистити кошик
@@ -133,10 +134,12 @@ export default {
             freeDeliveryRemaining: null,
             timer: null,
             productErrors: {},
+            usd: null,
         }
     },
     mounted() {
         this.calculateRemainingDiscounts();
+        this.fetchConfigs();
     },
     watch: {
         '$store.state.cart.total': function () {
@@ -148,6 +151,13 @@ export default {
         }
     },
     methods: {
+        fetchConfigs() {
+            axios.get('/api/configs')
+                .then(response => {
+                    this.$store.commit('setConfigs', response.data)
+                    this.usd = response.data.usd;
+                })
+        },
         deleteProduct(product) {
             axios.delete(`/api/cart/${product.product_id}`)
                 .then(response => {

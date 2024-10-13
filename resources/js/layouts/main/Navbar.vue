@@ -2,7 +2,7 @@
     <div class="fixed w-full z-50 bg-white">
         <nav
             class="navbar block py-2 w-full max-w-full rounded-none px-2 lg:px-4 border-0 top-0 shadow-xl">
-            <div class="container mx-auto flex items-center justify-between">
+            <div class="container mx-auto w-full flex items-center justify-between">
                 <router-link
                     :to="{name: 'home'}"
                     custom
@@ -14,35 +14,43 @@
                                 <img src="../../../../public/logo.png"/>
                             </div>
                         </div>
-                        <a class="block antialiased font-sans text-md lg:text-lg font-bold">KeysCover</a>
+                        <a class="antialiased font-sans text-md lg:text-lg font-bold block">KeysCover</a>
                     </div>
                 </router-link>
-                <div class="hidden items-center gap-2 lg:flex">
-                    <div class="auth flex flex-row justify-center items-center gap-5">
-                        <a @click="goToProducts"
-                           :class="{'link-error': $route.path === '/'}"
-                           class="link">Каталог</a>
-                        <router-link
-                            v-if="$store.state.user !== null"
-                            :to="{name: 'orders-list'}"
-                            custom
-                            v-slot="{ navigate, href }"
-                        >
-                            <a @click="navigate" :class="{'link-error': $route.path === '/orders/list'}" class="link">Історія
-                                замовлень</a>
-                        </router-link>
-                        <router-link
-                            v-if="$store.state.user !== null && $store.state.user.role === 'admin'"
-                            :to="{name: 'admin.dashboard'}"
-                            custom
-                            v-slot="{ navigate, href }"
-                        >
-                            <a @click="navigate"
-                               class="link">Admin</a>
-                        </router-link>
-                        <p class="font-bold" v-if="usd">USD {{ usd }}</p>
+
+                <div class="w-full hidden md:block mx-0 md:mx-14">
+                    <label class="input input-bordered items-center w-full flex gap-2">
+                        <input type="text" @input="delaySearch" :value="search" class="grow"
+                               placeholder="Шукати на сайті..." @enter="delaySearch"/>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 16 16"
+                            fill="currentColor"
+                            class="h-4 w-4 opacity-70">
+                            <path
+                                fill-rule="evenodd"
+                                d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                                clip-rule="evenodd"/>
+                        </svg>
+                    </label>
+                </div>
+                <div class="items-center justify-end gap-2 flex">
+                    <div class="auth flex flex-row justify-between items-center gap-4 md:gap-5">
+                        <div ref="mobileSearch" class="block md:hidden cursor-pointer">
+                            <svg class="h-6 w-6"
+                                 @click="isShowMobileSearch = !isShowMobileSearch" viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"/>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            </svg>
+
+                            <input v-if="isShowMobileSearch" :value="search" @input="delaySearch" type="text" placeholder="Шукати"
+                                   class="input input-bordered w-full max-w-sm absolute left-1/2 transform -translate-x-1/2 top-16"/>
+                        </div>
+
                         <div v-if="$store.state.user !== null">
-                            <button class="btn btn-outline rounded-2xl btn-sm" v-if="$route.name !== 'checkout'"
+                            <button class="btn btn-outline rounded-2xl btn-sm md:w-32" v-if="$route.name !== 'checkout'"
                                     onclick="cartModal.showModal()">
                                 <svg class="h-6 w-6 text-slate-500" width="24" height="24" viewBox="0 0 24 24"
                                      stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
@@ -69,83 +77,63 @@
                                 <span class="mt-0.5">{{ $store.state.cart?.total ?? 0 }} грн.</span>
                             </button>
                         </div>
-                        <div class="flex flex-row gap-4" v-if="$store.state.user === null">
-                            <router-link to="/login">
-                                <a class="link">Вхід</a>
-                            </router-link>
-                            <router-link to="/sign-up">
-                                <a class="link">Реєстрація</a>
-                            </router-link>
-                        </div>
-                        <a @click="logout" v-if="$store.state.user !== null" class="link">Вийти</a>
-                    </div>
-                </div>
-                <div class="lg:hidden flex flex-row justify-between items-center">
-                    <span class="font-bold text-sm" v-if="usd">USD {{ usd }}</span>
-                    <button class="btn btn-ghost btn-sm" v-if="$route.name !== 'checkout'"
-                            onclick="cartModal.showModal()">
-                        <svg class="h-5 w-5 text-slate-500" width="24" height="24" viewBox="0 0 24 24"
-                             stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                             stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z"/>
-                            <circle cx="9" cy="19" r="2"/>
-                            <circle cx="17" cy="19" r="2"/>
-                            <path d="M3 3h2l2 12a3 3 0 0 0 3 2h7a3 3 0 0 0 3 -2l1 -7h-15.2"/>
-                        </svg>
-                        <span class="mt-0.5">{{ $store.state.cart?.total ?? 0 }} грн.</span>
-                    </button>
-                    <div class="dropdown dropdown-end" ref="dropdown">
-                        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar" @click="toggleDropdown">
-                            <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                        </div>
 
-                        <ul v-if="isOpen"
-                            tabindex="0"
-                            class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[2] mt-3 w-52 p-2 shadow">
-                            <li>
-                                <a @click="goToProducts"
-                                   :class="{'link-error': $route.path === '/'}"
-                                   class="link">Каталог</a>
-                            </li>
-                            <li v-if="$store.state.user !== null">
-                                <router-link
-                                    :to="{name: 'orders-list'}"
-                                    custom
-                                    v-slot="{ navigate, href }"
-                                >
-                                    <a @click="navigate" :class="{'link-error': $route.path === '/orders/list'}"
-                                       class="link">Історія замовлень</a>
-                                </router-link>
-                            </li>
-                            <li v-if="$store.state.user !== null && $store.state.user.role === 'admin'">
-                                <router-link
-                                    :to="{name: 'admin.dashboard'}"
-                                    custom
-                                    v-slot="{ navigate, href }"
-                                >
-                                    <a @click="navigate"
-                                       class="link">Admin</a>
-                                </router-link>
-                            </li>
-                            <li v-if="$store.state.user == null">
-                                <router-link to="/login">
-                                    <a class="link">Вхід</a>
-                                </router-link>
-                            </li>
-                            <li v-if="$store.state.user == null">
-                                <router-link to="/sign-up">
-                                    <a class="link">Реєстрація</a>
-                                </router-link>
-                            </li>
-                            <li v-if="$store.state.user !== null">
-                                <a @click="logout" class="link">Вийти</a>
-                            </li>
-                        </ul>
-                    </div>
+                        <div class="dropdown dropdown-end" ref="dropdown">
+                            <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar"
+                                 @click="toggleDropdown">
+                                <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
 
+                            <ul v-if="isOpen"
+                                tabindex="0"
+                                class="menu dropdown-content bg-base-100 rounded-box z-[2] mt-3 w-52 p-2 shadow">
+                                <li v-if="$store.state.user">
+                                    <p>Вітаємо, {{ $store.state.user.name }}</p>
+                                </li>
+                                <li>
+                                    <a @click="goToProducts"
+                                       :class="{'link-error': $route.path === '/'}"
+                                       class="link">Каталог</a>
+                                </li>
+                                <li v-if="$store.state.user !== null">
+                                    <router-link
+                                        :to="{name: 'orders-list'}"
+                                        custom
+                                        v-slot="{ navigate, href }"
+                                    >
+                                        <a @click="navigate" :class="{'link-error': $route.path === '/orders/list'}"
+                                           class="link">Історія замовлень</a>
+                                    </router-link>
+                                </li>
+                                <li v-if="$store.state.user !== null && $store.state.user.role === 'admin'">
+                                    <router-link
+                                        :to="{name: 'admin.dashboard'}"
+                                        custom
+                                        v-slot="{ navigate, href }"
+                                    >
+                                        <a @click="navigate"
+                                           class="link">Admin</a>
+                                    </router-link>
+                                </li>
+                                <li v-if="$store.state.user == null">
+                                    <router-link to="/login">
+                                        <a class="link">Вхід</a>
+                                    </router-link>
+                                </li>
+                                <li v-if="$store.state.user == null">
+                                    <router-link to="/sign-up">
+                                        <a class="link">Реєстрація</a>
+                                    </router-link>
+                                </li>
+                                <li v-if="$store.state.user !== null">
+                                    <a @click="logout" class="link">Вийти</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 <dialog v-if="$route.name !== 'checkout'" ref="cartModal" id="cartModal" class="modal">
 
@@ -199,31 +187,39 @@
 import Auth from "../../api/Auth/Auth.js";
 import Cart from "../../views/cart/Cart.vue";
 import {toast} from "vue3-toastify";
+import Modal from "../../components/Modal.vue";
+import RouteHelper from "../../helpers/Route/RouteHelper.js";
 
 export default {
     data() {
         return {
-            usd: null,
             isOpen: false,
-            isShowSubNavbar: true
+            isDataLoaded: false,
+            isShowSubNavbar: true,
+            isShowMobileSearch: false,
+            search: '',
         }
     },
     created() {
-        this.fetchConfigs();
         this.fetchCart();
         this.emitter.on('show-cart', (evt) => {
             this.$refs?.cartModal?.showModal();
         })
     },
     mounted() {
+        this.search = this.$route.query.search ?? '';
+
         document.addEventListener('click', this.handleClickOutside);
+        document.addEventListener('click', this.handleClickOutsideMobileSearch);
         window.addEventListener("scroll", this.checkScrollPosition);
     },
     beforeDestroy() {
         document.removeEventListener('click', this.handleClickOutside);
+        document.removeEventListener('click', this.handleClickOutsideMobileSearch);
         window.addEventListener("scroll", this.checkScrollPosition);
     },
     components: {
+        Modal,
         Cart
     },
     watch: {
@@ -233,7 +229,9 @@ export default {
             if (to.path !== from.path) {
                 this.fetchCart();
             }
-        }
+
+            this.search = to.query.search ?? '';
+        },
     },
     methods: {
         toggleDropdown() {
@@ -247,6 +245,33 @@ export default {
             if (dropdown && !dropdown.contains(event.target)) {
                 this.closeDropdown();
             }
+        },
+        handleClickOutsideMobileSearch(event) {
+
+            if (!this.isShowMobileSearch) {
+                return;
+            }
+
+            const search = this.$refs.mobileSearch;
+            if (search && !search.contains(event.target)) {
+                this.closeMobileSearch();
+            }
+        },
+        closeMobileSearch() {
+            this.isShowMobileSearch = false;
+        },
+        delaySearch(e) {
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => {
+                this.search = e.target.value;
+
+                if (this.$route.name !== 'home') {
+                    this.$router.push({name: 'home', query: {search: this.search}});
+                    return
+                }
+
+                RouteHelper.updateQueryParams({search: this.search});
+            }, 800);
         },
         fetchCart() {
             axios.get('/api/cart')
@@ -264,12 +289,15 @@ export default {
                     }
                 })
         },
-        fetchConfigs() {
-            axios.get('/api/configs')
-                .then(response => {
-                    this.$store.commit('setConfigs', response.data)
-                    this.usd = response.data.usd;
+        fetchData() {
+            this.isDataLoaded = false;
+            return axios.get('/api/products', {params: {search: this.search}})
+                .then((response) => {
+                    this.data = response.data.data;
                 })
+                .then(() => {
+                    this.isDataLoaded = true;
+                });
         },
         logout() {
             Auth.logout()
@@ -300,6 +328,7 @@ export default {
     right: -40px;
     top: 40px
 }
+
 .slide-fade-enter-active, .slide-fade-leave-active {
     transition: transform .2s ease, opacity .2s ease;
 }
