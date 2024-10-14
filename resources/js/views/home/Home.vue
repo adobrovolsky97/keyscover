@@ -250,11 +250,6 @@ export default {
             this.filters.per_page = e.target.value;
             this.filters.page = 1;
         },
-        clearSearch() {
-            this.search = '';
-            this.filters.search = '';
-            this.filters.page = 1;
-        },
         toggleMode() {
             if (this.mode === '1-row') {
                 this.mode = '2-row';
@@ -326,13 +321,6 @@ export default {
         },
         resolveQueryParams() {
             this.filters = {...this.filters, ...this.route.query};
-        },
-        delaySearch() {
-            clearTimeout(this.timer);
-            this.timer = setTimeout(() => {
-                this.filters.search = this.search;
-                this.filters.page = 1;
-            }, 800);
         },
         handleCategoryClicked(category) {
             let categoriesArray = this.filters.categories.split(',');
