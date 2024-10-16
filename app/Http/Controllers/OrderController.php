@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role\Role;
 use App\Http\Requests\Order\StoreRequest;
 use App\Http\Resources\Order\OrderResource;
 use App\Jobs\SendOrderToCrmJob;
@@ -11,6 +12,7 @@ use App\Notifications\OrderCreatedNotification;
 use App\Services\Order\Contracts\OrderServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
 use Mail;
 use Notification;
 
@@ -40,7 +42,7 @@ class OrderController extends Controller
     public function index(): AnonymousResourceCollection
     {
         return OrderResource::collection($this->orderService->getAllPaginated(
-            ['user_id' => auth()->id()]
+            Auth::user()->role === Role::ADMIN ? [] : ['user_id' => auth()->id()]
         ));
     }
 
