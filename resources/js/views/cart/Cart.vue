@@ -48,7 +48,7 @@
                                         -
                                     </button>
                                     <input @input="updateProductQuantity(product)"
-                                           class="input input-bordered text-center input-md join-item w-14"
+                                           class="input input-bordered text-center input-md join-item w-14 focus:outline-none"
                                            placeholder="" v-model="product.quantity"/>
                                     <button @click="incrementQuantity(product)"
                                             :disabled="product.left_in_stock <= product.quantity"

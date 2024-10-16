@@ -28,7 +28,7 @@
                                             -
                                         </button>
                                         <input :disabled="product.left_in_stock <= 0"
-                                               class="input input-bordered text-center join-item w-16"
+                                               class="input input-bordered text-center join-item w-16 focus:outline-none"
                                                placeholder="" v-model="cartQty"/>
                                         <button :disabled="product.left_in_stock <= 0" @click="incrementQuantity"
                                                 class="btn btn-neutral join-item">

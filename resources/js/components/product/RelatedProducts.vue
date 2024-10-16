@@ -41,7 +41,14 @@
             <tr v-for="product in localRelatedProducts" :key="product.id">
                 <th>{{ product.id }}</th>
                 <td>{{ product.sku }}</td>
-                <td>{{ product.name }}</td>
+                <td>
+                    <router-link
+                        :to="{ name: 'product.show', params: { id: product.id } }"
+                        class="font-bold product-name hover:text-gray-400 cursor-pointer overflow-x-auto"
+                    >
+                        {{ product.name }}
+                    </router-link>
+                </td>
                 <td>
                     <svg class="h-6 w-6 cursor-pointer text-red-500"
                          @click="removeRelatedProduct(product.id)" viewBox="0 0 24 24" fill="none"

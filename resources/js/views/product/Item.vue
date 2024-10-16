@@ -48,7 +48,7 @@
                                 -
                             </button>
                             <input :disabled="product.left_in_stock <= 0"
-                                   class="input input-bordered text-center input-sm lg:input-md join-item w-16"
+                                   class="input input-bordered text-center input-sm lg:input-md join-item w-16 focus:outline-none"
                                    placeholder="" v-model="cartQty" :class="{'!input-xs': minified}"/>
                             <button :disabled="product.left_in_stock <= cartQty" @click="incrementQuantity"
                                     class="btn btn-neutral join-item btn-sm lg:btn-md" :class="{'!btn-xs': minified}">

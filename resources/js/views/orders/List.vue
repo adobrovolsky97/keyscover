@@ -6,10 +6,10 @@
         <div class="container">
             <TableSkeleton v-if="!isDataLoaded"/>
             <div class="orders-list mt-4" v-if="isDataLoaded && data.data.length > 0">
-                <div class="collapse collapse-arrow border shadow-xl mb-4 w-full" v-for="order in data.data" :key="order.id">
+                <div class="collapse collapse-arrow border shadow-xl mb-4 w-full" v-for="(order, orderIndex) in data.data" :key="order.id">
                     <input type="checkbox"/>
                     <div class="collapse-title md:text-xl text-sm font-medium flex md:flex-row flex-col md:justify-between justify-start md:items-center items-start">
-                        <span>Замовлення #{{ order.number }}</span>
+                        <span>Замовлення #{{data.meta.total - (data.meta.per_page * (data.meta.current_page - 1) + orderIndex)}} (<b>{{ order.number }}</b>)</span>
                         <span>{{ order.created_at }}</span>
                     </div>
                     <div class="collapse-content  overflow-x-auto">
