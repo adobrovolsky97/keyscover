@@ -110,7 +110,7 @@
                                     }} грн.</span>
                             </button>
 
-                            <button v-else class="btn btn-outline rounded-2xl btn-sm">
+                            <button v-else class="btn btn-outline rounded-2xl btn-sm md:w-32">
                                 <svg class="h-6 w-6 text-slate-500" width="24" height="24" viewBox="0 0 24 24"
                                      stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
                                      stroke-linejoin="round">
