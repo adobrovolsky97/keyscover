@@ -377,6 +377,8 @@ export default {
                 .then(response => {
                     this.data = response.data;
                     this.isDataLoaded = true;
+                    // scroll to top
+                    window.scrollTo(0, 0);
                 })
         },
         clearSearch() {

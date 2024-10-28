@@ -50,7 +50,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
                 $query->where('is_hidden', false);
             })
             ->when(!empty($searchParams['sort_by']), function (Builder $query) use ($searchParams) {
-                $query->orderBy($searchParams['sort_by'], $searchParams['order_dir'] ?? 'asc');
+                $query->reorder($searchParams['sort_by'], $searchParams['order_dir'] ?? 'asc');
             });
     }
 
