@@ -117,14 +117,14 @@ class FetchProductsCommand extends Command
 
         $this->info('Product ' . $product->name . ' has been processed');
 
-        if (!empty($productData['asset_url']) && !app()->isLocal()) {
-            $this->addAttachmentsToProduct($product, array_merge(
-                [$productData['asset_url']],
-                array_column($productData['attachments'] ?? [], 'original_url'),
-            ));
-        }
-
-        $this->removeDuplicatedMedia($product);
+//        if (!empty($productData['asset_url']) && !app()->isLocal()) {
+//            $this->addAttachmentsToProduct($product, array_merge(
+//                [$productData['asset_url']],
+//                array_column($productData['attachments'] ?? [], 'original_url'),
+//            ));
+//        }
+//
+//        $this->removeDuplicatedMedia($product);
 
         $product->update(['last_sync_at' => now()]);
     }
