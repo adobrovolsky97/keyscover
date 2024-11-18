@@ -62,6 +62,10 @@ class CartService extends BaseCrudService implements CartServiceInterface
             throw new BadRequestHttpException('В наявності: ' . $product->left_in_stock . ' шт.');
         }
 
+        if($quantity % $product->cart_increment_step !== 0) {
+            throw new BadRequestHttpException('Кількість товару повинна бути кратно ' . $product->cart_increment_step);
+        }
+
         !empty($cartProduct)
             ? $cartProduct->update(['quantity' => $cartProduct->quantity + $cartProduct->product->cart_increment_step])
             : $cart->products()->create([

@@ -102,7 +102,7 @@ import Carousel from "./Carousel.vue";
 import RelatedProducts from "./RelatedProducts.vue";
 import 'md-editor-v3/lib/preview.css';
 import {MdPreview} from "md-editor-v3";
-import {computed, ref} from "vue";
+import {computed, ref, watchEffect} from "vue";
 import store from "../../store.js";
 import {onMounted} from "vue";
 import {useRoute} from "vue-router";
@@ -197,20 +197,26 @@ const getCartQuantityForCurrentProduct = () => {
     return cartItem ? cartItem.quantity : 1;
 };
 
+watchEffect(() => {
+    cart.value = store.state.cart;
+    cartQty.value = getCartQuantityForCurrentProduct();
+});
+
+
 const addItemToCart = (product) => {
-    if (cartQty.value < 1) {
+    if (cartQty.value < product.cart_increment_step) {
         toast.error("Невірна кількість товару", {
             position: 'bottom-right'
         })
         return;
     }
 
-    if (product.left_in_stock < cartQty.value) {
-        cartQty.value = product.left_in_stock;
-        toast.error("Недостатня кількість товарів на складі. Залишок: " + product.left_in_stock + " штук.", {
-            position: 'bottom-right'
-        });
-        return;
+    if (cartQty.value % product.cart_increment_step !== 0) {
+        cartQty.value = parseInt(cartQty.value) + parseInt(product.cart_increment_step - (cartQty.value % product.cart_increment_step));
+    }
+
+    if (product.left_in_stock <= cartQty.value) {
+        cartQty.value = product.left_in_stock - (product.left_in_stock % product.cart_increment_step);
     }
 
     axios.post('/api/cart/' + product.id, {quantity: cartQty.value})
@@ -220,6 +226,9 @@ const addItemToCart = (product) => {
             cart.value = response.data.data;
             cartQty.value = getCartQuantityForCurrentProduct();
         })
+        .catch((error) => {
+            toast.error(error?.response?.data?.message ?? 'Помилка', {autoClose: 5000, position: 'bottom-right'});
+        });
 };
 
 const incrementQuantity = () => {
@@ -249,13 +258,8 @@ const updateProductQuantity = () => {
         cartQty.value = parseInt(cartQty.value) +  parseInt(product.value.cart_increment_step - (cartQty.value % product.value.cart_increment_step));
     }
 
-
-    if (product.value.left_in_stock < cartQty.value) {
-        cartQty.value = product.value.left_in_stock;
-        toast.error("Недостатня кількість товарів на складі. Залишок: " + product.value.left_in_stock + " штук.", {
-            position: 'bottom-right'
-        });
-        return;
+    if (product.value.left_in_stock <= cartQty.value) {
+        cartQty.value = product.value.left_in_stock - (product.value.left_in_stock % product.value.cart_increment_step);
     }
 
     axios.patch(`/api/cart/${product.value.id}`, {quantity: cartQty.value})
@@ -265,5 +269,8 @@ const updateProductQuantity = () => {
             cartQty.value = getCartQuantityForCurrentProduct();
             toast.success("Кількість товару оновлено!", {autoClose: 5000, position: 'bottom-right'});
         })
+        .catch(error => {
+            toast.error(error?.response?.data?.message ?? 'Помилка', {autoClose: 5000, position: 'bottom-right'});
+        });
 }
 </script>

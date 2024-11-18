@@ -17,7 +17,8 @@
         </svg>
         <div class="card-body p-2 lg:p-4" :class="{'!p-4 lg:!p-2': minified}">
 
-            <p v-if="!minified" class="text-xs text-gray-400 hover:font-bold cursor-pointer hover:text-black">Арт. {{ product.sku }}</p>
+            <p v-if="!minified" class="text-xs text-gray-400 hover:font-bold cursor-pointer hover:text-black">Арт.
+                {{ product.sku }}</p>
             <p v-if="!minified" class="text-xs text-gray-400">{{ product.category.breadcrumbs }}</p>
 
             <!-- Product name -->
@@ -61,7 +62,8 @@
                         }} шт.</span>
                 </div>
 
-                <button v-if="!cartProduct && product.left_in_stock >= product.cart_increment_step" @click="addItemToCart(product)"
+                <button v-if="!cartProduct && product.left_in_stock >= product.cart_increment_step"
+                        @click="addItemToCart(product)"
                         class="btn btn-neutral btn-block btn-sm lg:btn-md" :class="{'!btn-xs': minified}">
                     Додати до кошика
                 </button>
@@ -70,7 +72,8 @@
                         class="btn btn-neutral btn-block btn-sm lg:btn-md" :class="{'!btn-xs': minified}">
                     Немає в наявності
                 </button>
-                <button v-if="cartProduct && product.left_in_stock >= product.cart_increment_step" @click="updateProductQuantity"
+                <button v-if="cartProduct && product.left_in_stock >= product.cart_increment_step"
+                        @click="updateProductQuantity"
                         class="btn btn-success btn-block btn-sm lg:btn-md text-white" :class="{'!btn-xs': minified}">
                     Оновити кількість
                 </button>
@@ -82,20 +85,24 @@
                     <div class="flex flex-row justify-between items-center gap-1 mb-0 md:mb-0">
                         <div class="join">
                             <button :disabled="!couldBeDecremented()" @click="decrementQuantity"
-                                    class="btn btn-neutral join-item btn-sm lg:btn-md" :class="{'btn-sm lg:!btn-xs': minified}">
+                                    class="btn btn-neutral join-item btn-sm lg:btn-md"
+                                    :class="{'btn-sm lg:!btn-xs': minified}">
                                 -
                             </button>
                             <input :disabled="product.left_in_stock <= product.cart_increment_step"
                                    class="input input-bordered text-center input-sm lg:input-md join-item"
-                                   placeholder="" v-model="cartQty" :class="{'input-sm lg:!input-xs w-12 lg:w-8': minified}"/>
+                                   placeholder="" v-model="cartQty"
+                                   :class="{'input-sm lg:!input-xs w-12 lg:w-8': minified}"/>
                             <button :disabled="!couldBeIncremented()" @click="incrementQuantity"
-                                    class="btn btn-neutral join-item btn-sm lg:btn-md" :class="{'btn-sm lg:!btn-xs': minified}">
+                                    class="btn btn-neutral join-item btn-sm lg:btn-md"
+                                    :class="{'btn-sm lg:!btn-xs': minified}">
                                 +
                             </button>
                         </div>
                     </div>
 
-                    <button v-if="!cartProduct && product.left_in_stock >= product.cart_increment_step" @click="addItemToCart(product)"
+                    <button v-if="!cartProduct && product.left_in_stock >= product.cart_increment_step"
+                            @click="addItemToCart(product)"
                             class="btn btn-neutral btn-sm lg:btn-md" :class="{'btn-sm lg:!btn-xs': minified}">
                         Додати
                     </button>
@@ -105,7 +112,8 @@
                         Немає
                     </button>
                     <button v-if="cartProduct && product.left_in_stock > 0" @click="updateProductQuantity"
-                            class="btn btn-success btn-sm lg:btn-md text-white" :class="{'btn-sm lg:!btn-xs': minified}">
+                            class="btn btn-success btn-sm lg:btn-md text-white"
+                            :class="{'btn-sm lg:!btn-xs': minified}">
                         Оновити
                     </button>
                 </div>
@@ -178,12 +186,12 @@ export default {
                 return;
             }
 
-            if (product.left_in_stock < this.cartQty) {
-                this.cartQty = product.left_in_stock;
-                toast.error("Недостатня кількість товарів на складі. Залишок: " + product.left_in_stock + " штук.", {
-                    position: 'bottom-right'
-                });
-                return;
+            if (this.cartQty % this.product.cart_increment_step !== 0) {
+                this.cartQty = parseInt(this.cartQty) + parseInt(this.product.cart_increment_step - (this.cartQty % this.product.cart_increment_step));
+            }
+
+            if (product.left_in_stock <= this.cartQty) {
+                this.cartQty = product.left_in_stock - (product.left_in_stock % product.cart_increment_step);
             }
 
             axios.post('/api/cart/' + product.id, {quantity: this.cartQty})
@@ -193,11 +201,14 @@ export default {
                     this.cart = response.data.data;
                     this.cartQty = this.getCartQuantityForCurrentProduct();
                 })
+                .catch((error) => {
+                    toast.error(error?.response?.data?.message ?? 'Помилка', {autoClose: 5000, position: 'bottom-right'});
+                });
         },
         incrementQuantity() {
 
             if (this.couldBeIncremented()) {
-                this.cartQty+= this.product.cart_increment_step;
+                this.cartQty += this.product.cart_increment_step;
             } else {
                 this.cartQty = this.product.left_in_stock;
                 this.productErrors[this.product.id] = "В наявності: " + this.product.left_in_stock + " шт.";
@@ -208,7 +219,7 @@ export default {
                 return;
             }
 
-            this.cartQty-= this.product.cart_increment_step;
+            this.cartQty -= this.product.cart_increment_step;
         },
         couldBeIncremented() {
             return this.product.left_in_stock >= this.cartQty + this.product.cart_increment_step;
@@ -222,15 +233,11 @@ export default {
             }
 
             if (this.cartQty % this.product.cart_increment_step !== 0) {
-                this.cartQty = parseInt(this.cartQty) +  parseInt(this.product.cart_increment_step - (this.cartQty % this.product.cart_increment_step));
+                this.cartQty = parseInt(this.cartQty) + parseInt(this.product.cart_increment_step - (this.cartQty % this.product.cart_increment_step));
             }
 
-            if (this.product.left_in_stock < this.cartQty) {
-                this.cartQty = this.product.left_in_stock;
-                toast.error("Недостатня кількість товарів на складі. Залишок: " + this.product.left_in_stock + " штук.", {
-                    position: 'bottom-right'
-                });
-                return;
+            if (this.product.left_in_stock <= this.cartQty) {
+                this.cartQty = this.product.left_in_stock - (this.product.left_in_stock % this.product.cart_increment_step);
             }
 
             axios.patch(`/api/cart/${this.product.id}`, {quantity: this.cartQty})
@@ -240,6 +247,9 @@ export default {
                     this.cartQty = this.getCartQuantityForCurrentProduct();
                     toast.success("Кількість товару оновлено!", {autoClose: 5000, position: 'bottom-right'});
                 })
+                .catch(error => {
+                    toast.error(error?.response?.data?.message ?? 'Помилка', {autoClose: 5000, position: 'bottom-right'});
+                });
         },
         handleClick(event) {
             // Handle left-click only (event.button === 0) and let middle-click, Ctrl+click work as normal

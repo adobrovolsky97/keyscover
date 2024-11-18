@@ -159,17 +159,26 @@ export default {
                     this.$store.commit('setConfigs', response.data)
                     this.usd = response.data.usd;
                 })
+                .catch((error) => {
+                    toast.error(error?.response?.data?.message ?? 'Помилка', {autoClose: 5000, position: 'bottom-right'});
+                })
         },
         deleteProduct(product) {
             axios.delete(`/api/cart/${product.product_id}`)
                 .then(response => {
                     this.$store.commit('setCart', response.data.data);
                 })
+                .catch((error) => {
+                    toast.error(error?.response?.data?.message ?? 'Помилка', {autoClose: 5000, position: 'bottom-right'});
+                })
         },
         clearCart() {
             axios.delete('/api/cart')
                 .then(() => {
                     this.$store.commit('setCart', {})
+                })
+                .catch((error) => {
+                    toast.error(error?.response?.data?.message ?? 'Помилка', {autoClose: 5000, position: 'bottom-right'});
                 })
         },
         goToCheckout() {
@@ -197,6 +206,9 @@ export default {
                 .then(response => {
                     this.$store.commit('setCart', response.data.data);
                 })
+                .catch((error) => {
+                    toast.error(error?.response?.data?.message ?? 'Помилка', {autoClose: 5000, position: 'bottom-right'});
+                })
         },
         calculateRemainingDiscounts() {
             this.fivePercentDiscountRemaining = ((this.$store.state.configs.five_percent_discount - this.$store.state.cart.total_usd)).toFixed(2);
@@ -212,22 +224,26 @@ export default {
         },
         updateProductQuantity(product) {
 
-            if (product.quantity < product.cart_increment_step) {
-                product.quantity = product.cart_increment_step;
-            }
-
-            if (product.quantity % product.cart_increment_step !== 0) {
-                product.quantity = parseInt(product.quantity) +  parseInt(product.cart_increment_step - (product.quantity % product.cart_increment_step));
-            }
-
             this.productErrors = {};
             clearTimeout(this.timer);
             this.timer = setTimeout(() => {
+
+                if (product.quantity < product.cart_increment_step) {
+                    product.quantity = product.cart_increment_step;
+                }
+
+                if (product.quantity % product.cart_increment_step !== 0) {
+                    product.quantity = parseInt(product.quantity) +  parseInt(product.cart_increment_step - (product.quantity % product.cart_increment_step));
+                }
+
+                if (product.left_in_stock <= product.quantity) {
+                    product.quantity = product.left_in_stock - (product.left_in_stock % product.cart_increment_step);
+                }
+
                 axios.patch(`/api/cart/${product.product_id}`, {quantity: product.quantity})
                     .then(response => {
                         this.$store.commit('setCart', response.data.data);
                         this.cart = response.data.data;
-                        this.cartQty = this.getCartQuantityForCurrentProduct();
                     })
                     .catch((error) => {
                         this.productErrors[product.product_id] = error.response.data.message;
