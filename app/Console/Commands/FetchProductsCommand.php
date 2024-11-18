@@ -184,7 +184,7 @@ class FetchProductsCommand extends Command
                 $product
                     ->addMediaFromUrl($attachment)
                     ->withCustomProperties(['name' => $name])
-                    ->toMediaCollection($id === 0 ? Media::COLLECTION_MAIN->value : Media::COLLECTION_ADDITIONAL->value);
+                    ->toMediaCollection(Media::COLLECTION_IMAGES->value);
 
                 $this->info('Attachment ' . $name . ' has been added to product ' . $product->name);
             } catch (Throwable $exception) {
@@ -211,8 +211,8 @@ class FetchProductsCommand extends Command
             $mediaNames[] = $media->getCustomProperty('name');
         }
 
-        if ($product->refresh()->getFirstMedia(Media::COLLECTION_MAIN->value) === null) {
-            $product->getFirstMedia()?->update(['collection_name' => Media::COLLECTION_MAIN->value]);
+        if ($product->refresh()->getFirstMedia(Media::COLLECTION_IMAGES->value) === null) {
+            $product->getFirstMedia()?->update(['collection_name' => Media::COLLECTION_IMAGES->value]);
         }
     }
 }

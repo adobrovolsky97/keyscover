@@ -17,7 +17,7 @@ class SimplifiedProductResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
-        $image = $this->getFirstMediaUrl(Media::COLLECTION_MAIN->value, 'watermarked');
+        $image = $this->getFirstMediaUrl(Media::COLLECTION_IMAGES->value, 'watermarked');
 
         return [
             'id'                    => $this->id,
@@ -30,7 +30,7 @@ class SimplifiedProductResource extends JsonResource
             'is_hidden'             => $this->is_hidden,
             'left_in_stock'         => $this->left_in_stock,
             'image'                 => empty($image) ? asset('no-image.png') : $image,
-            'media'                 => $this->whenLoaded('media', MediaResource::collection($this->media->sortByDesc('collection_name'))),
+            'media'                 => $this->whenLoaded('media', MediaResource::collection($this->getMedia(Media::COLLECTION_IMAGES->value))),
             'category'              => [
                 'id'          => $this->category?->id,
                 'name'        => $this->category?->name,

@@ -604,7 +604,7 @@
                                                                             <td align="center"
                                                                                 style="padding:0;Margin:0;font-size:0px">
                                                                                 @php
-                                                                                    $image = $orderProduct->product->getFirstMediaUrl(Media::COLLECTION_MAIN->value, 'watermarked');
+                                                                                    $image = $orderProduct->product->getFirstMediaUrl(Media::COLLECTION_IMAGES->value, 'watermarked');
                                                                                     $image = empty($image) ? asset('no-image.png') : $image
                                                                                 @endphp
                                                                                 <img class="adapt-img"

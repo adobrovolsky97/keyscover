@@ -21,7 +21,7 @@ class ProductResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $image = $this->getFirstMediaUrl(Media::COLLECTION_MAIN->value, 'watermarked');
+        $image = $this->getFirstMediaUrl(Media::COLLECTION_IMAGES->value, 'watermarked');
 
         $fieldsToRender = ['Тип', 'Лезо', 'Кількість кнопок', 'Логотип', 'Частота'];
 
@@ -50,13 +50,14 @@ class ProductResource extends JsonResource
             'related_products'      => SimplifiedProductResource::collection($this->relatedProducts),
             'similar_products'      => SimplifiedProductResource::collection($this->similarProducts),
             'image'                 => empty($image) ? asset('no-image.png') : $image,
-            'media'                 => $this->whenLoaded('media', MediaResource::collection($this->media->sortByDesc('collection_name'))),
+            'media'                 => $this->whenLoaded('media', MediaResource::collection($this->getMedia(Media::COLLECTION_IMAGES->value))),
             'category'              => [
                 'id'          => $this->category?->id,
                 'name'        => $this->category?->name,
                 'breadcrumbs' => $this->category?->breadcrumbs
             ],
-            'custom_fields'         => $customFields
+            'custom_fields'         => $customFields,
+            'cart_increment_step'   => $this->cart_increment_step,
         ];
     }
 }

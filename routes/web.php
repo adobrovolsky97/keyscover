@@ -28,7 +28,7 @@ Route::get('/{any}', function (Request $request) {
         $product = Product::query()->whereKey($productId)->first();
 
         if (!empty($product)) {
-            $image = $product->getFirstMediaUrl(Media::COLLECTION_MAIN->value, 'watermarked');
+            $image = $product->getFirstMediaUrl(Media::COLLECTION_IMAGES->value, 'watermarked');
             $ogMeta = [
                 'title'       => $product->name,
                 'description' => $product->description ?? $defaultDescription,

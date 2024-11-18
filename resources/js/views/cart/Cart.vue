@@ -43,7 +43,9 @@
                             </div>
                             <div class="flex flex-row justify-between items-center gap-1 mb-4 xl:mb-0 xl:mr-4">
                                 <div class="join">
-                                    <button @click="decrementQuantity(product)"
+                                    <button
+                                        :disabled="product.quantity <= product.cart_increment_step"
+                                        @click="decrementQuantity(product)"
                                             class="btn btn-success text-white join-item btn-md rounded-l-full">
                                         -
                                     </button>
@@ -176,7 +178,7 @@ export default {
         incrementQuantity(product) {
 
             this.productErrors = {};
-            axios.patch(`/api/cart/${product.product_id}`, {quantity: product.quantity + 1})
+            axios.patch(`/api/cart/${product.product_id}`, {quantity: (parseInt(product.quantity) + parseInt(product.cart_increment_step))})
                 .then(response => {
                     this.$store.commit('setCart', response.data.data);
                 })
@@ -185,13 +187,13 @@ export default {
                 })
         },
         decrementQuantity(product) {
-            if (product.quantity <= 1) {
+            if (product.quantity <= product.cart_increment_step) {
                 return;
             }
 
             this.productErrors = {};
 
-            axios.patch(`/api/cart/${product.product_id}`, {quantity: product.quantity - 1})
+            axios.patch(`/api/cart/${product.product_id}`, {quantity: (parseInt(product.quantity) - parseInt(product.cart_increment_step))})
                 .then(response => {
                     this.$store.commit('setCart', response.data.data);
                 })
@@ -209,6 +211,15 @@ export default {
             }
         },
         updateProductQuantity(product) {
+
+            if (product.quantity < product.cart_increment_step) {
+                product.quantity = product.cart_increment_step;
+            }
+
+            if (product.quantity % product.cart_increment_step !== 0) {
+                product.quantity = parseInt(product.quantity) +  parseInt(product.cart_increment_step - (product.quantity % product.cart_increment_step));
+            }
+
             this.productErrors = {};
             clearTimeout(this.timer);
             this.timer = setTimeout(() => {

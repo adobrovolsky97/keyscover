@@ -122,7 +122,7 @@ class LoadDumpCommand extends Command
                 }
 
                 $this->info('Loading media ' . $media);
-                $collection = explode('-', $media)[0] ?? \App\Enums\Product\Media::COLLECTION_MAIN->value;
+                $collection = \App\Enums\Product\Media::COLLECTION_IMAGES->value;
                 $productModel->addMediaFromDisk($fullPath, 'public')->toMediaCollection($collection);
                 Storage::disk('public')->delete($fullPath);
             }

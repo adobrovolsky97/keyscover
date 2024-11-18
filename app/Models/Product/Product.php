@@ -35,6 +35,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property array $custom_fields
  * @property boolean $is_available_in_stock
  * @property integer $left_in_stock
+ * @property integer $cart_increment_step
  * @property Carbon $last_sync_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -63,6 +64,7 @@ class Product extends BaseModel implements HasMedia
         'is_stop_crm_update',
         'last_sync_at',
         'description',
+        'cart_increment_step',
         'created_at',
         'updated_at'
     ];
@@ -109,8 +111,7 @@ class Product extends BaseModel implements HasMedia
      */
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection(Media::COLLECTION_MAIN->name);
-        $this->addMediaCollection(Media::COLLECTION_ADDITIONAL->name);
+        $this->addMediaCollection(Media::COLLECTION_IMAGES->name);
     }
 
     /**

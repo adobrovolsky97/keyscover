@@ -179,9 +179,17 @@ const fetchProduct = async () => {
         });
 };
 
+const couldBeIncremented = () => {
+    return product.value.left_in_stock >= cartQty.value + product.value.cart_increment_step;
+};
+
+const couldBeDecremented = ()  => {
+    return cartQty.value > product.value.cart_increment_step;
+};
+
 const getCartQuantityForCurrentProduct = () => {
     if (!product.value) {
-        return 1;
+        return product.cart_increment_step;
     }
 
     let cartItem = cart.value?.products?.find(item => item.product_id === product.value.id);
@@ -215,8 +223,8 @@ const addItemToCart = (product) => {
 };
 
 const incrementQuantity = () => {
-    if (product.value.left_in_stock > cartQty.value) {
-        cartQty.value++;
+    if (couldBeIncremented()) {
+        cartQty.value+= product.value.cart_increment_step;
     } else {
         cartQty.value = product.value.left_in_stock;
         productErrors.value[product.value.id] = "В наявності: " + product.value.left_in_stock + " шт.";
@@ -224,14 +232,24 @@ const incrementQuantity = () => {
 };
 
 const decrementQuantity = () => {
-    if (cartQty.value <= 1) {
+    if (!couldBeDecremented()) {
         return;
     }
 
-    cartQty.value--;
+    cartQty.value-= product.value.cart_increment_step;
 };
 
 const updateProductQuantity = () => {
+
+    if (cartQty.value < product.value.cart_increment_step) {
+        cartQty.value = product.value.cart_increment_step;
+    }
+
+    if (cartQty.value % product.value.cart_increment_step !== 0) {
+        cartQty.value = parseInt(cartQty.value) +  parseInt(product.value.cart_increment_step - (cartQty.value % product.value.cart_increment_step));
+    }
+
+
     if (product.value.left_in_stock < cartQty.value) {
         cartQty.value = product.value.left_in_stock;
         toast.error("Недостатня кількість товарів на складі. Залишок: " + product.value.left_in_stock + " штук.", {

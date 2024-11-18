@@ -44,7 +44,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
                 };
             })
             ->when(!empty($searchParams['only_available']), function (Builder $query) use ($searchParams) {
-                $query->where('left_in_stock', '>', 0);
+                $query->whereRaw('left_in_stock >= cart_increment_step');
             })
             ->when(!empty($searchParams['exclude_hidden']), function (Builder $query) use ($searchParams) {
                 $query->where('is_hidden', false);

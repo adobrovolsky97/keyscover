@@ -63,7 +63,7 @@ class CartService extends BaseCrudService implements CartServiceInterface
         }
 
         !empty($cartProduct)
-            ? $cartProduct->update(['quantity' => $cartProduct->quantity + 1])
+            ? $cartProduct->update(['quantity' => $cartProduct->quantity + $cartProduct->product->cart_increment_step])
             : $cart->products()->create([
             'product_id' => $product->id,
             'quantity'   => $quantity,
@@ -84,12 +84,16 @@ class CartService extends BaseCrudService implements CartServiceInterface
      */
     public function updateQuantity(Product $product, int $quantity): Cart
     {
-        if ($quantity < 1) {
+        if ($quantity < $product->cart_increment_step) {
             throw new Exception('Quantity must be greater than 0');
         }
 
         if (empty($cart = $this->getUserCart(false))) {
             throw new Exception('Cart is empty');
+        }
+
+        if($quantity % $product->cart_increment_step !== 0) {
+            throw new BadRequestHttpException('Кількість товару повинна бути кратно ' . $product->cart_increment_step);
         }
 
         /** @var CartProduct $cartProduct */
@@ -192,13 +196,13 @@ class CartService extends BaseCrudService implements CartServiceInterface
         $isChangedCart = false;
 
         foreach ($cart->products as $cartProduct) {
-            if ($cartProduct->quantity > $cartProduct->product->left_in_stock && $cartProduct->product->left_in_stock > 0) {
+            if ($cartProduct->quantity > $cartProduct->product->left_in_stock && $cartProduct->product->left_in_stock >= $cartProduct->product->cart_increment_step) {
                 $cartProduct->update(['quantity' => $cartProduct->product->left_in_stock]);
                 $isChangedCart = true;
                 continue;
             }
 
-            if ($cartProduct->quantity > $cartProduct->product->left_in_stock && $cartProduct->product->left_in_stock === 0) {
+            if ($cartProduct->quantity > $cartProduct->product->left_in_stock && $cartProduct->product->left_in_stock < $cartProduct->product->cart_increment_step) {
                 $cartProduct->delete();
                 $isChangedCart = true;
             }

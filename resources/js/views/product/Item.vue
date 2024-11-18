@@ -43,14 +43,14 @@
                 <div class="flex flex-col items-center justify-center mb-2 relative">
                     <div class="flex flex-row justify-between items-center gap-1 mb-0 md:mb-0">
                         <div class="join">
-                            <button :disabled="product.left_in_stock <= 0" @click="decrementQuantity"
+                            <button :disabled="!couldBeDecremented()" @click="decrementQuantity"
                                     class="btn btn-neutral join-item btn-sm lg:btn-md" :class="{'!btn-xs': minified}">
                                 -
                             </button>
-                            <input :disabled="product.left_in_stock <= 0"
+                            <input :disabled="product.left_in_stock <= product.cart_increment_step"
                                    class="input input-bordered text-center input-sm lg:input-md join-item w-16 focus:outline-none"
                                    placeholder="" v-model="cartQty" :class="{'!input-xs': minified}"/>
-                            <button :disabled="product.left_in_stock <= cartQty" @click="incrementQuantity"
+                            <button :disabled="!couldBeIncremented()" @click="incrementQuantity"
                                     class="btn btn-neutral join-item btn-sm lg:btn-md" :class="{'!btn-xs': minified}">
                                 +
                             </button>
@@ -61,16 +61,16 @@
                         }} шт.</span>
                 </div>
 
-                <button v-if="!cartProduct && product.left_in_stock > 0" @click="addItemToCart(product)"
+                <button v-if="!cartProduct && product.left_in_stock >= product.cart_increment_step" @click="addItemToCart(product)"
                         class="btn btn-neutral btn-block btn-sm lg:btn-md" :class="{'!btn-xs': minified}">
                     Додати до кошика
                 </button>
 
-                <button v-if="!cartProduct && product.left_in_stock <= 0" disabled
+                <button v-if="!cartProduct && product.left_in_stock < product.cart_increment_step" disabled
                         class="btn btn-neutral btn-block btn-sm lg:btn-md" :class="{'!btn-xs': minified}">
                     Немає в наявності
                 </button>
-                <button v-if="cartProduct && product.left_in_stock > 0" @click="updateProductQuantity"
+                <button v-if="cartProduct && product.left_in_stock >= product.cart_increment_step" @click="updateProductQuantity"
                         class="btn btn-success btn-block btn-sm lg:btn-md text-white" :class="{'!btn-xs': minified}">
                     Оновити кількість
                 </button>
@@ -81,26 +81,26 @@
                 <div class="flex flex-row justify-between items-center gap-1">
                     <div class="flex flex-row justify-between items-center gap-1 mb-0 md:mb-0">
                         <div class="join">
-                            <button :disabled="product.left_in_stock <= 0" @click="decrementQuantity"
+                            <button :disabled="!couldBeDecremented()" @click="decrementQuantity"
                                     class="btn btn-neutral join-item btn-sm lg:btn-md" :class="{'btn-sm lg:!btn-xs': minified}">
                                 -
                             </button>
-                            <input :disabled="product.left_in_stock <= 0"
+                            <input :disabled="product.left_in_stock <= product.cart_increment_step"
                                    class="input input-bordered text-center input-sm lg:input-md join-item"
                                    placeholder="" v-model="cartQty" :class="{'input-sm lg:!input-xs w-12 lg:w-8': minified}"/>
-                            <button :disabled="product.left_in_stock <= cartQty" @click="incrementQuantity"
+                            <button :disabled="!couldBeIncremented()" @click="incrementQuantity"
                                     class="btn btn-neutral join-item btn-sm lg:btn-md" :class="{'btn-sm lg:!btn-xs': minified}">
                                 +
                             </button>
                         </div>
                     </div>
 
-                    <button v-if="!cartProduct && product.left_in_stock > 0" @click="addItemToCart(product)"
+                    <button v-if="!cartProduct && product.left_in_stock >= product.cart_increment_step" @click="addItemToCart(product)"
                             class="btn btn-neutral btn-sm lg:btn-md" :class="{'btn-sm lg:!btn-xs': minified}">
                         Додати
                     </button>
 
-                    <button v-if="!cartProduct && product.left_in_stock <= 0" disabled
+                    <button v-if="!cartProduct && product.left_in_stock <= product.cart_increment_step" disabled
                             class="btn btn-neutral btn-sm lg:btn-md" :class="{'btn-sm lg:!btn-xs': minified}">
                         Немає
                     </button>
@@ -143,7 +143,7 @@ export default {
         return {
             productErrors: {},
             cart: this.$store.state.cart,
-            cartQty: 0,
+            cartQty: 1,
             cartProduct: null,
             fallbackImage: '../../../../public/no-image.png',
             loading: true,
@@ -167,11 +167,11 @@ export default {
         getCartQuantityForCurrentProduct() {
             let cartItem = this.cart?.products?.find(item => item.product_id === this.product.id);
             this.cartProduct = cartItem ? cartItem : null;
-            return cartItem ? cartItem.quantity : 1;
+            return cartItem ? cartItem.quantity : this.product.cart_increment_step;
         },
         addItemToCart(product) {
 
-            if (this.cartQty < 1) {
+            if (this.cartQty < this.product.cart_increment_step) {
                 toast.error("Невірна кількість товару", {
                     position: 'bottom-right'
                 })
@@ -196,21 +196,34 @@ export default {
         },
         incrementQuantity() {
 
-            if (this.product.left_in_stock > this.cartQty) {
-                this.cartQty++;
+            if (this.couldBeIncremented()) {
+                this.cartQty+= this.product.cart_increment_step;
             } else {
                 this.cartQty = this.product.left_in_stock;
                 this.productErrors[this.product.id] = "В наявності: " + this.product.left_in_stock + " шт.";
             }
         },
         decrementQuantity() {
-            if (this.cartQty <= 1) {
+            if (!this.couldBeDecremented()) {
                 return;
             }
 
-            this.cartQty--;
+            this.cartQty-= this.product.cart_increment_step;
+        },
+        couldBeIncremented() {
+            return this.product.left_in_stock >= this.cartQty + this.product.cart_increment_step;
+        },
+        couldBeDecremented() {
+            return this.cartQty > this.product.cart_increment_step;
         },
         updateProductQuantity() {
+            if (this.cartQty < this.product.cart_increment_step) {
+                this.cartQty = this.product.cart_increment_step;
+            }
+
+            if (this.cartQty % this.product.cart_increment_step !== 0) {
+                this.cartQty = parseInt(this.cartQty) +  parseInt(this.product.cart_increment_step - (this.cartQty % this.product.cart_increment_step));
+            }
 
             if (this.product.left_in_stock < this.cartQty) {
                 this.cartQty = this.product.left_in_stock;
