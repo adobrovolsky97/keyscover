@@ -5,6 +5,9 @@ namespace App\Jobs;
 use App\Enums\Export\Status;
 use App\Exports\User\UserExport;
 use App\Models\Export\Export;
+use App\Models\Order\Order;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -38,15 +41,13 @@ class ExportJob implements ShouldQueue
     public function handle(): void
     {
         try {
-            $fileName = $this->export->name . '_' . now()->format('Y-m-d H:i:s') . '.xlsx';
-
             if (!Storage::disk('public')->exists('exports')) {
                 Storage::disk('public')->makeDirectory('exports');
             }
 
-            Excel::store(new UserExport(), "exports/$fileName", 'public');
+            $this->processExport();
 
-            $this->export->update(['status' => Status::COMPLETED, 'file_path' => "exports/$fileName"]);
+            $this->export->update(['status' => Status::COMPLETED, 'file_path' => "exports/{$this->export->name}"]);
 
         } catch (Throwable $exception) {
             $this->export->update([
@@ -54,5 +55,28 @@ class ExportJob implements ShouldQueue
                 'status' => Status::FAILED
             ]);
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function processExport(): void
+    {
+        if ($this->export->type === Export::TYPE_USERS) {
+            Excel::store(new UserExport(), "exports/{$this->export->name}", 'public');
+            return;
+        }
+
+        if(empty($this->export->params['order_id'])){
+            throw new Exception('Order ID is required');
+        }
+
+        $order = Order::findOrFail($this->export->params['order_id']);
+
+        $pdf = PDF::loadView('pdf.order', ['order' => $order])
+            ->setPaper('a4')
+            ->setOptions(['isHtml5ParserEnabled' => true, 'isPhpEnabled' => true]);
+
+        $pdf->save(Storage::disk('public')->path("exports/{$this->export->name}"));
     }
 }

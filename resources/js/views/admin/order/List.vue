@@ -43,7 +43,8 @@
                     <td>{{ order.created_at }}</td>
                     <td>
                         <span v-if="order.is_crm_synced" class="badge badge-sm badge-success text-white">Так</span>
-                        <span v-else class="badge badge-error badge-sm whitespace-nowrap text-white" @click="syncOrder">Ні, синхронізувати</span>
+                        <span v-else class="badge cursor-pointer badge-error badge-sm whitespace-nowrap text-white"
+                              @click="syncOrder(order)">Ні, синхронізувати</span>
                     </td>
                     <td>
                         <button class="btn btn-xs btn-success text-white" @click="showOrder(order)">
@@ -63,18 +64,41 @@
                 <form method="dialog">
                     <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                 </form>
-                <h3 class="text-lg font-bold">Замовлення {{activeOrder.number}}</h3>
+                <div class="flex flex-row justify-between items-start">
+                    <h3 class="text-lg font-bold">Замовлення {{ activeOrder.number }}</h3>
+                    <svg class="h-8 w-8 cursor-pointer text-green-700 float-right mr-4" @click="exportAndDownloadOrder(activeOrder)" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                         stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z"/>
+                        <path d="M14 3v4a1 1 0 0 0 1 1h4"/>
+                        <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/>
+                        <line x1="12" y1="11" x2="12" y2="17"/>
+                        <polyline points="9 14 12 17 15 14"/>
+                    </svg>
+                </div>
 
                 <div class="client-data flex flex-col justify-start items-start">
-                    <span><span class="font-bold">ПІБ</span>: {{ activeOrder.surname }} {{ activeOrder.name }} {{ activeOrder.patronymic }}</span>
+                    <span><span class="font-bold">ПІБ</span>: {{ activeOrder.surname }} {{
+                            activeOrder.name
+                        }} {{ activeOrder.patronymic }}</span>
                     <span><span class="font-bold">Телефон</span>: {{ activeOrder.phone }}</span>
-                    <span><span class="font-bold">Спосіб доставки</span>: {{ activeOrder.delivery_type === 'new-post' ? 'Нова Пошта' : 'Самовивіз' }}</span>
-                    <span><span class="font-bold">Спосіб оплати</span>: {{ activeOrder.payment_type === 'by_requisites' ? 'Оплата за реквізитами' : 'Розрахунок на пошті при отриманні' }}</span>
+                    <span><span class="font-bold">Спосіб доставки</span>: {{
+                            activeOrder.delivery_type === 'new-post' ? 'Нова Пошта' : 'Самовивіз'
+                        }}</span>
+                    <span><span class="font-bold">Спосіб оплати</span>: {{
+                            activeOrder.payment_type === 'by_requisites' ? 'Оплата за реквізитами' : 'Розрахунок на пошті при отриманні'
+                        }}</span>
                     <span v-if="activeOrder.city_name"><span class="font-bold">Місто</span>: {{ activeOrder.city_name }}</span>
-                    <span v-if="activeOrder.warehouse_name"><span class="font-bold">Відділення</span>: {{ activeOrder.warehouse_name }}</span>
-                    <span><span class="font-bold">Вартість</span>: {{ activeOrder.total_price_usd }} $ / {{ activeOrder.total_price_uah }} грн.</span>
-                    <span v-if="activeOrder.discount_percent > 0"><span class="font-bold">Знижка ({{ activeOrder.discount_percent }}%)</span>: {{ activeOrder.discount_usd }} $ / {{activeOrder.discount_uah}} грн.</span>
-                    <span v-if="activeOrder.discount_percent > 0"><span class="font-bold">Вартість зі знижкою</span>: {{ activeOrder.total_with_discount_usd }} $ / {{ activeOrder.total_with_discount_uah}} грн.</span>
+                    <span v-if="activeOrder.warehouse_name"><span
+                        class="font-bold">Відділення</span>: {{ activeOrder.warehouse_name }}</span>
+                    <span><span class="font-bold">Вартість</span>: {{
+                            activeOrder.total_price_usd
+                        }} $ / {{ activeOrder.total_price_uah }} грн.</span>
+                    <span v-if="activeOrder.discount_percent > 0"><span class="font-bold">Знижка ({{
+                            activeOrder.discount_percent
+                        }}%)</span>: {{ activeOrder.discount_usd }} $ / {{ activeOrder.discount_uah }} грн.</span>
+                    <span v-if="activeOrder.discount_percent > 0"><span class="font-bold">Вартість зі знижкою</span>: {{
+                            activeOrder.total_with_discount_usd
+                        }} $ / {{ activeOrder.total_with_discount_uah }} грн.</span>
                     <span v-if="activeOrder.comment"><span class="font-bold">Коментар</span>: {{ activeOrder.comment }}</span>
                 </div>
                 <div class="products-list w-full overflow-x-auto">
@@ -99,12 +123,14 @@
                                     </div>
                                 </div>
                             </td>
-                            <td><span class="link cursor-pointer" @click="showProduct(product)">{{ product.product.name }}</span></td>
+                            <td><span class="link cursor-pointer" @click="showProduct(product)">{{
+                                    product.product.name
+                                }}</span></td>
                             <td class="text-gray-400">{{ product.product.sku }}</td>
-                            <td>{{product.product.usd_price}} $</td>
-                            <td>{{product.quantity}}</td>
-                            <td>{{product.total_price}} $</td>
-                            <td>{{product.total_price_uah}} грн.</td>
+                            <td>{{ product.product.usd_price }} $</td>
+                            <td>{{ product.quantity }}</td>
+                            <td>{{ product.total_price }} $</td>
+                            <td>{{ product.total_price_uah }} грн.</td>
                         </tr>
                         </tbody>
                     </table>
@@ -130,6 +156,7 @@ import TableSkeleton from "../../../components/skeleton/TableSkeleton.vue";
 import RouteHelper from "../../../helpers/Route/RouteHelper.js";
 import {toast} from "vue3-toastify";
 import {useHead} from "@vueuse/head";
+import axios from "axios";
 
 export default {
     setup() {
@@ -194,12 +221,17 @@ export default {
             // open in new tab
             const url = this.$router.resolve({
                 name: 'product.show',
-                params: { id: product.product.id }
+                params: {id: product.product.id}
             }).href;
 
             window.open(url, '_blank');
         },
         syncOrder(order) {
+
+            if (this.isSyncPending) {
+                return;
+            }
+
             this.isSyncPending = true;
 
             axios.post(`/api/orders/${order.id}/sync`)
@@ -210,7 +242,32 @@ export default {
                 })
                 .catch(error => {
                     this.isSyncPending = false;
-                    toast.error('Помилка синхронізації замовлення');
+                    toast.error(error?.response?.data?.message ?? 'Помилка синхронізації замовлення');
+                });
+        },
+        exportAndDownloadOrder(order) {
+            if (this.isExportDisabled) {
+                return;
+            }
+
+            this.isExportDisabled = true;
+
+            axios.get(`/api/export`, {
+                params: {
+                    name: `Замовлення_#${order.number}.pdf`,
+                    type: 'orders',
+                    params: {
+                        order_id: order.id
+                    }
+                }
+            })
+                .then(response => {
+                    this.isExportDisabled = false;
+                    toast.success('Замовлення успішно експортовано');
+                })
+                .catch(error => {
+                    this.isExportDisabled = false;
+                    toast.error(error?.response?.data?.message ?? 'Помилка експорту замовлення');
                 });
         },
         fetchOrders() {

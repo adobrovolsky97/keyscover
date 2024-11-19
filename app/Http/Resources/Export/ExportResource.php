@@ -17,7 +17,7 @@ class ExportResource extends JsonResource
     {
         return [
             'id'         => $this->id,
-            'name'       => $this->name.'.xlsx',
+            'name'       => $this->name,
             'status'     => $this->status,
             'error'      => $this->error,
             'created_at' => $this->created_at?->format('Y-m-d H:i:s'),

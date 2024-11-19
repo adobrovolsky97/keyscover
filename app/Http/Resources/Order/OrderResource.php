@@ -42,7 +42,8 @@ class OrderResource extends JsonResource
             'total_with_discount_uah' => round($this->total_price_uah - $this->discount_uah),
             'total_with_discount_usd' => round($this->total_price_usd - $this->discount_usd, 2),
             'created_at'              => $this->created_at?->format('d.m.Y H:i:s'),
-            'products'                => OrderProductResource::collection($this->products)
+            'products'                => OrderProductResource::collection($this->products),
+            'is_crm_synced'           => $this->is_crm_synced,
         ];
     }
 }

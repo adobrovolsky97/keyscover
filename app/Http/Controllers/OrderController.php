@@ -15,6 +15,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
 use Mail;
 use Notification;
+use Throwable;
 
 /**
  * Class OrderController
@@ -67,5 +68,23 @@ class OrderController extends Controller
         }
 
         return response()->json();
+    }
+
+    /**
+     * @param Order $order
+     * @return JsonResponse
+     */
+    public function syncOrderToCrm(Order $order): JsonResponse
+    {
+        if ($order->is_crm_synced) {
+            abort(404);
+        }
+
+        try {
+            SendOrderToCrmJob::dispatchSync($order);
+            return response()->json();
+        } catch (Throwable $exception) {
+            return response()->json(['message' => $exception->getMessage()], 500);
+        }
     }
 }

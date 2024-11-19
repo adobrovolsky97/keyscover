@@ -3,9 +3,11 @@
 namespace App\Services\Crm;
 
 use App\Models\Order\Order;
+use App\Notifications\OrderSyncFailedNotification;
 use App\Services\Crm\Contracts\CrmServiceInterface;
 use Exception;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Notification;
 
 /**
  * Class CrmService
@@ -70,6 +72,14 @@ class CrmService implements CrmServiceInterface
      */
     public function createOrder(Order $order): void
     {
+        if (app()->isLocal()) {
+            $order->update([
+                'is_crm_synced' => true,
+                'crm_order_id'  => rand(6666, 9999)
+            ]);
+            return;
+        }
+
         $customFieldsData = [
             [
                 'name'  => 'Номер телефону з сайту',
@@ -138,6 +148,9 @@ class CrmService implements CrmServiceInterface
             $order->update([
                 'sync_error' => $response->json()
             ]);
+
+            // Send error notification to admin
+            Notification::route('telegram', config('services.telegram-bot-api.recipient'))->notify(new OrderSyncFailedNotification($order));
         });
 
         if (!empty($response->json('id'))) {

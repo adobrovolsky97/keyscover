@@ -75,6 +75,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::group(['prefix' => 'orders'], function () {
         Route::get('', [OrderController::class, 'index']);
         Route::post('', [OrderController::class, 'store']);
+        Route::post('{order}/sync', [OrderController::class, 'syncOrderToCrm']);
     });
 });
 

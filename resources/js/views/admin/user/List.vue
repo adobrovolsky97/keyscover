@@ -129,7 +129,7 @@ export default {
         },
         exportUsers() {
             this.isExportDisabled = true;
-            axios.get('/api/export', {params: {name: 'Users'}})
+            axios.get('/api/export', {params: {name: 'Users.xlsx', type: 'users'}})
                 .then(response => {
                     toast.success("Експорт запущено, згодом він з'явиься на сторінці з експортами і буде доступним до завантаження", {
                         timeout: 10000,
