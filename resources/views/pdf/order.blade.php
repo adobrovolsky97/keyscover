@@ -15,7 +15,7 @@
         @endif
         <p><b>Отримувач:</b> {{$order->full_name}}</p>
     </div>
-    <table style="border: 1px solid black">
+    <table style="border: 1px solid black; width: 100%">
         <thead>
         <tr>
             <th>Фото</th>
