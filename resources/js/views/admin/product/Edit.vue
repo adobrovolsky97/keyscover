@@ -2,12 +2,17 @@
     <div v-if="isProductLoaded" class="border rounded-2xl shadow-xl p-4">
         <div class="flex flex-row justify-between items-center">
             <h3 class="font-bold text-lg mb-4">Оновлення товару</h3>
-            <router-link
-                :to="{ name: 'product.show', params: { id: product.id } }"
-                class="font-bold product-name hover:text-gray-400 cursor-pointer overflow-x-auto"
-            >
-                <button class="btn btn-success btn-outline">Показати на сайті</button>
-            </router-link>
+           <div>
+               <button :disabled="isLoading" class="btn btn-success self-end text-white" @click="updateProduct">
+                   Зберегти
+               </button>
+               <router-link
+                   :to="{ name: 'product.show', params: { id: product.id } }"
+                   class="font-bold ml-2 product-name hover:text-gray-400 cursor-pointer overflow-x-auto"
+               >
+                   <button class="btn btn-success btn-outline">Показати на сайті</button>
+               </router-link>
+           </div>
         </div>
         <div class="form">
             <div class="images">

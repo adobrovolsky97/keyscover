@@ -13,7 +13,9 @@
                         <p class="text-lg">
                             {{ product.category.breadcrumbs }}
                             <br>
-                            <span class="text-gray-400 hover:font-bold hover:text-black cursor-pointer">Арт.: {{ product.sku }}</span>
+                            <span class="text-gray-400 hover:font-bold hover:text-black cursor-pointer">
+                                <span @click="copyToClipboard(product.sku)">Арт. {{ product.sku }}</span>
+                            </span>
                             <br>
                             <span class="text-error font-bold text-2xl">{{ product.usd_price }} $ / {{ product.price }} грн.</span>
                         </p>
@@ -102,11 +104,12 @@ import Carousel from "./Carousel.vue";
 import RelatedProducts from "./RelatedProducts.vue";
 import 'md-editor-v3/lib/preview.css';
 import {MdPreview} from "md-editor-v3";
-import {computed, ref, watchEffect} from "vue";
+import {computed, ref, watch, watchEffect} from "vue";
 import store from "../../store.js";
 import {onMounted} from "vue";
 import {useRoute} from "vue-router";
 import {useHead} from "@vueuse/head";
+import CartHelper from "../../helpers/CartHelper.js";
 
 const isDataLoaded = ref(false);
 const product = ref(null);
@@ -144,6 +147,13 @@ const activeSimilarProducts = computed(() => {
 const parsedDescription = computed(() => {
     return marked(product.value.description || '');
 });
+
+const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+        toast.success('Артикул скопійовано');
+    }).catch(err => {
+    });
+};
 
 const fetchProduct = async () => {
     axios.get('/api/products/' + route.params.id)
@@ -202,22 +212,21 @@ watchEffect(() => {
     cartQty.value = getCartQuantityForCurrentProduct();
 });
 
+const timer = ref(null);
+
+watch(() => cartQty.value, () => {
+    if (timer.value) {
+        clearTimeout(timer.value);
+    }
+
+    timer.value = setTimeout(() => {
+        cartQty.value = CartHelper.updateCartQuantity(cartQty.value, product.value)
+    }, 500);
+});
+
 
 const addItemToCart = (product) => {
-    if (cartQty.value < product.cart_increment_step) {
-        toast.error("Невірна кількість товару", {
-            position: 'bottom-right'
-        })
-        return;
-    }
-
-    if (cartQty.value % product.cart_increment_step !== 0) {
-        cartQty.value = parseInt(cartQty.value) + parseInt(product.cart_increment_step - (cartQty.value % product.cart_increment_step));
-    }
-
-    if (product.left_in_stock <= cartQty.value) {
-        cartQty.value = product.left_in_stock - (product.left_in_stock % product.cart_increment_step);
-    }
+    cartQty.value = CartHelper.updateCartQuantity(cartQty.value, product)
 
     axios.post('/api/cart/' + product.id, {quantity: cartQty.value})
         .then((response) => {
@@ -250,13 +259,7 @@ const decrementQuantity = () => {
 
 const updateProductQuantity = () => {
 
-    if (cartQty.value < product.value.cart_increment_step) {
-        cartQty.value = product.value.cart_increment_step;
-    }
-
-    if (cartQty.value % product.value.cart_increment_step !== 0) {
-        cartQty.value = parseInt(cartQty.value) +  parseInt(product.value.cart_increment_step - (cartQty.value % product.value.cart_increment_step));
-    }
+    cartQty.value = CartHelper.updateCartQuantity(cartQty.value, product.value)
 
     if (product.value.left_in_stock <= cartQty.value) {
         cartQty.value = product.value.left_in_stock - (product.value.left_in_stock % product.value.cart_increment_step);

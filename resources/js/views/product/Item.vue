@@ -17,8 +17,9 @@
         </svg>
         <div class="card-body p-2 lg:p-4" :class="{'!p-4 lg:!p-2': minified}">
 
-            <p v-if="!minified" class="text-xs text-gray-400 hover:font-bold cursor-pointer hover:text-black">Арт.
-                {{ product.sku }}</p>
+            <p v-if="!minified" class="text-xs text-gray-400 hover:font-bold cursor-pointer hover:text-black">
+                <span @click="copyToClipboard(product.sku)">Арт. {{ product.sku }}</span>
+            </p>
             <p v-if="!minified" class="text-xs text-gray-400">{{ product.category.breadcrumbs }}</p>
 
             <!-- Product name -->
@@ -125,6 +126,7 @@
 <script>
 import {toast} from "vue3-toastify";
 import Carousel from "./Carousel.vue";
+import CartHelper from "../../helpers/CartHelper.js";
 
 export default {
     name: 'Item',
@@ -155,6 +157,7 @@ export default {
             cartProduct: null,
             fallbackImage: '../../../../public/no-image.png',
             loading: true,
+            timer: null
         }
     },
     watch: {
@@ -162,6 +165,18 @@ export default {
             handler: function () {
                 this.cart = this.$store.state.cart;
                 this.cartQty = this.getCartQuantityForCurrentProduct();
+            },
+            deep: true
+        },
+        cartQty: {
+            handler: function () {
+                if (this.timer) {
+                    clearTimeout(this.timer);
+                }
+
+                this.timer = setTimeout(() => {
+                    this.cartQty = CartHelper.updateCartQuantity(this.cartQty, this.product)
+                }, 500);
             },
             deep: true
         }
@@ -177,22 +192,14 @@ export default {
             this.cartProduct = cartItem ? cartItem : null;
             return cartItem ? cartItem.quantity : this.product.cart_increment_step;
         },
+        copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                toast.success('Артикул скопійовано');
+            }).catch(err => {
+            });
+        },
         addItemToCart(product) {
-
-            if (this.cartQty < this.product.cart_increment_step) {
-                toast.error("Невірна кількість товару", {
-                    position: 'bottom-right'
-                })
-                return;
-            }
-
-            if (this.cartQty % this.product.cart_increment_step !== 0) {
-                this.cartQty = parseInt(this.cartQty) + parseInt(this.product.cart_increment_step - (this.cartQty % this.product.cart_increment_step));
-            }
-
-            if (product.left_in_stock <= this.cartQty) {
-                this.cartQty = product.left_in_stock - (product.left_in_stock % product.cart_increment_step);
-            }
+            this.cartQty = CartHelper.updateCartQuantity(this.cartQty, product)
 
             axios.post('/api/cart/' + product.id, {quantity: this.cartQty})
                 .then((response) => {
@@ -202,7 +209,10 @@ export default {
                     this.cartQty = this.getCartQuantityForCurrentProduct();
                 })
                 .catch((error) => {
-                    toast.error(error?.response?.data?.message ?? 'Помилка', {autoClose: 5000, position: 'bottom-right'});
+                    toast.error(error?.response?.data?.message ?? 'Помилка', {
+                        autoClose: 5000,
+                        position: 'bottom-right'
+                    });
                 });
         },
         incrementQuantity() {
@@ -228,13 +238,7 @@ export default {
             return this.cartQty > this.product.cart_increment_step;
         },
         updateProductQuantity() {
-            if (this.cartQty < this.product.cart_increment_step) {
-                this.cartQty = this.product.cart_increment_step;
-            }
-
-            if (this.cartQty % this.product.cart_increment_step !== 0) {
-                this.cartQty = parseInt(this.cartQty) + parseInt(this.product.cart_increment_step - (this.cartQty % this.product.cart_increment_step));
-            }
+            this.cartQty = CartHelper.updateCartQuantity(this.cartQty, this.product)
 
             if (this.product.left_in_stock <= this.cartQty) {
                 this.cartQty = this.product.left_in_stock - (this.product.left_in_stock % this.product.cart_increment_step);
@@ -248,7 +252,10 @@ export default {
                     toast.success("Кількість товару оновлено!", {autoClose: 5000, position: 'bottom-right'});
                 })
                 .catch(error => {
-                    toast.error(error?.response?.data?.message ?? 'Помилка', {autoClose: 5000, position: 'bottom-right'});
+                    toast.error(error?.response?.data?.message ?? 'Помилка', {
+                        autoClose: 5000,
+                        position: 'bottom-right'
+                    });
                 });
         },
         handleClick(event) {
@@ -270,10 +277,6 @@ export default {
         showProduct() {
             return this.$router.push({name: 'product.show', params: {id: this.product.id}});
         },
-        onImageError(event) {
-            event.target.src = this.fallbackImage;
-            this.loading = false;
-        }
     }
 }
 </script>
