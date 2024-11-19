@@ -52,7 +52,7 @@
                 </td>
                 <td><span class="link cursor-pointer">{{$orderProduct->product->name}}</span></td>
                 <td class="text-gray-400">{{ $orderProduct->product->sku }}</td>
-                <td>{{ $orderProduct->product->quantity }}</td>
+                <td>{{ $orderProduct->quantity }}</td>
             </tr>
 
         @endforeach
