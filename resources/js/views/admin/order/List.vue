@@ -20,6 +20,7 @@
                     <th>Вартість</th>
                     <th>Знижка</th>
                     <th>Створено</th>
+                    <th>Синхр.?</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -40,6 +41,10 @@
                     <td>{{ order.total_price_usd }}$ / {{ order.total_price_uah }} грн.</td>
                     <td>{{ order.discount_usd }}$ / {{ order.discount_uah }} грн.</td>
                     <td>{{ order.created_at }}</td>
+                    <td>
+                        <span v-if="order.is_crm_synced" class="badge badge-sm badge-success text-white">Так</span>
+                        <span v-else class="badge badge-error badge-sm whitespace-nowrap text-white" @click="syncOrder">Ні, синхронізувати</span>
+                    </td>
                     <td>
                         <button class="btn btn-xs btn-success text-white" @click="showOrder(order)">
                             Переглянути
@@ -141,7 +146,8 @@ export default {
             filters: {
                 page: 1,
             },
-            route: useRoute()
+            route: useRoute(),
+            isSyncPending: false
         }
     },
     components: {
@@ -192,6 +198,20 @@ export default {
             }).href;
 
             window.open(url, '_blank');
+        },
+        syncOrder(order) {
+            this.isSyncPending = true;
+
+            axios.post(`/api/orders/${order.id}/sync`)
+                .then(response => {
+                    this.isSyncPending = false;
+                    toast.success('Замовлення успішно синхронізовано');
+                    this.fetchOrders();
+                })
+                .catch(error => {
+                    this.isSyncPending = false;
+                    toast.error('Помилка синхронізації замовлення');
+                });
         },
         fetchOrders() {
             this.isDataLoaded = false;
