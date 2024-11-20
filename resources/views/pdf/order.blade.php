@@ -39,7 +39,7 @@
                                 }
 
                                 if (file_exists($image)) {
-                                    $img = Image::make($image)->resize(100, 100, function ($constraint) {
+                                    $img = Image::make($image)->resize(150, 150, function ($constraint) {
                                         $constraint->aspectRatio();
                                     })->encode('data-url');
                                 } else {
