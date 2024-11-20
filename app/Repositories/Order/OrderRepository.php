@@ -21,6 +21,7 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
     protected function applyFilters(array $searchParams = []): Builder
     {
         return parent::applyFilters($searchParams)
+            ->with(['products.product.category.parent'])
             ->when(!empty($searchParams['search']), function (Builder $query) use ($searchParams){
                 $query->where(function (Builder $query) use ($searchParams){
                     $lowerSearch = mb_strtolower($searchParams['search']);
