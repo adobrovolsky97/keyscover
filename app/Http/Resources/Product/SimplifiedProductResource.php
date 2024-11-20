@@ -29,6 +29,7 @@ class SimplifiedProductResource extends JsonResource
             'is_available_in_stock' => $this->is_available_in_stock,
             'is_hidden'             => $this->is_hidden,
             'left_in_stock'         => $this->left_in_stock,
+            'cart_increment_step'   => $this->cart_increment_step,
             'image'                 => empty($image) ? asset('no-image.png') : $image,
             'media'                 => $this->whenLoaded('media', MediaResource::collection($this->getMedia(Media::COLLECTION_IMAGES->value))),
             'category'              => [

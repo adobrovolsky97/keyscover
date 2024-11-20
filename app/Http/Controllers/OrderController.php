@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Role\Role;
+use App\Http\Requests\Order\SearchRequest;
 use App\Http\Requests\Order\StoreRequest;
 use App\Http\Resources\Order\OrderResource;
 use App\Jobs\SendOrderToCrmJob;
@@ -38,13 +39,18 @@ class OrderController extends Controller
     /**
      * Get orders list
      *
+     * @param SearchRequest $request
      * @return AnonymousResourceCollection
      */
-    public function index(): AnonymousResourceCollection
+    public function index(SearchRequest $request): AnonymousResourceCollection
     {
-        return OrderResource::collection($this->orderService->getAllPaginated(
-            Auth::user()->role === Role::ADMIN ? [] : ['user_id' => auth()->id()]
-        ));
+        $params = $request->validated();
+
+        if (Auth::user()->role !== Role::ADMIN) {
+            $params['user_id'] = auth()->id();
+        }
+
+        return OrderResource::collection($this->orderService->getAllPaginated($params));
     }
 
     /**

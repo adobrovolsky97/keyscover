@@ -22,14 +22,14 @@
             </p>
             <p v-if="!minified" class="text-xs text-gray-400">{{ product.category.breadcrumbs }}</p>
 
-            <!-- Product name -->
             <router-link
                 :to="{ name: 'product.show', params: { id: product.id } }"
                 @click="handleClick($event)"
-                class="font-bold lg:text-lg text-xs product-name hover:text-gray-400 cursor-pointer overflow-x-auto"
-                :class="{'!text-xs !overflow-hidden !text-ellipsis !whitespace-nowrap': minified}"
+                class="font-bold lg:text-lg text-xs product-name hover:text-gray-400 cursor-pointer text-start"
+                :data-tip="product.name"
+                :class="{'!text-xs': minified, 'tooltip': isTextTrimmed && !minified}"
             >
-                {{ product.name }}
+                <p ref="productName" class="w-full !whitespace-nowrap !overflow-hidden !text-ellipsis">{{ product.name }}</p>
             </router-link>
 
             <div class="flex flex-row justify-between items-center">
@@ -151,6 +151,7 @@ export default {
     },
     data() {
         return {
+            isTextTrimmed: false,
             productErrors: {},
             cart: this.$store.state.cart,
             cartQty: 1,
@@ -182,11 +183,19 @@ export default {
         }
     },
     mounted() {
+        this.checkIfTextTrimmed();
+
         if (this.$store.state.user !== null) {
             this.cartQty = this.getCartQuantityForCurrentProduct();
         }
     },
     methods: {
+        checkIfTextTrimmed() {
+            const productNameElement = this.$refs.productName;
+            if (productNameElement) {
+                this.isTextTrimmed = productNameElement.scrollWidth > productNameElement.clientWidth;
+            }
+        },
         getCartQuantityForCurrentProduct() {
             let cartItem = this.cart?.products?.find(item => item.product_id === this.product.id);
             this.cartProduct = cartItem ? cartItem : null;

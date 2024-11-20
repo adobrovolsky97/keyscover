@@ -5,6 +5,32 @@
             </h3>
         </div>
         <TableSkeleton v-if="!isDataLoaded"/>
+
+        <div>
+            <label class="input input-bordered text-sm input-sm md:input-md w-full flex items-center mb-2">
+                <input @input="delaySearch" v-model="search" type="text" class="grow"
+                       placeholder="Пошук"/>
+                <svg v-if="search !== ''" @click="clearSearch" class="h-5 w-5 cursor-pointer" width="24" height="24"
+                     viewBox="0 0 24 24" stroke-width="2"
+                     stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z"/>
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+                <svg
+                    v-else
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                    class="h-4 w-4 opacity-70">
+                    <path
+                        fill-rule="evenodd"
+                        d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                        clip-rule="evenodd"/>
+                </svg>
+            </label>
+        </div>
+
         <div class="overflow-x-auto" v-if="isDataLoaded && data.data.length">
             <table class="table">
                 <thead>
@@ -17,9 +43,21 @@
                     <th>Тип оплати</th>
                     <th>Місто</th>
                     <th>Відділення</th>
-                    <th>Вартість</th>
+                    <th>
+                        <span @click="toggleOrder('total_price_uah')" class="cursor-pointer link">
+                            Вартість <span
+                            v-if="filters.sort_by === 'total_price_uah' && filters.order_dir === 'asc'">↑</span>
+                             <span v-if="filters.sort_by === 'total_price_uah' && filters.order_dir === 'desc'">↓</span>
+                        </span>
+                    </th>
                     <th>Знижка</th>
-                    <th>Створено</th>
+                    <th>
+                        <span @click="toggleOrder('created_at')" class="cursor-pointer link">
+                            Створено <span
+                            v-if="filters.sort_by === 'created_at' && filters.order_dir === 'asc'">↑</span>
+                             <span v-if="filters.sort_by === 'created_at' && filters.order_dir === 'desc'">↓</span>
+                        </span>
+                    </th>
                     <th>Синхр.?</th>
                     <th></th>
                 </tr>
@@ -66,7 +104,9 @@
                 </form>
                 <div class="flex flex-row justify-between items-start">
                     <h3 class="text-lg font-bold">Замовлення {{ activeOrder.number }}</h3>
-                    <svg class="h-8 w-8 cursor-pointer text-green-700 float-right mr-4" @click="exportAndDownloadOrder(activeOrder)" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                    <svg class="h-8 w-8 cursor-pointer text-green-700 float-right mr-4"
+                         @click="exportAndDownloadOrder(activeOrder)" width="24" height="24" viewBox="0 0 24 24"
+                         stroke-width="2"
                          stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z"/>
                         <path d="M14 3v4a1 1 0 0 0 1 1h4"/>
@@ -170,8 +210,12 @@ export default {
             isExportDisabled: false,
             activeOrder: null,
             data: {},
+            search: '',
             filters: {
+                search: '',
                 page: 1,
+                sort_by: null,
+                order_dir: 'asc',
             },
             route: useRoute(),
             isSyncPending: false
@@ -204,11 +248,20 @@ export default {
         this.resolveQueryParams();
     },
     methods: {
+        delaySearch() {
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => {
+                this.filters.search = this.search;
+                this.filters.page = 1;
+            }, 800);
+        },
         updatePage(page) {
             this.filters.page = page;
         },
         resolveQueryParams() {
             this.filters = {...this.filters, ...this.route.query};
+
+            this.search = this.filters.search;
         },
         showOrder(order) {
             this.activeOrder = order;
@@ -216,6 +269,11 @@ export default {
                 const dialog = document.getElementById('order_modal');
                 dialog.showModal();
             });
+        },
+        toggleOrder(orderBy) {
+            this.filters.order_dir = this.filters.order_dir === 'asc' ? 'desc' : 'asc';
+            this.filters.sort_by = orderBy;
+            this.filters.page = 1;
         },
         showProduct(product) {
             // open in new tab
