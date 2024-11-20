@@ -39,14 +39,16 @@
                                 }
 
                                 if (file_exists($image)) {
-                                    $imageData = base64_encode(file_get_contents($image));
-                                    $mimeType = mime_content_type($image);
+                                    $img = Image::make($image)->resize(100, 100, function ($constraint) {
+                                        $constraint->aspectRatio();
+                                    })->encode('data-url');
                                 } else {
-                                    $imageData = base64_encode(file_get_contents(public_path('no-image.png')));
-                                    $mimeType = mime_content_type(public_path('no-image.png'));
+                                    $img = Image::make(public_path('no-image.png'))->resize(100, 100, function ($constraint) {
+                                        $constraint->aspectRatio();
+                                    })->encode('data-url');
                                 }
                             @endphp
-                            <img src="data:{{ $mimeType }};base64,{{ $imageData }}" width="100">
+                            <img src="{{ $img }}" width="100">
                         </div>
                     </div>
                 </td>
@@ -62,7 +64,7 @@
                         {{ $orderProduct->product->sku }}
                      </span>
                 </td>
-                <td>{{ $orderProduct->quantity }}</td>
+                <td>{{ $orderProduct->quantity }} шт.</td>
             </tr>
             @if(!$loop->last)
                 <tr>
