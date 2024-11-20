@@ -46,15 +46,31 @@
                                     $mimeType = mime_content_type(public_path('no-image.png'));
                                 }
                             @endphp
-                            <img src="data:{{ $mimeType }};base64,{{ $imageData }}" width="120">
+                            <img src="data:{{ $mimeType }};base64,{{ $imageData }}" width="100">
                         </div>
                     </div>
                 </td>
-                <td><span class="link cursor-pointer">{{$orderProduct->product->name}}</span></td>
-                <td class="text-gray-400">{{ $orderProduct->product->sku }}</td>
+                <td>
+                <span class="link cursor-pointer"
+                      style="display: inline-block; max-width: 250px; white-space: break-spaces; overflow: hidden; text-overflow: ellipsis;">
+                         {{$orderProduct->product->name}}
+                </span>
+                </td>
+                <td class="text-gray-400">
+                     <span class="link cursor-pointer"
+                           style="display: inline-block; max-width: 200px; white-space: break-spaces; overflow: hidden; text-overflow: ellipsis;">
+                        {{ $orderProduct->product->sku }}
+                     </span>
+                </td>
                 <td>{{ $orderProduct->quantity }}</td>
             </tr>
-
+            @if(!$loop->last)
+                <tr>
+                    <td colspan="4">
+                        <div style="border-bottom: 1px solid black; width: 100%;"></div>
+                    </td>
+                </tr>
+            @endif
         @endforeach
         </tbody>
     </table>
