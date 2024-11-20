@@ -214,8 +214,8 @@ export default {
             filters: {
                 search: '',
                 page: 1,
-                sort_by: null,
-                order_dir: 'asc',
+                sort_by: 'created_at',
+                order_dir: 'desc',
             },
             route: useRoute(),
             isSyncPending: false
