@@ -41,11 +41,11 @@
                                 if (file_exists($image)) {
                                     $img = Image::make($image)->resize(100, 100, function ($constraint) {
                                         $constraint->aspectRatio();
-                                    })->encode('data-url', 60);
+                                    })->encode('data-url', 70);
                                 } else {
                                     $img = Image::make(public_path('no-image.png'))->resize(100, 100, function ($constraint) {
                                         $constraint->aspectRatio();
-                                    })->encode('data-url', 60);
+                                    })->encode('data-url', 70);
                                 }
                             @endphp
                             <img src="{{ $img }}" width="100">
