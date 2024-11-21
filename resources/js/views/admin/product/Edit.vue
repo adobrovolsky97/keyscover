@@ -55,8 +55,13 @@
                         <div class="label">
                             <span class="label-text">SKU</span>
                         </div>
-                        <input type="text" disabled readonly placeholder="SKU" v-model="product.sku"
-                               class="input input-bordered w-full"/>
+                        <span class="join">
+                            <input type="text" disabled readonly placeholder="SKU" v-model="product.sku"
+                                   class="input input-bordered w-full join-item"/>
+                            <button  @click="copyToClipboard(product.sku)" class="btn btn-warning rounded-l-none">
+                                <svg class="h-6 w-6"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <rect x="8" y="8" width="12" height="12" rx="2" />  <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2" /></svg>
+                            </button>
+                        </span>
                     </label>
                     <label class="form-control w-full">
                         <div class="label">
@@ -226,6 +231,12 @@ export default {
             if (fileId !== null) {
                 this.product.images_to_remove.push(fileId);
             }
+        },
+        copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                toast.success('Артикул скопійовано');
+            }).catch(err => {
+            });
         },
         updateProduct() {
             this.isLoading = true;
