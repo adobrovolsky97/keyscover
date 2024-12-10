@@ -19,11 +19,11 @@
                 <tbody>
                 <!-- row 1 -->
                 <tr v-for="config in data" :key="config.id">
-                    <th>{{ config.key }}</th>
-                    <th>{{ config.type }}</th>
-                    <th>{{ config.value }}</th>
-                    <th>{{ config.description }}</th>
-                    <th>
+                    <td>{{ config.key }}</td>
+                    <td>{{ config.type }}</td>
+                    <td>{{ config.value }}</td>
+                    <td><span v-html="config.description"></span></td>
+                    <td>
                         <router-link
                             :to="{name: 'admin.configs.edit', params: {id: config.id}}"
                             class="btn btn-ghost"
@@ -34,7 +34,7 @@
                             </svg>
 
                         </router-link>
-                    </th>
+                    </td>
                 </tr>
                 </tbody>
             </table>
