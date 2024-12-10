@@ -94,7 +94,11 @@ class FetchProductsCommand extends Command
             ])
             : null;
 
-        $product = $this->productService->find(['external_id' => $productData['id']])->first();
+        $syncField = app(ConfigServiceInterface::class)->getValue(Key::SYNC_CRM_FIELD->value) ?? 'sku';
+
+        $fieldForCrm = $syncField === 'external_id' ? 'id' : 'sku';
+
+        $product = $this->productService->find([$syncField => $productData[$fieldForCrm]])->first();
 
         if ($product?->is_stop_crm_update) {
             $this->error('Product ' . $product->name . ' should skip update');
@@ -103,7 +107,7 @@ class FetchProductsCommand extends Command
 
         /** @var Product $product */
         $product = $this->productService->updateOrCreate(
-            ['sku' => $productData['sku']],
+            [$syncField => $productData[$fieldForCrm]],
             [
                 'external_id'           => $productData['id'],
                 'name'                  => $productData['title'],

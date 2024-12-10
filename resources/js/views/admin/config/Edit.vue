@@ -5,12 +5,25 @@
         </div>
         <div class="form">
             <div class="flex flex-col justify-between items-start gap-2">
-                <div class="form-control">
+
+                <div v-if="config?.type === 'boolean'" class="form-control">
                     <label class="label cursor-pointer">
                         <span class="label-text mr-2">Увімкнено</span>
                         <input type="checkbox" class="toggle toggle-success" v-model="config.value" true-value="1"
                                false-value="0"/>
                     </label>
+                </div>
+
+                <div v-if="config?.type === 'string'" class="form-control">
+                    <div class="label">
+                        <span class="label-text">Значення</span>
+                    </div>
+                    <input type="text" class="input input-bordered" v-model="config.value"/>
+                </div>
+                <span class="text-red-600 text-xs" v-if="errors?.value">{{ errors.value[0] }}</span>
+
+                <div v-if="config?.description">
+                    *<i class="text-sm"> {{ config.description }}</i>
                 </div>
 
                 <button :disabled="isLoading" class="btn btn-success self-end text-white" @click="updateConfig">
@@ -35,8 +48,11 @@ export default {
     data() {
         return {
             isLoading: false,
+            errors: {},
             config: {
+                type: null,
                 value: null,
+                description: null
             },
         }
     },
@@ -49,6 +65,8 @@ export default {
                 .then(response => {
                     this.config = {
                         value: response.data.data.value,
+                        type: response.data.data.type,
+                        description: response.data.data.description
                     }
                 })
                 .catch(error => {
@@ -57,6 +75,7 @@ export default {
         },
         updateConfig() {
             this.isLoading = true;
+            this.errors = {};
 
             axios.put(`/api/configs/${this.$route.params.id}`, {value: this.config.value})
                 .then(response => {

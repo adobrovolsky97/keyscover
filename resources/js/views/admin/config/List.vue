@@ -12,6 +12,7 @@
                     <th>Key</th>
                     <th>Type</th>
                     <th>Value</th>
+                    <th>Description</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -21,6 +22,7 @@
                     <th>{{ config.key }}</th>
                     <th>{{ config.type }}</th>
                     <th>{{ config.value }}</th>
+                    <th>{{ config.description }}</th>
                     <th>
                         <router-link
                             :to="{name: 'admin.configs.edit', params: {id: config.id}}"

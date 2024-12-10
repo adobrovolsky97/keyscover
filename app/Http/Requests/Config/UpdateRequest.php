@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Config;
 
+use App\Models\Config\Config;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
@@ -11,9 +12,13 @@ class UpdateRequest extends FormRequest
 {
     public function rules(): array
     {
-        // now I only support bool val
+        /** @var Config $config */
+        $config = $this->route('config');
+
+        $rules = $config->key->getValidationRules();
+
         return [
-            'value' => ['required', 'boolean']
+            'value' => $rules
         ];
     }
 }

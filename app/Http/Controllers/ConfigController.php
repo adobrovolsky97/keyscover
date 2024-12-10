@@ -47,7 +47,16 @@ class ConfigController extends Controller
      */
     public function list(): AnonymousResourceCollection
     {
-        return ConfigResource::collection($this->configService->getAll([['key', 'in', [Key::IS_CRM_ENABLED->value]]]));
+        return ConfigResource::collection($this->configService->getAll([
+            [
+                'key',
+                'in',
+                [
+                    Key::IS_CRM_ENABLED->value,
+                    Key::SYNC_CRM_FIELD->value,
+                ]
+            ]
+        ]));
     }
 
     /**

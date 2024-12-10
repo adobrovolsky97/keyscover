@@ -14,6 +14,7 @@ use Adobrovolsky97\LaravelRepositoryServicePattern\Models\BaseModel;
  * @property Key $key
  * @property string $value
  * @property Type $type
+ * @property string $description
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
@@ -22,7 +23,7 @@ class Config extends BaseModel
 	/**
 	 * @var array
 	 */
-	protected $fillable = ['key', 'value', 'type', 'created_at', 'updated_at'];
+	protected $fillable = ['key', 'value', 'type', 'description', 'created_at', 'updated_at'];
 
     /**
      * @var string[]
