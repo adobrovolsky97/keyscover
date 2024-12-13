@@ -108,7 +108,7 @@
                         Додати
                     </button>
 
-                    <button v-if="!cartProduct && product.left_in_stock <= product.cart_increment_step" disabled
+                    <button v-if="!cartProduct && product.left_in_stock < product.cart_increment_step" disabled
                             class="btn btn-neutral btn-sm lg:btn-md" :class="{'btn-sm lg:!btn-xs': minified}">
                         Немає
                     </button>

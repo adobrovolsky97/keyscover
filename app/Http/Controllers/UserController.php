@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Role\Role;
+use App\Http\Requests\User\SearchRequest;
 use App\Http\Resources\User\UserResource;
 use App\Models\User\User;
 use App\Services\User\Contracts\UserServiceInterface;
@@ -43,15 +44,19 @@ class UserController extends Controller
     /**
      * Get users list
      *
+     * @param SearchRequest $request
      * @return AnonymousResourceCollection
      */
-    public function index(): AnonymousResourceCollection
+    public function index(SearchRequest $request): AnonymousResourceCollection
     {
         return UserResource::collection(
-            $this->userService->withCount(['orders'])->getAllPaginated([
-                'except' => [Auth::id()],
-                'role'   => Role::USER->value
-            ], 50)
+            $this->userService->withCount(['orders'])->getAllPaginated(array_merge(
+                [
+                    'except' => [Auth::id()],
+                    'role'   => Role::USER->value
+                ],
+                $request->validated()
+            ), 50)
         );
     }
 

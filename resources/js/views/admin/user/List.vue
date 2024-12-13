@@ -15,23 +15,41 @@
                     <th>Ім'я</th>
                     <th>Номер телефону</th>
                     <th>Email</th>
-                    <th>Кількість замовлень</th>
-                    <th>Остання активність</th>
-                    <th>Дата реєстрації</th>
+                    <th class="link">
+                           <span @click="toggleOrder('orders_count')" class="cursor-pointer">
+                            Кількість замовлень <span
+                               v-if="filters.order_by === 'orders_count' && filters.order_dir === 'asc'">↑</span>
+                             <span v-if="filters.order_by === 'orders_count' && filters.order_dir === 'desc'">↓</span>
+                        </span>
+                    </th>
+                    <th class="link">
+                        <span @click="toggleOrder('last_activity_at')" class="cursor-pointer">
+                            Остання активність <span
+                            v-if="filters.order_by === 'last_activity_at' && filters.order_dir === 'asc'">↑</span>
+                             <span v-if="filters.order_by === 'last_activity_at' && filters.order_dir === 'desc'">↓</span>
+                        </span>
+                    </th>
+                    <th class="link">
+                        <span @click="toggleOrder('created_at')" class="cursor-pointer">
+                            Дата реєстрації <span
+                            v-if="filters.order_by === 'created_at' && filters.order_dir === 'asc'">↑</span>
+                             <span v-if="filters.order_by === 'created_at' && filters.order_dir === 'desc'">↓</span>
+                        </span>
+                    </th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
                 <!-- row 1 -->
                 <tr v-for="user in data.data" :key="user.id">
-                    <th>{{ user.id }}</th>
-                    <th>{{user.surname}} {{ user.name }}</th>
-                    <th>{{ user.phone }}</th>
-                    <th>{{ user.email }}</th>
-                    <th>{{ user.orders_count }}</th>
-                    <th>{{ user.last_activity_at }}</th>
-                    <th>{{ user.created_at }}</th>
-                    <th>
+                    <td>{{ user.id }}</td>
+                    <td>{{user.surname}} {{ user.name }}</td>
+                    <td>{{ user.phone }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.orders_count }}</td>
+                    <td>{{ user.last_activity_at }}</td>
+                    <td>{{ user.created_at }}</td>
+                    <td>
                         <svg @click="deleteUser(user)" class="h-6 w-6 cursor-pointer text-red-500" viewBox="0 0 24 24"
                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                              stroke-linejoin="round">
@@ -40,7 +58,7 @@
                             <line x1="10" y1="11" x2="10" y2="17"/>
                             <line x1="14" y1="11" x2="14" y2="17"/>
                         </svg>
-                    </th>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -81,6 +99,8 @@ export default {
             data: {},
             filters: {
                 page: 1,
+                order_by: null,
+                order_dir: null,
             },
             route: useRoute()
         }
@@ -112,6 +132,11 @@ export default {
         this.resolveQueryParams();
     },
     methods: {
+        toggleOrder(orderBy) {
+            this.filters.order_dir = this.filters.order_dir === 'asc' ? 'desc' : 'asc';
+            this.filters.order_by = orderBy;
+            this.filters.page = 1;
+        },
         updatePage(page) {
             this.filters.page = page;
         },

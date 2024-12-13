@@ -201,7 +201,12 @@ export default {
                 this.filters.page = 1;
             }
         },
-
+        '$route.query': {
+            handler: function (value) {
+                this.filters = {...this.filters, ...value};
+            },
+            deep: true
+        },
         '$route.query.search': {
             handler: function (value) {
                 this.search = value;

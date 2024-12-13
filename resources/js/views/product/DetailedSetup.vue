@@ -119,6 +119,10 @@ const cart = ref(store.state.cart);
 const cartProduct = ref(null);
 const route = useRoute();
 
+watch(() => route.params.id, async () => {
+    await fetchProduct();
+});
+
 onMounted(async () => {
     await fetchProduct();
 });
@@ -156,6 +160,7 @@ const copyToClipboard = (text) => {
 };
 
 const fetchProduct = async () => {
+    isDataLoaded.value = false;
     axios.get('/api/products/' + route.params.id)
         .then((response) => {
             product.value = response.data.data;

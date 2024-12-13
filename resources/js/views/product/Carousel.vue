@@ -1,6 +1,6 @@
 <template>
     <!-- Main Image with Transition -->
-    <div class="relative w-full images-carousel rounded-lg">
+    <div class="relative w-full images-carousel rounded-lg select-none">
         <swiper
             :spaceBetween="10"
             :navigation="showArrows"
