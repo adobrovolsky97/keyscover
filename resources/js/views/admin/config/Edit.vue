@@ -14,7 +14,7 @@
                     </label>
                 </div>
 
-                <div v-if="config?.type === 'string'" class="form-control">
+                <div v-if="config?.type === 'string'" class="form-control w-full">
                     <div class="label">
                         <span class="label-text">Значення</span>
                     </div>

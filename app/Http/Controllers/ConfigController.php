@@ -39,6 +39,7 @@ class ConfigController extends Controller
             'five_percent_discount' => $this->configService->getValue(Key::FIVE_PERCENT_DISCOUNT_SUM->value),
             'ten_percent_discount'  => $this->configService->getValue(Key::TEN_PERCENT_DISCOUNT_SUM->value),
             'free_delivery_sum'     => $this->configService->getValue(Key::FREE_DELIVERY_SUM->value),
+            'header_message'        => $this->configService->getValue(Key::HEADER_MESSAGE->value),
         ]);
     }
 
@@ -54,6 +55,7 @@ class ConfigController extends Controller
                 [
                     Key::IS_CRM_ENABLED->value,
                     Key::SYNC_CRM_FIELD->value,
+                    Key::HEADER_MESSAGE->value
                 ]
             ]
         ]));
