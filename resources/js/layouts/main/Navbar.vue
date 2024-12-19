@@ -45,6 +45,57 @@
                 </div>
                 <div class="items-center justify-end gap-2 flex">
                     <div class="auth flex flex-row justify-between items-center gap-2.5 md:gap-5">
+
+                        <div ref="mobileSearch" class="block md:hidden cursor-pointer">
+                            <div class="relative">
+                                <svg class="h-6 w-6"
+                                     @click="isShowMobileSearch = !isShowMobileSearch" viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                     stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"/>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                                </svg>
+
+                                <svg v-if="$route.query.search?.length" class="h-5 w-5 absolute -top-3 -right-3.5"
+                                     width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                     fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z"/>
+                                    <path d="M3 20l1.3 -3.9a9 8 0 1 1 3.4 2.9l-4.7 1"/>
+                                    <line x1="12" y1="12" x2="12" y2="12.01"/>
+                                    <line x1="8" y1="12" x2="8" y2="12.01"/>
+                                    <line x1="16" y1="12" x2="16" y2="12.01"/>
+                                </svg>
+                            </div>
+                            <div v-if="isShowMobileSearch"
+                                 class="absolute left-1/2 transform -translate-x-1/2 w-full max-w-sm top-14">
+                                <label class="input input-bordered items-center w-full flex gap-2">
+                                    <input type="text" @input="delaySearch" :value="search" class="grow"
+                                           :placeholder="$route.query.categories?.length ? 'Пошук по категорії': 'Пошук на сайті'"
+                                           v-on:keyup.enter="closeMobileSearch"/>
+                                    <svg
+                                        v-if="!$route.query.search?.length"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 16 16"
+                                        fill="currentColor"
+                                        class="h-4 w-4 opacity-70">
+                                        <path
+                                            fill-rule="evenodd"
+                                            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                                            clip-rule="evenodd"/>
+                                    </svg>
+                                    <svg v-else @click="resetSearch" class="h-5 w-5 cursor-pointer" width="24"
+                                         height="24"
+                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                         stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z"/>
+                                        <line x1="18" y1="6" x2="6" y2="18"/>
+                                        <line x1="6" y1="6" x2="18" y2="18"/>
+                                    </svg>
+                                </label>
+                            </div>
+                        </div>
+
                         <div class="dropdown dropdown-end" ref="contactDropdown">
                             <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar"
                                  @click="openContactsModal">
@@ -97,62 +148,12 @@
                                             </svg>
                                         </a>
                                     </div>
-                                    <a @click="copyNumber" class="cursor-pointer mt-2 font-bold">
-                                        380968038462
+                                    <a @click="copyNumber" class="cursor-pointer text-orange-500 mt-2 font-bold">
+                                        0968038462
                                     </a>
                                 </div>
                             </div>
 
-                        </div>
-
-                        <div ref="mobileSearch" class="block md:hidden cursor-pointer">
-                            <div class="relative">
-                                <svg class="h-6 w-6"
-                                     @click="isShowMobileSearch = !isShowMobileSearch" viewBox="0 0 24 24"
-                                     fill="none"
-                                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                     stroke-linejoin="round">
-                                    <circle cx="11" cy="11" r="8"/>
-                                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                                </svg>
-
-                                <svg v-if="$route.query.search?.length" class="h-5 w-5 absolute -top-3 -right-3.5"
-                                     width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                     fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z"/>
-                                    <path d="M3 20l1.3 -3.9a9 8 0 1 1 3.4 2.9l-4.7 1"/>
-                                    <line x1="12" y1="12" x2="12" y2="12.01"/>
-                                    <line x1="8" y1="12" x2="8" y2="12.01"/>
-                                    <line x1="16" y1="12" x2="16" y2="12.01"/>
-                                </svg>
-                            </div>
-                            <div v-if="isShowMobileSearch"
-                                 class="absolute left-1/2 transform -translate-x-1/2 w-full max-w-sm top-14">
-                                <label class="input input-bordered items-center w-full flex gap-2">
-                                    <input type="text" @input="delaySearch" :value="search" class="grow"
-                                           :placeholder="$route.query.categories?.length ? 'Пошук по категорії': 'Пошук на сайті'"
-                                           v-on:keyup.enter="closeMobileSearch"/>
-                                    <svg
-                                        v-if="!$route.query.search?.length"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 16 16"
-                                        fill="currentColor"
-                                        class="h-4 w-4 opacity-70">
-                                        <path
-                                            fill-rule="evenodd"
-                                            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                                            clip-rule="evenodd"/>
-                                    </svg>
-                                    <svg v-else @click="resetSearch" class="h-5 w-5 cursor-pointer" width="24"
-                                         height="24"
-                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                         stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z"/>
-                                        <line x1="18" y1="6" x2="6" y2="18"/>
-                                        <line x1="6" y1="6" x2="18" y2="18"/>
-                                    </svg>
-                                </label>
-                            </div>
                         </div>
 
                         <div v-if="$store.state.user !== null">
