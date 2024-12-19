@@ -375,7 +375,7 @@ export default {
             }, 800);
         },
         copyNumber() {
-            navigator.clipboard.writeText('380968038462').then(() => {
+            navigator.clipboard.writeText('0968038462').then(() => {
                 toast.success('Телефон скопійовано');
             }).catch(err => {
             })
