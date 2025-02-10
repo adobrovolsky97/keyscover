@@ -19,6 +19,8 @@ class CrmService implements CrmServiceInterface
      */
     private const API_URL = 'https://api.keepincrm.com/v1';
 
+    const FEE_PRODUCT_SKU = 'fee';
+
     /**
      * @throws Exception
      */
@@ -80,6 +82,12 @@ class CrmService implements CrmServiceInterface
             return;
         }
 
+        $paymentType = match ($order->payment_type) {
+            Order::PAYMENT_BY_REQUISITES => 'Оплата за реквізитами',
+            Order::PAYMENT_TYPE_CASH_ON_DELIVERY => 'Розрахунок на пошті при отриманні',
+            Order::PAYMENT_ONLINE => 'Посилання для онлайн оплати картою (+1,5% комісії)',
+        };
+
         $customFieldsData = [
             [
                 'name'  => 'Номер телефону з сайту',
@@ -95,7 +103,7 @@ class CrmService implements CrmServiceInterface
             ],
             [
                 'name'  => 'Гроші з сайту',
-                'value' => $order->payment_type === Order::PAYMENT_BY_REQUISITES ? 'Оплата за реквізитами' : 'Розрахунок на пошті при отриманні'
+                'value' => $paymentType
             ]
         ];
 
@@ -129,7 +137,7 @@ class CrmService implements CrmServiceInterface
                         'product_attributes' => [
                             'sku'      => $product->product->sku,
                             'title'    => $product->product->name,
-                            'price'    => $product->product->uah_price,
+                            'price'    => floor($product->product->uah_price),
                             'currency' => 'UAH',
                         ]
                     ];
