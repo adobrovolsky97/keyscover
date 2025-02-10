@@ -9,6 +9,7 @@ use App\Models\Product\Product;
 use App\Services\Category\Contracts\CategoryServiceInterface;
 use App\Services\Config\Contracts\ConfigServiceInterface;
 use App\Services\Crm\Contracts\CrmServiceInterface;
+use App\Services\Crm\CrmService;
 use App\Services\Product\Contracts\ProductServiceInterface;
 use Illuminate\Console\Command;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
@@ -70,6 +71,10 @@ class FetchProductsCommand extends Command
 
         while ($page <= $lastPage) {
             foreach ($data['items'] ?? [] as $product) {
+                if ($product['sku'] === CrmService::FEE_PRODUCT_SKU) {
+                    continue;
+                }
+
                 $this->processProduct($product);
             }
 
