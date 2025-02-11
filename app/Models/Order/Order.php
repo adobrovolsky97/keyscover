@@ -100,7 +100,11 @@ class Order extends BaseModel
 
     public function getPaymentTypeTextAttribute(): string
     {
-        return $this->payment_type === 'cash_on_delivery' ? 'Розрахунок на пошті при отриманні' : 'Оплата за реквізитами';
+        return match ($this->payment_type) {
+            self::PAYMENT_TYPE_CASH_ON_DELIVERY => 'Розрахунок на пошті при отриманні',
+            self::PAYMENT_BY_REQUISITES => 'Оплата за реквізитами',
+            self::PAYMENT_ONLINE => 'Посилання для онлайн оплати картою (+1,5% комісії)',
+        };
     }
 
     /**

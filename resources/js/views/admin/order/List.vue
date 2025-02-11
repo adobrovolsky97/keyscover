@@ -124,9 +124,11 @@
                     <span><span class="font-bold">Спосіб доставки</span>: {{
                             activeOrder.delivery_type === 'new-post' ? 'Нова Пошта' : 'Самовивіз'
                         }}</span>
-                    <span><span class="font-bold">Спосіб оплати</span>: {{
-                            activeOrder.payment_type === 'by_requisites' ? 'Оплата за реквізитами' : 'Розрахунок на пошті при отриманні'
-                        }}</span>
+                    <span><span class="font-bold">Спосіб оплати</span>:
+                    <span v-if="activeOrder.payment_type === 'by_requisites'">Оплата за реквізитами</span>
+                    <span v-if="activeOrder.payment_type === 'cash_on_delivery'">Розрахунок на пошті при отриманні</span>
+                    <span v-if="activeOrder.payment_type === 'online'">Посилання для онлайн оплати картою (+1,5% комісії)</span>
+                    </span>
                     <span v-if="activeOrder.city_name"><span class="font-bold">Місто</span>: {{ activeOrder.city_name }}</span>
                     <span v-if="activeOrder.warehouse_name"><span
                         class="font-bold">Відділення</span>: {{ activeOrder.warehouse_name }}</span>
