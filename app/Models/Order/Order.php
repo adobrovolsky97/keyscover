@@ -45,6 +45,7 @@ class Order extends BaseModel
 {
     const PAYMENT_TYPE_CASH_ON_DELIVERY = 'cash_on_delivery';
     const PAYMENT_BY_REQUISITES = 'by_requisites';
+    const PAYMENT_ONLINE = 'online';
 
     const DELIVERY_TYPE_SELF_PICKUP = 'self-pickup';
     const DELIVERY_TYPE_NEW_POST = 'new-post';

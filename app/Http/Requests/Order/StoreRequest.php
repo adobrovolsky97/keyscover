@@ -26,7 +26,7 @@ class StoreRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                Rule::in([Order::PAYMENT_BY_REQUISITES, Order::PAYMENT_TYPE_CASH_ON_DELIVERY])
+                Rule::in([Order::PAYMENT_BY_REQUISITES, Order::PAYMENT_TYPE_CASH_ON_DELIVERY, Order::PAYMENT_ONLINE])
             ],
             'delivery_type'  => [
                 'required',

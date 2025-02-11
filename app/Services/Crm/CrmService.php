@@ -82,6 +82,8 @@ class CrmService implements CrmServiceInterface
             return;
         }
 
+        $fee = 0;
+
         $paymentType = match ($order->payment_type) {
             Order::PAYMENT_BY_REQUISITES => 'Оплата за реквізитами',
             Order::PAYMENT_TYPE_CASH_ON_DELIVERY => 'Розрахунок на пошті при отриманні',
@@ -118,9 +120,43 @@ class CrmService implements CrmServiceInterface
             ];
         }
 
+        $totalPrice = 0;
+
+        $products = $order->products
+            ->map(function ($product) use (&$totalPrice) {
+                $price = floor($product->product->uah_price);
+
+                $totalPrice += $price * $product->quantity;
+                return [
+                    'amount'             => $product->quantity,
+                    'title'              => $product->product->name,
+                    'product_attributes' => [
+                        'sku'      => $product->product->sku,
+                        'title'    => $product->product->name,
+                        'price'    => $price,
+                        'currency' => 'UAH',
+                    ]
+                ];
+            })
+            ->toArray();
+
+        if ($order->payment_type === Order::PAYMENT_ONLINE) {
+            $fee = floor($order->total_price_uah * 0.015);
+            $products[] = [
+                'amount'             => 1,
+                'title'              => 'Комісія за онлайн оплату 1.5%',
+                'product_attributes' => [
+                    'sku'      => self::FEE_PRODUCT_SKU,
+                    'title'    => 'Комісія за онлайн оплату 1.5%',
+                    'price'    => $fee,
+                    'currency' => 'UAH',
+                ]
+            ];
+        }
+
         $payload = [
             'title'                   => "Замовлення з сайту #$order->id",
-            'total'                   => $order->total_price_uah - ($order->discount_uah ?? 0),
+            'total'                   => $totalPrice + $fee - ($order->discount_uah ?? 0),
             'currency'                => 'UAH',
             'comment'                 => $order->comment,
             'products_total_as_total' => false,
@@ -129,20 +165,7 @@ class CrmService implements CrmServiceInterface
                 'email'  => $order->user->email,
                 'phones' => [$order->phone]
             ],
-            'jobs_attributes'         => $order->products
-                ->map(function ($product) {
-                    return [
-                        'amount'             => $product->quantity,
-                        'title'              => $product->product->name,
-                        'product_attributes' => [
-                            'sku'      => $product->product->sku,
-                            'title'    => $product->product->name,
-                            'price'    => floor($product->product->uah_price),
-                            'currency' => 'UAH',
-                        ]
-                    ];
-                })
-                ->toArray(),
+            'jobs_attributes'         => $products,
             'discount'                => $order->discount_uah,
             'discount_kind'           => 'absolute_discount',
             'custom_fields'           => $customFieldsData

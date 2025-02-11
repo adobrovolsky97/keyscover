@@ -46,6 +46,8 @@
                                 <error v-if="Object.keys(errors).length > 0" :errors="errors"
                                        attribute="comment"></error>
                                 <div class="form-group -pt-4">
+                                    <hr>
+                                    <p>Спосіб доставки</p>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio"
                                                v-model="deliveryType" :value="'new-post'"
@@ -113,13 +115,39 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <select v-model="form.paymentType" class="select select-sm mt-4 select-bordered w-full">
-                                <option v-if="deliveryType ==='new-post'" :value="'cash_on_delivery'">Розрахунок
-                                    на пошті при отриманні
-                                </option>
-                                <option :value="'by_requisites'">Оплата за реквізитами</option>
-                            </select>
+                        <div class="form-group mt-2">
+                            <hr>
+                            <p>Спосіб оплати</p>
+                            <div v-if="deliveryType ==='new-post'" class="form-check">
+                                <input class="form-check-input" type="radio"
+                                       v-model="form.paymentType" :value="'cash_on_delivery'"
+                                       name="payment_type" id="payment_type_1">
+                                <label class="form-check-label text-sm" for="payment_type_1">
+                                    Розрахунок на пошті при отриманні
+                                </label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio"
+                                       v-model="form.paymentType" :value="'by_requisites'"
+                                       name="payment_type" id="payment_type_2">
+                                <label class="form-check-label text-sm" for="payment_type_2">
+                                    Оплата за реквізитами
+                                </label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio"
+                                       v-model="form.paymentType" :value="'online'"
+                                       name="payment_type" id="payment_type_3">
+                                <label class="form-check-label text-sm" for="payment_type_3">
+                                    Посилання для онлайн оплати картою
+                                </label>
+                                <br>
+                                <span class="text-xs text-gray-400">
+                                    * Банківська комісія +1,5% до вартості, але без плати за кредитні кошти.
+                                </span>
+                            </div>
                             <error v-if="Object.keys(errors).length > 0" :errors="errors"
                                    attribute="payment_type"></error>
                         </div>
@@ -215,6 +243,11 @@ export default {
 
             // Update the form.phone value
             this.form.phone = val;
+        },
+        'deliveryType': {
+            handler: function (val) {
+                this.form.paymentType = 'by_requisites';
+            }
         }
     },
     mounted() {
