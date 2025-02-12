@@ -99,7 +99,7 @@ class CrmService implements CrmServiceInterface
             ],
             [
                 'name'  => 'Гроші з сайту',
-                'value' => $order->payment_type_text
+                'value' => $order->payment_type_text_for_crm
             ]
         ];
 
