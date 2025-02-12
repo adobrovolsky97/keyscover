@@ -39,7 +39,7 @@ class OrderService extends BaseCrudService implements OrderServiceInterface
             $data['user_id'] = Auth::id();
             $data['dollar_rate'] = $configService->getValue(Key::DOLLAR->value);
             $data['total_price_usd'] = $cart->total;
-            $data['total_price_uah'] = round($cart->total * $data['dollar_rate']);
+            $data['total_price_uah'] = $cart->total_uah;
             $data['discount_percent'] = $cart->discount_percent;
             $data['discount_usd'] = $cart->discount_amount;
             $data['discount_uah'] = $cart->discount_amount_uah;
