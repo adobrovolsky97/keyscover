@@ -393,7 +393,7 @@ export default {
                     });
                     this.orderTimeout = setTimeout(() => {
                         this.$router.push({name: 'orders-list'});
-                    }, 6000);
+                    }, 3000);
                 })
                 .catch((e) => {
                     this.errors = e.response.data.errors;
