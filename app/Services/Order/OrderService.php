@@ -58,7 +58,7 @@ class OrderService extends BaseCrudService implements OrderServiceInterface
                     'product_id'      => $product->product_id,
                     'quantity'        => $product->quantity,
                     'total_price'     => $product->quantity * $product->product->price,
-                    'total_price_uah' => round(($product->quantity * $product->product->price) * $data['dollar_rate']),
+                    'total_price_uah' => $product->quantity * $product->product->uah_price,
                 ]);
 
                 $product->product->update(['left_in_stock' => $product->product->left_in_stock - $product->quantity]);

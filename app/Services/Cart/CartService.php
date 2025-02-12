@@ -137,8 +137,6 @@ class CartService extends BaseCrudService implements CartServiceInterface
         $discountAmount = 0;
         $discountAmountUah = 0;
 
-        $totalPriceUah = floor($totalPriceUah);
-
         // calculating discounts
         if ($totalPrice >= $fivePercentConfigValue) {
             $discountPercent = 5;
