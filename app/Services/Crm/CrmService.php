@@ -138,10 +138,10 @@ class CrmService implements CrmServiceInterface
             $fee = floor($order->total_price_uah * 0.015);
             $products[] = [
                 'amount'             => 1,
-                'title'              => 'Комісія за онлайн оплату 1.5%',
+                'title'              => 'Пакування',
                 'product_attributes' => [
                     'sku'      => self::FEE_PRODUCT_SKU,
-                    'title'    => 'Комісія за онлайн оплату 1.5%',
+                    'title'    => 'Пакування',
                     'price'    => $fee,
                     'currency' => 'UAH',
                 ]
