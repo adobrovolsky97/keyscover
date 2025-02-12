@@ -18,7 +18,7 @@
                             <span><span class="font-bold">Телефон</span>: {{ order.phone }}</span>
                             <span><span class="font-bold">Спосіб доставки</span>: {{ order.delivery_type === 'new-post' ? 'Нова Пошта' : 'Самовивіз' }}</span>
                             <span><span class="font-bold">Спосіб оплати</span>:
-                            <span v-if="order.payment_type === 'by_requisites'">Оплата за реквізитами</span>
+                            <span v-if="order.payment_type === 'by_requisites'">Оплата за реквізитами IBAN</span>
                     <span v-if="order.payment_type === 'cash_on_delivery'">Розрахунок на пошті при отриманні</span>
                     <span
                         v-if="order.payment_type === 'online'">Посилання для онлайн оплати картою (+1,5% комісії)</span>

@@ -102,7 +102,7 @@ class Order extends BaseModel
     {
         return match ($this->payment_type) {
             self::PAYMENT_TYPE_CASH_ON_DELIVERY => 'Розрахунок на пошті при отриманні',
-            self::PAYMENT_BY_REQUISITES => 'Оплата за реквізитами',
+            self::PAYMENT_BY_REQUISITES => 'Оплата за реквізитами IBAN',
             self::PAYMENT_ONLINE => 'Посилання для онлайн оплати картою (+1,5% комісії)',
         };
     }

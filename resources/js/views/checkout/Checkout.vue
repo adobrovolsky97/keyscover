@@ -132,7 +132,7 @@
                                        v-model="form.paymentType" :value="'by_requisites'"
                                        name="payment_type" id="payment_type_2">
                                 <label class="form-check-label text-sm" for="payment_type_2">
-                                    Оплата за реквізитами
+                                    Оплата за реквізитами IBAN
                                 </label>
                             </div>
 
