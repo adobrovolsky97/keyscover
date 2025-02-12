@@ -40,8 +40,8 @@ class ProductResource extends JsonResource
             'sku'                   => $this->sku,
             'name'                  => $this->name,
             'description'           => $this->description,
-            'price'                 => ceil($this->uah_price),
-            'usd_price'             => $this->price, // TODO
+            'price'                 => $this->uah_price,
+            'usd_price'             => $this->price,
             'is_available_in_stock' => $this->is_available_in_stock,
             'is_hidden'             => $this->is_hidden,
             'is_stop_crm_update'    => $this->is_stop_crm_update,

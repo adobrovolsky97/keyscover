@@ -84,12 +84,6 @@ class CrmService implements CrmServiceInterface
 
         $fee = 0;
 
-        $paymentType = match ($order->payment_type) {
-            Order::PAYMENT_BY_REQUISITES => 'Оплата за реквізитами',
-            Order::PAYMENT_TYPE_CASH_ON_DELIVERY => 'Розрахунок на пошті при отриманні',
-            Order::PAYMENT_ONLINE => 'Посилання для онлайн оплати картою (+1,5% комісії)',
-        };
-
         $customFieldsData = [
             [
                 'name'  => 'Номер телефону з сайту',
@@ -105,7 +99,7 @@ class CrmService implements CrmServiceInterface
             ],
             [
                 'name'  => 'Гроші з сайту',
-                'value' => $paymentType
+                'value' => $order->payment_type_text
             ]
         ];
 
@@ -124,7 +118,7 @@ class CrmService implements CrmServiceInterface
 
         $products = $order->products
             ->map(function ($product) use (&$totalPrice) {
-                $price = floor($product->product->uah_price);
+                $price = $product->product->uah_price;
 
                 $totalPrice += $price * $product->quantity;
                 return [

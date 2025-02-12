@@ -41,12 +41,12 @@ class CartResource extends JsonResource
                     'name'                => $cartProduct->product->name,
                     'quantity'            => $cartProduct->quantity,
                     'price'               => $cartProduct->product->price,
-                    'uah_price'           => ceil($cartProduct->product->uah_price),
+                    'uah_price'           => $cartProduct->product->uah_price,
                     'left_in_stock'       => $cartProduct->product->left_in_stock,
                     'image'               => empty($image) ? asset('no-image.png') : $image,
                     'product_id'          => $cartProduct->product_id,
                     'cart_increment_step' => $cartProduct->product->cart_increment_step,
-                    'total_price_uah'     => ceil($cartProduct->quantity * ceil($cartProduct->product->uah_price)),
+                    'total_price_uah'     => $cartProduct->quantity * $cartProduct->product->uah_price,
                     'total_price_usd'     => round($cartProduct->quantity * $cartProduct->product->price, 2),
                 ];
             })
