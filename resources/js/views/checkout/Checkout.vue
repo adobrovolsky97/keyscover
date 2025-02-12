@@ -144,7 +144,7 @@
                                     Посилання для онлайн оплати картою
                                 </label>
                                 <br>
-                                <span class="text-xs text-gray-400">
+                                <span v-if="form.paymentType === 'online'" class="text-xs text-gray-400">
                                     * Банківська комісія +1,5% до вартості, але без плати за кредитні кошти.
                                 </span>
                             </div>
