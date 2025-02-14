@@ -9,11 +9,12 @@
                 <div class="collapse collapse-arrow border shadow-xl mb-4 w-full" v-for="(order, orderIndex) in data.data" :key="order.id">
                     <input type="checkbox"/>
                     <div class="collapse-title md:text-xl text-sm font-medium flex md:flex-row flex-col md:justify-between justify-start md:items-center items-start">
-                        <span>Замовлення #{{data.meta.total - (data.meta.per_page * (data.meta.current_page - 1) + orderIndex)}} (<b>{{ order.number }}</b>)</span>
+                        <span>Замовлення #{{data.meta.total - (data.meta.per_page * (data.meta.current_page - 1) + orderIndex)}}</span>
                         <span>{{ order.created_at }}</span>
                     </div>
                     <div class="collapse-content  overflow-x-auto">
                         <div class="client-data flex flex-col justify-start items-start">
+                            <span><span class="font-bold">Номер замовлення</span>: <b class="cursor-pointer text-gray-400 hover:text-black" @mousedown.stop="copyNumber(order.number)">{{ order.number }}</b></span>
                             <span><span class="font-bold">ПІБ</span>: {{ order.surname }} {{ order.name }} {{ order.patronymic }}</span>
                             <span><span class="font-bold">Телефон</span>: {{ order.phone }}</span>
                             <span><span class="font-bold">Спосіб доставки</span>: {{ order.delivery_type === 'new-post' ? 'Нова Пошта' : 'Самовивіз' }}</span>
@@ -81,6 +82,7 @@ import Pagination from "../../components/pagination/Pagination.vue";
 import TableSkeleton from "../../components/skeleton/TableSkeleton.vue";
 import RouteHelper from "../../helpers/Route/RouteHelper.js";
 import {useHead} from "@vueuse/head";
+import {toast} from "vue3-toastify";
 
 export default {
     setup() {
@@ -143,6 +145,12 @@ export default {
                     this.data = response.data;
                     this.isDataLoaded = true;
                 })
+        },
+        copyNumber(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                toast.success('Номер замовлення скопійовано');
+            }).catch(err => {
+            });
         },
         showProduct(product) {
             // open in new tab
