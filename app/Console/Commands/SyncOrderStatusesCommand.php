@@ -33,10 +33,11 @@ class SyncOrderStatusesCommand extends Command
             ->whereNull('crm_status')
             ->orWhere('crm_status', '!=', Order::STATUS_FINISHED)
             ->min('created_at');
-        $maxOrderDate = Order::query()
-            ->whereNull('crm_status')
-            ->orWhere('crm_status', '!=', Order::STATUS_FINISHED)
-            ->max('created_at');
+        $maxOrderDate = Carbon::today();
+
+        if(Carbon::parse($minOrderDate)->diffInDays($maxOrderDate) >= 14) {
+            $minOrderDate = Carbon::today()->subDays(14);
+        }
 
         $page = 1;
 
