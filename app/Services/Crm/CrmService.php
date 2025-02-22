@@ -67,6 +67,22 @@ class CrmService implements CrmServiceInterface
     }
 
     /**
+     * @param array $params
+     * @param int $page
+     * @return array
+     */
+    public function getOrders(array $params = [], int $page = 1): array
+    {
+        $response = Http::withHeader('X-Auth-Token', config('app.crm_api_key'))
+            ->timeout(30)
+            ->get(self::API_URL . '/agreements', array_merge($params, [
+                'page' => $page
+            ]));
+
+        return $response->json();
+    }
+
+    /**
      * Create crm order
      *
      * @param Order $order

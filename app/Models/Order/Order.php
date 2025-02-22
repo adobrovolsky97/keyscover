@@ -27,6 +27,7 @@ use Adobrovolsky97\LaravelRepositoryServicePattern\Models\BaseModel;
  * @property string $city_name
  * @property string $warehouse_id
  * @property string $warehouse_name
+ * @property string $ttn
  * @property float $total_price_usd
  * @property float $total_price_uah
  * @property float $discount_percent
@@ -34,8 +35,11 @@ use Adobrovolsky97\LaravelRepositoryServicePattern\Models\BaseModel;
  * @property float $discount_uah
  * @property float $dollar_rate
  * @property boolean $is_crm_synced
+ * @property boolean $is_paid
  * @property integer $crm_order_id
  * @property string $sync_error
+ * @property string $crm_status
+ * @property string $nova_poshta_status
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property OrderProduct[]|Collection $products
@@ -49,6 +53,11 @@ class Order extends BaseModel
 
     const DELIVERY_TYPE_SELF_PICKUP = 'self-pickup';
     const DELIVERY_TYPE_NEW_POST = 'new-post';
+
+    const STATUS_FINISHED = 'Успішно';
+    const STATUS_RESERVED = 'Бронь';
+    const STATUS_FISCALIZED = 'Фіскалізація';
+    const STATUS_PACKING = 'Комплектація';
 
     /**
      * @var array
@@ -76,6 +85,10 @@ class Order extends BaseModel
         'is_crm_synced',
         'crm_order_id',
         'sync_error',
+        'crm_status',
+        'nova_poshta_status',
+        'ttn',
+        'is_paid',
         'created_at',
         'updated_at'
     ];

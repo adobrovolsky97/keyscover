@@ -44,6 +44,10 @@ class OrderResource extends JsonResource
             'created_at'              => $this->created_at?->format('d.m.Y H:i:s'),
             'products'                => OrderProductResource::collection($this->products),
             'is_crm_synced'           => $this->is_crm_synced,
+            'crm_status'              => $this->crm_status,
+            'nova_poshta_status'      => $this->nova_poshta_status,
+            'ttn'                     => $this->ttn,
+            'is_paid'                 => $this->is_paid
         ];
     }
 }

@@ -33,4 +33,11 @@ interface CrmServiceInterface
      * @return void
      */
     public function createOrder(Order $order): void;
+
+    /**
+     * @param array $params
+     * @param int $page
+     * @return array
+     */
+    public function getOrders(array $params = [], int $page = 1): array;
 }
