@@ -37,6 +37,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Номер</th>
+                    <th>Статус</th>
                     <th>ПІБ</th>
                     <th>Номер телефону</th>
                     <th>Тип доставки</th>
@@ -66,6 +67,14 @@
                 <tr v-for="order in data.data" :key="order.id">
                     <td>{{ order.id }}</td>
                     <td>{{ order.number }}</td>
+                    <td>
+                        <span
+                            v-if="order.crm_status"
+                            class="font-light"
+                            :class="{'text-red-400': !order.is_paid, 'text-green-400': order.is_paid}">{{
+                                order.crm_status
+                            }}</span>
+                    </td>
                     <td>{{ order.surname }} {{ order.name }} {{ order.patronymic }}</td>
                     <td>+38{{ order.phone }}</td>
                     <td>{{ order.delivery_type === 'self-pickup' ? 'Самовивіз' : 'Нова Пошта' }}</td>
@@ -104,7 +113,12 @@
                     <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                 </form>
                 <div class="flex flex-row justify-between items-start">
-                    <h3 class="text-lg font-bold">Замовлення {{ activeOrder.number }}</h3>
+                    <h3 class="text-lg font-bold">Замовлення {{ activeOrder.number }}<span
+                        v-if="activeOrder.crm_status"
+                        class="font-light"
+                        :class="{'text-red-400': !activeOrder.is_paid, 'text-green-400': activeOrder.is_paid}"> ({{
+                            activeOrder.crm_status
+                        }})</span></h3>
                     <svg class="h-8 w-8 cursor-pointer text-green-700 float-right mr-4"
                          @click="exportAndDownloadOrder(activeOrder)" width="24" height="24" viewBox="0 0 24 24"
                          stroke-width="2"
@@ -118,6 +132,8 @@
                 </div>
 
                 <div class="client-data flex flex-col justify-start items-start">
+                    <span v-if="activeOrder.ttn"><span class="font-bold">ТТН</span>: {{ activeOrder.ttn }} <span
+                        class="italic" v-if="activeOrder.nova_poshta_status"> ({{ activeOrder.nova_poshta_status }})</span></span>
                     <span><span class="font-bold">ПІБ</span>: {{ activeOrder.surname }} {{
                             activeOrder.name
                         }} {{ activeOrder.patronymic }}</span>
