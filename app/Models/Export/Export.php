@@ -23,7 +23,7 @@ class Export extends BaseModel
 {
     const TYPE_USERS = 'users';
     const TYPE_ORDERS = 'orders';
-
+    const TYPE_ORDERS_XLSX = 'orders_xlsx';
 
     /**
      * @var array

@@ -15,7 +15,7 @@ class ExportRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'type' => ['required', 'string', Rule::in([Export::TYPE_USERS, Export::TYPE_ORDERS])],
+            'type' => ['required', 'string', Rule::in([Export::TYPE_USERS, Export::TYPE_ORDERS, Export::TYPE_ORDERS_XLSX])],
             'params' => ['nullable', 'array']
         ];
     }

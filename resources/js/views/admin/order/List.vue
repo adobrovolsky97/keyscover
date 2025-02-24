@@ -119,21 +119,57 @@
                         :class="{'text-red-400': !activeOrder.is_paid, 'text-green-400': activeOrder.is_paid}"> ({{
                             activeOrder.crm_status
                         }})</span></h3>
-                    <svg class="h-8 w-8 cursor-pointer text-green-700 float-right mr-4"
-                         @click="exportAndDownloadOrder(activeOrder)" width="24" height="24" viewBox="0 0 24 24"
-                         stroke-width="2"
-                         stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z"/>
-                        <path d="M14 3v4a1 1 0 0 0 1 1h4"/>
-                        <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/>
-                        <line x1="12" y1="11" x2="12" y2="17"/>
-                        <polyline points="9 14 12 17 15 14"/>
-                    </svg>
+
+                    <div class="flex flex-row justify-between gap-2 items-center mr-2">
+                        <svg class="cursor-pointer" @click="exportOrderToPdf(activeOrder)" height="30px" width="30px"
+                             version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"
+                             viewBox="0 0 309.267 309.267" xml:space="preserve">
+                            <g>
+                                <path style="fill:#E2574C;" d="M38.658,0h164.23l87.049,86.711v203.227c0,10.679-8.659,19.329-19.329,19.329H38.658
+                                    c-10.67,0-19.329-8.65-19.329-19.329V19.329C19.329,8.65,27.989,0,38.658,0z"/>
+                                <path style="fill:#B53629;" d="M289.658,86.981h-67.372c-10.67,0-19.329-8.659-19.329-19.329V0.193L289.658,86.981z"/>
+                                <path style="fill:#FFFFFF;" d="M217.434,146.544c3.238,0,4.823-2.822,4.823-5.557c0-2.832-1.653-5.567-4.823-5.567h-18.44
+                                    c-3.605,0-5.615,2.986-5.615,6.282v45.317c0,4.04,2.3,6.282,5.412,6.282c3.093,0,5.403-2.242,5.403-6.282v-12.438h11.153
+                                    c3.46,0,5.19-2.832,5.19-5.644c0-2.754-1.73-5.49-5.19-5.49h-11.153v-16.903C204.194,146.544,217.434,146.544,217.434,146.544z
+                                     M155.107,135.42h-13.492c-3.663,0-6.263,2.513-6.263,6.243v45.395c0,4.629,3.74,6.079,6.417,6.079h14.159
+                                    c16.758,0,27.824-11.027,27.824-28.047C183.743,147.095,173.325,135.42,155.107,135.42z M155.755,181.946h-8.225v-35.334h7.413
+                                    c11.221,0,16.101,7.529,16.101,17.918C171.044,174.253,166.25,181.946,155.755,181.946z M106.33,135.42H92.964
+                                    c-3.779,0-5.886,2.493-5.886,6.282v45.317c0,4.04,2.416,6.282,5.663,6.282s5.663-2.242,5.663-6.282v-13.231h8.379
+                                    c10.341,0,18.875-7.326,18.875-19.107C125.659,143.152,117.425,135.42,106.33,135.42z M106.108,163.158h-7.703v-17.097h7.703
+                                    c4.755,0,7.78,3.711,7.78,8.553C113.878,159.447,110.863,163.158,106.108,163.158z"/>
+                            </g>
+                        </svg>
+
+                        <svg @click="exportOrderToXls(activeOrder)" class="cursor-pointer" height="30px" width="30px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                             viewBox="0 0 512 512" xml:space="preserve">
+                            <path style="fill:#E2E5E7;" d="M128,0c-17.6,0-32,14.4-32,32v448c0,17.6,14.4,32,32,32h320c17.6,0,32-14.4,32-32V128L352,0H128z"/>
+                                                        <path style="fill:#B0B7BD;" d="M384,128h96L352,0v96C352,113.6,366.4,128,384,128z"/>
+                                                        <polygon style="fill:#CAD1D8;" points="480,224 384,128 480,128 "/>
+                                                        <path style="fill:#84BD5A;" d="M416,416c0,8.8-7.2,16-16,16H48c-8.8,0-16-7.2-16-16V256c0-8.8,7.2-16,16-16h352c8.8,0,16,7.2,16,16
+                                V416z"/>
+                                                        <g>
+                                <path style="fill:#FFFFFF;" d="M144.336,326.192l22.256-27.888c6.656-8.704,19.584,2.416,12.288,10.736
+                                    c-7.664,9.088-15.728,18.944-23.408,29.04l26.096,32.496c7.04,9.6-7.024,18.8-13.936,9.328l-23.552-30.192l-23.152,30.848
+                                    c-6.528,9.328-20.992-1.152-13.696-9.856l25.712-32.624c-8.064-10.112-15.872-19.952-23.664-29.04
+                                    c-8.048-9.6,6.912-19.44,12.8-10.464L144.336,326.192z"/>
+                                                            <path style="fill:#FFFFFF;" d="M197.36,303.152c0-4.224,3.584-7.808,8.064-7.808c4.096,0,7.552,3.6,7.552,7.808v64.096h34.8
+                                    c12.528,0,12.8,16.752,0,16.752H205.44c-4.48,0-8.064-3.184-8.064-7.792v-73.056H197.36z"/>
+                                                            <path style="fill:#FFFFFF;" d="M272.032,314.672c2.944-24.832,40.416-29.296,58.08-15.728c8.704,7.024-0.512,18.16-8.192,12.528
+                                    c-9.472-6-30.96-8.816-33.648,4.464c-3.456,20.992,52.192,8.976,51.296,43.008c-0.896,32.496-47.968,33.248-65.632,18.672
+                                    c-4.24-3.456-4.096-9.072-1.792-12.544c3.328-3.312,7.024-4.464,11.392-0.88c10.48,7.152,37.488,12.528,39.392-5.648
+                                    C321.28,339.632,268.064,351.008,272.032,314.672z"/>
+                            </g>
+                                                        <path style="fill:#CAD1D8;" d="M400,432H96v16h304c8.8,0,16-7.2,16-16v-16C416,424.8,408.8,432,400,432z"/>
+                        </svg>
+                    </div>
                 </div>
 
                 <div class="client-data flex flex-col justify-start items-start">
                     <span v-if="activeOrder.ttn"><span class="font-bold">ТТН</span>: {{ activeOrder.ttn }} <span
-                        class="italic" v-if="activeOrder.nova_poshta_status"> ({{ activeOrder.nova_poshta_status }})</span></span>
+                        class="italic" v-if="activeOrder.nova_poshta_status"> ({{
+                            activeOrder.nova_poshta_status
+                        }})</span></span>
                     <span><span class="font-bold">ПІБ</span>: {{ activeOrder.surname }} {{
                             activeOrder.name
                         }} {{ activeOrder.patronymic }}</span>
@@ -323,7 +359,7 @@ export default {
                     toast.error(error?.response?.data?.message ?? 'Помилка синхронізації замовлення');
                 });
         },
-        exportAndDownloadOrder(order) {
+        exportOrderToPdf(order) {
             if (this.isExportDisabled) {
                 return;
             }
@@ -334,6 +370,31 @@ export default {
                 params: {
                     name: `Замовлення_#${order.number}.pdf`,
                     type: 'orders',
+                    params: {
+                        order_id: order.id
+                    }
+                }
+            })
+                .then(response => {
+                    this.isExportDisabled = false;
+                    toast.success('Замовлення успішно експортовано');
+                })
+                .catch(error => {
+                    this.isExportDisabled = false;
+                    toast.error(error?.response?.data?.message ?? 'Помилка експорту замовлення');
+                });
+        },
+        exportOrderToXls(order) {
+            if (this.isExportDisabled) {
+                return;
+            }
+
+            this.isExportDisabled = true;
+
+            axios.get(`/api/export`, {
+                params: {
+                    name: `Замовлення_#${order.number}.xlsx`,
+                    type: 'orders_xlsx',
                     params: {
                         order_id: order.id
                     }

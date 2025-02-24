@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Enums\Export\Status;
+use App\Exports\Order\OrderExport;
 use App\Exports\User\UserExport;
 use App\Models\Export\Export;
 use App\Models\Order\Order;
@@ -67,11 +68,16 @@ class ExportJob implements ShouldQueue
             return;
         }
 
-        if(empty($this->export->params['order_id'])){
+        if (empty($this->export->params['order_id'])) {
             throw new Exception('Order ID is required');
         }
 
         $order = Order::findOrFail($this->export->params['order_id']);
+
+        if($this->export->type === Export::TYPE_ORDERS_XLSX){
+            Excel::store(new OrderExport($order), "exports/{$this->export->name}", 'public');
+            return;
+        }
 
         $pdf = PDF::loadView('pdf.order', ['order' => $order])
             ->setPaper('a4')
