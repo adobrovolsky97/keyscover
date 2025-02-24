@@ -39,6 +39,8 @@ class SyncOrderStatusesCommand extends Command
             $minOrderDate = Carbon::today()->subDays(14);
         }
 
+        dd($minOrderDate, $maxOrderDate);
+
         $page = 1;
 
         do {
