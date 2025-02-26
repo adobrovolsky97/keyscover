@@ -55,7 +55,7 @@
                             </button>
                         </div>
                         <div v-if="product.is_hidden_price" class="mt-3.5">
-                            Ціна за запитом
+                            Під замовлення
                         </div>
                         <div class="overflow-x-auto rounded-lg mt-4" v-if="product.custom_fields.length > 0">
                             <hr>

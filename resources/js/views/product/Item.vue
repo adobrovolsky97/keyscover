@@ -64,7 +64,7 @@
                 </div>
 
                 <span v-if="product.is_hidden_price">
-                    Ціна за запитом
+                    Під замовлення
                 </span>
 
                 <button v-if="!cartProduct && product.left_in_stock >= product.cart_increment_step && !product.is_hidden_price"
