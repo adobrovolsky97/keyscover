@@ -20,7 +20,7 @@
                             <span class="text-error font-bold text-2xl">{{ product.usd_price }} $ / {{ product.price }} грн.</span>
                         </p>
                         <hr class="mt-2">
-                        <div v-if="$store.state.user !== null"
+                        <div v-if="$store.state.user !== null && !product.is_hidden_price"
                              class="flex flex-row w-full gap-1 justify-center lg:justify-start mt-5">
                             <div class="flex flex-col items-center justify-center">
                                 <div class="flex flex-row justify-between items-center gap-1 mb-4 md:mb-0">
@@ -53,6 +53,9 @@
                                     class="btn btn-success text-white">
                                 Оновити кількість
                             </button>
+                        </div>
+                        <div v-if="product.is_hidden_price" class="mt-3.5">
+                            Ціна за запитом
                         </div>
                         <div class="overflow-x-auto rounded-lg mt-4" v-if="product.custom_fields.length > 0">
                             <hr>
@@ -198,7 +201,7 @@ const couldBeIncremented = () => {
     return product.value.left_in_stock >= cartQty.value + product.value.cart_increment_step;
 };
 
-const couldBeDecremented = ()  => {
+const couldBeDecremented = () => {
     return cartQty.value > product.value.cart_increment_step;
 };
 
@@ -247,7 +250,7 @@ const addItemToCart = (product) => {
 
 const incrementQuantity = () => {
     if (couldBeIncremented()) {
-        cartQty.value+= product.value.cart_increment_step;
+        cartQty.value += product.value.cart_increment_step;
     } else {
         cartQty.value = product.value.left_in_stock;
         productErrors.value[product.value.id] = "В наявності: " + product.value.left_in_stock + " шт.";
@@ -259,7 +262,7 @@ const decrementQuantity = () => {
         return;
     }
 
-    cartQty.value-= product.value.cart_increment_step;
+    cartQty.value -= product.value.cart_increment_step;
 };
 
 const updateProductQuantity = () => {

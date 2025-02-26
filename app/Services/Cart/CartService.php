@@ -51,6 +51,10 @@ class CartService extends BaseCrudService implements CartServiceInterface
      */
     public function addProductToCart(Product $product, int $quantity): Cart
     {
+        if ($product->is_hidden_price) {
+            abort(404);
+        }
+
         if (empty($cart = $this->getUserCart(false))) {
             $cart = $this->repository->create(['user_id' => Auth::id()]);
         }
@@ -62,7 +66,7 @@ class CartService extends BaseCrudService implements CartServiceInterface
             throw new BadRequestHttpException('В наявності: ' . $product->left_in_stock . ' шт.');
         }
 
-        if($quantity % $product->cart_increment_step !== 0) {
+        if ($quantity % $product->cart_increment_step !== 0) {
             throw new BadRequestHttpException('Кількість товару повинна бути кратно ' . $product->cart_increment_step);
         }
 
@@ -96,7 +100,7 @@ class CartService extends BaseCrudService implements CartServiceInterface
             throw new Exception('Cart is empty');
         }
 
-        if($quantity % $product->cart_increment_step !== 0) {
+        if ($quantity % $product->cart_increment_step !== 0) {
             throw new BadRequestHttpException('Кількість товару повинна бути кратно ' . $product->cart_increment_step);
         }
 

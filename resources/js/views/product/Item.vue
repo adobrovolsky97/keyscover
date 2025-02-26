@@ -42,7 +42,7 @@
             </div>
             <div v-if="$store.state.user !== null && !minified" class="card-actions justify-center">
 
-                <div class="flex flex-col items-center justify-center mb-2 relative">
+                <div v-if="!product.is_hidden_price" class="flex flex-col items-center justify-center mb-2 relative">
                     <div class="flex flex-row justify-between items-center gap-1 mb-0 md:mb-0">
                         <div class="join">
                             <button :disabled="!couldBeDecremented()" @click="decrementQuantity"
@@ -63,7 +63,11 @@
                         }} шт.</span>
                 </div>
 
-                <button v-if="!cartProduct && product.left_in_stock >= product.cart_increment_step"
+                <span v-if="product.is_hidden_price">
+                    Ціна за запитом
+                </span>
+
+                <button v-if="!cartProduct && product.left_in_stock >= product.cart_increment_step && !product.is_hidden_price"
                         @click="addItemToCart(product)"
                         class="btn btn-neutral btn-block btn-sm lg:btn-md" :class="{'!btn-xs': minified}">
                     Додати до кошика

@@ -58,6 +58,7 @@ class ProductResource extends JsonResource
             ],
             'custom_fields'         => $customFields,
             'cart_increment_step'   => $this->cart_increment_step,
+            'is_hidden_price'       => $this->is_hidden_price,
         ];
     }
 }

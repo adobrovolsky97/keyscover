@@ -36,6 +36,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property boolean $is_available_in_stock
  * @property integer $left_in_stock
  * @property integer $cart_increment_step
+ * @property boolean $is_hidden_price
  * @property Carbon $last_sync_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -65,6 +66,7 @@ class Product extends BaseModel implements HasMedia
         'last_sync_at',
         'description',
         'cart_increment_step',
+        'is_hidden_price',
         'created_at',
         'updated_at'
     ];

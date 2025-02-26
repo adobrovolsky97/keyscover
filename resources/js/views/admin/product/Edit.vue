@@ -109,6 +109,14 @@
                     </label>
                 </div>
 
+                <div class="form-control">
+                    <label class="label cursor-pointer">
+                        <span class="label-text mr-2">Заховати ціну товару</span>
+                        <input type="checkbox" class="toggle" v-model="product.is_hidden_price" true-value="1"
+                               false-value="0"/>
+                    </label>
+                </div>
+
                 <hr class="mt-4 mb-4 w-full">
                 <div class="w-full">
                     <RelatedProducts v-if="isProductLoaded" :id="product.id" title="Додаткові товари"
@@ -171,6 +179,7 @@ export default {
                 images_to_remove: [],
                 is_stop_crm_update: false,
                 is_hidden: false,
+                is_hidden_price: false,
                 related_products: [],
                 similar_products: [],
                 cart_increment_step: 1,
@@ -199,6 +208,7 @@ export default {
                         cart_increment_step: productResponse.cart_increment_step,
                         is_stop_crm_update: productResponse.is_stop_crm_update,
                         is_hidden: productResponse.is_hidden,
+                        is_hidden_price: productResponse.is_hidden_price,
                         related_products: productResponse.related_products,
                         similar_products: productResponse.similar_products,
                     }
