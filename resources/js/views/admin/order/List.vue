@@ -70,7 +70,6 @@
                     <td>
                         <span
                             v-if="order.crm_status"
-                            class="font-light"
                             :class="ProductHelper().getColorForStatus(order.crm_status)">{{
                                 order.crm_status
                             }}</span>
@@ -115,7 +114,6 @@
                 <div class="flex flex-row justify-between items-start">
                     <h3 class="text-lg font-bold">Замовлення {{ activeOrder.number }}<span
                         v-if="activeOrder.crm_status"
-                        class="font-light"
                         :class="ProductHelper().getColorForStatus(activeOrder.crm_status)"> ({{
                             activeOrder.crm_status
                         }})</span></h3>

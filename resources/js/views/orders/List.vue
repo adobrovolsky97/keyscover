@@ -13,7 +13,6 @@
                         class="collapse-title md:text-xl text-sm font-medium flex md:flex-row flex-col md:justify-between justify-start md:items-center items-start">
                         <span>Замовлення #{{ data.meta.total - (data.meta.per_page * (data.meta.current_page - 1) + orderIndex) }}<span
                             v-if="order.crm_status"
-                            class="font-light"
                             :class="ProductHelper().getColorForStatus(order.crm_status)"> ({{
                                 order.crm_status
                             }})</span></span>
