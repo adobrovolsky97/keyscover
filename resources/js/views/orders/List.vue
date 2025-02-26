@@ -14,7 +14,7 @@
                         <span>Замовлення #{{ data.meta.total - (data.meta.per_page * (data.meta.current_page - 1) + orderIndex) }}<span
                             v-if="order.crm_status"
                             class="font-light"
-                            :class="{'text-red-400': !order.is_paid, 'text-green-400': order.is_paid}"> ({{
+                            :class="ProductHelper().getColorForStatus(order.crm_status)"> ({{
                                 order.crm_status
                             }})</span></span>
                         <span>{{ order.created_at }}</span>
@@ -110,6 +110,7 @@ import TableSkeleton from "../../components/skeleton/TableSkeleton.vue";
 import RouteHelper from "../../helpers/Route/RouteHelper.js";
 import {useHead} from "@vueuse/head";
 import {toast} from "vue3-toastify";
+import ProductHelper from "../../helpers/ProductHelper.js";
 
 export default {
     setup() {
@@ -161,6 +162,9 @@ export default {
         this.resolveQueryParams();
     },
     methods: {
+        ProductHelper() {
+            return ProductHelper
+        },
         updatePage(page) {
             this.filters.page = page;
         },

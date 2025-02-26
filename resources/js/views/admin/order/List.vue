@@ -71,7 +71,7 @@
                         <span
                             v-if="order.crm_status"
                             class="font-light"
-                            :class="{'text-red-400': !order.is_paid, 'text-green-400': order.is_paid}">{{
+                            :class="ProductHelper().getColorForStatus(order.crm_status)">{{
                                 order.crm_status
                             }}</span>
                     </td>
@@ -116,7 +116,7 @@
                     <h3 class="text-lg font-bold">Замовлення {{ activeOrder.number }}<span
                         v-if="activeOrder.crm_status"
                         class="font-light"
-                        :class="{'text-red-400': !activeOrder.is_paid, 'text-green-400': activeOrder.is_paid}"> ({{
+                        :class="ProductHelper().getColorForStatus(activeOrder.crm_status)"> ({{
                             activeOrder.crm_status
                         }})</span></h3>
 
@@ -253,6 +253,7 @@ import RouteHelper from "../../../helpers/Route/RouteHelper.js";
 import {toast} from "vue3-toastify";
 import {useHead} from "@vueuse/head";
 import axios from "axios";
+import ProductHelper from "../../../helpers/ProductHelper.js";
 
 export default {
     setup() {
@@ -304,6 +305,9 @@ export default {
         this.resolveQueryParams();
     },
     methods: {
+        ProductHelper() {
+            return ProductHelper
+        },
         delaySearch() {
             clearTimeout(this.timer);
             this.timer = setTimeout(() => {
