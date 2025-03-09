@@ -170,6 +170,7 @@ export default {
             isInitialLoad: true,
             isScrollToTop: false,
             showScrollToTop: false,
+            fetchDataTimer: null,
             filters: {
                 only_available: 1,
                 order_by: 'id_desc',
@@ -191,27 +192,27 @@ export default {
     watch: {
         'filters': {
             handler: function () {
-                this.fetchData();
+                this.fetchData(false);
             },
             deep: true
         },
         order_by: {
             handler: function () {
-                this.filters.order_by = this.order_by;
-                this.filters.page = 1;
+                this.filters = {
+                    ...this.filters,
+                    order_by: this.order_by,
+                    page: 1,
+                }
             }
-        },
-        '$route.query': {
-            handler: function (value) {
-                this.filters = {...this.filters, ...value};
-            },
-            deep: true
         },
         '$route.query.search': {
             handler: function (value) {
                 this.search = value;
-                this.filters.search = value;
-                this.filters.page = 1;
+                this.filters = {
+                    ...this.filters,
+                    search: value,
+                    page: 1,
+                }
             }
         },
     },
@@ -292,37 +293,47 @@ export default {
                 this.isMoveCategoriesToTop = false;
             }
         },
-        fetchData() {
-            RouteHelper.updateQueryParams(this.queryParams);
-            this.isDataLoaded = false;
-            return axios.get('/api/products', {params: this.filters})
-                .then((response) => {
-                    this.data = response.data;
-                })
-                .then(() => {
-                    this.isDataLoaded = true;
+        fetchData(isImmediateRequest = true) {
 
-                    if (!this.isInitialLoad && this.isScrollToTop) {
-                        this.isScrollToTop = false;
-                        window.scrollTo({top: 0, behavior: 'instant'});
-                    } else {
-                        const savedState = localStorage.getItem('productListState');
-                        if (savedState) {
-                            const {productId} = JSON.parse(savedState);
-                            this.$nextTick(() => {
-                                const element = document.getElementById(productId);
-                                if (element) {
-                                    element.scrollIntoView({behavior: 'instant', block: 'center'});
-                                }
-                            });
+            if (this.fetchDataTimer) {
+                clearTimeout(this.fetchDataTimer);
+            }
+
+            const timeout = isImmediateRequest ? 1 : 500;
+
+            this.fetchDataTimer = setTimeout(() => {
+
+                RouteHelper.updateQueryParams(this.queryParams);
+                this.isDataLoaded = false;
+                return axios.get('/api/products', {params: this.filters})
+                    .then((response) => {
+                        this.data = response.data;
+                    })
+                    .then(() => {
+                        this.isDataLoaded = true;
+
+                        if (!this.isInitialLoad && this.isScrollToTop) {
+                            this.isScrollToTop = false;
+                            window.scrollTo({top: 0, behavior: 'instant'});
+                        } else {
+                            const savedState = localStorage.getItem('productListState');
+                            if (savedState) {
+                                const {productId} = JSON.parse(savedState);
+                                this.$nextTick(() => {
+                                    const element = document.getElementById(productId);
+                                    if (element) {
+                                        element.scrollIntoView({behavior: 'instant', block: 'center'});
+                                    }
+                                });
+                            }
+                            // Clear the saved state
+                            localStorage.removeItem('productListState');
                         }
-                        // Clear the saved state
-                        localStorage.removeItem('productListState');
-                    }
-                })
-                .finally(() => {
-                    this.isInitialLoad = false;
-                });
+                    })
+                    .finally(() => {
+                        this.isInitialLoad = false;
+                    });
+            }, timeout);
         },
         resolveQueryParams() {
             this.filters = {...this.filters, ...this.route.query};
@@ -338,8 +349,11 @@ export default {
 
             categoriesArray = this.updateParentCategories(this.categories, categoriesArray);
 
-            this.filters.categories = categoriesArray.filter((category) => category !== '').join(',');
-            this.filters.page = 1;
+            this.filters = {
+                ...this.filters,
+                categories: categoriesArray.filter((category) => category !== '').join(','),
+                page: 1,
+            };
         },
         processAllChildCategories(category, categoriesArray, operation) {
             const processCategory = (category, categoriesArray, operation) => {
