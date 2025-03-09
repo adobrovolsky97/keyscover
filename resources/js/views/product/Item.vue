@@ -33,10 +33,10 @@
             </router-link>
 
             <div class="flex flex-row justify-between items-center">
-                <div class="badge badge-outline badge-neutral badge-sm lg:badge-md" :class="{'!badge-sm': minified}">
+                <div class="badge badge-outline badge-neutral badge-sm xl:badge-md" :class="{'!badge-sm': minified}">
                     {{ product.usd_price }}$
                 </div>
-                <div class="badge badge-outline badge-neutral badge-sm lg:badge-md" :class="{'!badge-sm': minified}">
+                <div class="badge badge-outline badge-neutral badge-sm xl:badge-md" :class="{'!badge-sm': minified}">
                     {{ product.price }} грн.
                 </div>
             </div>
