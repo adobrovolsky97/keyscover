@@ -111,7 +111,7 @@
 
                 <div class="form-control">
                     <label class="label cursor-pointer">
-                        <span class="label-text mr-2">Заховати ціну товару</span>
+                        <span class="label-text mr-2">Заблокувати можливість додати в кошик</span>
                         <input type="checkbox" class="toggle" v-model="product.is_hidden_price" true-value="1"
                                false-value="0"/>
                     </label>

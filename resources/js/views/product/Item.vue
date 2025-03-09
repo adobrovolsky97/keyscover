@@ -86,7 +86,7 @@
 
             <div v-if="$store.state.user !== null && minified" class="card-actions justify-center">
 
-                <div class="flex flex-row justify-between items-center gap-1">
+                <div v-if="!product.is_hidden_price" class="flex flex-row justify-between items-center gap-1">
                     <div class="flex flex-row justify-between items-center gap-1 mb-0 md:mb-0">
                         <div class="join">
                             <button :disabled="!couldBeDecremented()" @click="decrementQuantity"
@@ -121,6 +121,9 @@
                             :class="{'btn-sm lg:!btn-xs': minified}">
                         Оновити
                     </button>
+                </div>
+                <div class="text-xs p-1" v-else>
+                    Під замовлення
                 </div>
             </div>
         </div>

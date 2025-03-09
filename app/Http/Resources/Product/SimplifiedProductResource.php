@@ -25,6 +25,7 @@ class SimplifiedProductResource extends JsonResource
             'name'                  => $this->name,
             'description'           => $this->description,
             'price'                 => ceil($this->uah_price),
+            'is_hidden_price'       => $this->is_hidden_price,
             'usd_price'             => $this->price, // TODO
             'is_available_in_stock' => $this->is_available_in_stock,
             'is_hidden'             => $this->is_hidden,
