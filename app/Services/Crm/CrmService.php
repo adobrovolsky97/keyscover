@@ -165,7 +165,7 @@ class CrmService implements CrmServiceInterface
         }
 
         $payload = [
-            'title'                   => "Замовлення з сайту #$order->id",
+            'title'                   => "Замовлення з сайту #$order->number",
             'total'                   => $totalPrice + $fee - ($order->discount_uah ?? 0),
             'currency'                => 'UAH',
             'comment'                 => $order->comment,

@@ -2,6 +2,7 @@
 
 namespace App\Services\Order;
 
+use Adobrovolsky97\LaravelRepositoryServicePattern\Exceptions\Repository\RepositoryException;
 use App\Enums\Config\Key;
 use App\Models\CartProduct\CartProduct;
 use App\Models\Order\Order;
@@ -43,7 +44,7 @@ class OrderService extends BaseCrudService implements OrderServiceInterface
             $data['discount_percent'] = $cart->discount_percent;
             $data['discount_usd'] = $cart->discount_amount;
             $data['discount_uah'] = $cart->discount_amount_uah;
-            $data['number'] = $data['user_id'] . '-' . time();
+            $data['number'] = $this->getOrderNumber($data['user_id']);
 
             /** @var Order $order */
             $order = parent::create($data);
@@ -68,6 +69,16 @@ class OrderService extends BaseCrudService implements OrderServiceInterface
 
             return $order->refresh();
         });
+    }
+
+    /**
+     * @throws RepositoryException
+     */
+    protected function getOrderNumber(int $userId):string
+    {
+        $ordersCount = $this->repository->count(['user_id' => $userId]) + 1;
+
+        return "$userId-$ordersCount";
     }
 
     /**
