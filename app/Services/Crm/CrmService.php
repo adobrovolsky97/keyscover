@@ -106,6 +106,10 @@ class CrmService implements CrmServiceInterface
                 'value' => $order->phone,
             ],
             [
+                'name'  => 'Номер замовлення з сайту',
+                'value' => $order->number,
+            ],
+            [
                 'name'  => 'П.І.Б з сайту',
                 'value' => $order->full_name,
             ],
@@ -165,7 +169,7 @@ class CrmService implements CrmServiceInterface
         }
 
         $payload = [
-            'title'                   => "Замовлення з сайту #$order->number",
+            'title'                   => "Замовлення з сайту #$order->id",
             'total'                   => $totalPrice + $fee - ($order->discount_uah ?? 0),
             'currency'                => 'UAH',
             'comment'                 => $order->comment,
