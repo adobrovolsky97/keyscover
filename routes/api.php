@@ -6,10 +6,13 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductSubscriptionController;
 use App\Http\Controllers\StatController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserNotificationController;
 use App\Http\Controllers\VisitTrackerController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -77,6 +80,14 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::post('', [OrderController::class, 'store']);
         Route::post('{order}/sync', [OrderController::class, 'syncOrderToCrm']);
     });
+
+    Route::post('products/{product}/subscribe', [ProductSubscriptionController::class, 'store']);
+    Route::post('favorites/{product}/toggle', [FavoriteController::class, 'toggle']);
+    Route::get('favorites', [FavoriteController::class, 'index']);
+
+    Route::get('notifications', [UserNotificationController::class, 'index']);
+    Route::get('notifications/count', [UserNotificationController::class, 'getCount']);
+    Route::post('notifications/read-all', [UserNotificationController::class, 'readAllNotifications']);
 });
 
 /**
@@ -105,6 +116,8 @@ Route::middleware(AdminMiddleware::class)->group(function () {
         Route::get('', [UserController::class, 'index']);
         Route::delete('{user}', [UserController::class, 'destroy']);
     });
+
+    Route::post('notifications', [UserNotificationController::class, 'store']);
 
     /**
      * Configs
@@ -138,5 +151,4 @@ Route::middleware(AdminMiddleware::class)->group(function () {
     Route::post('products/mass-actions', [ProductController::class, 'handleMassActions']);
     Route::post('products/{product}', [ProductController::class, 'update']);
     Route::delete('products/{product}', [ProductController::class, 'destroy']);
-
 });

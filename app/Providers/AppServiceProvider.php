@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Product\Product;
+use App\Observers\ProductObserver;
 use App\Repositories\Cart\CartRepository;
 use App\Repositories\Cart\Contracts\CartRepositoryInterface;
 use App\Repositories\Category\CategoryRepository;
@@ -10,12 +12,18 @@ use App\Repositories\Config\ConfigRepository;
 use App\Repositories\Config\Contracts\ConfigRepositoryInterface;
 use App\Repositories\Export\Contracts\ExportRepositoryInterface;
 use App\Repositories\Export\ExportRepository;
+use App\Repositories\Favorite\Contracts\FavoriteRepositoryInterface;
+use App\Repositories\Favorite\FavoriteRepository;
 use App\Repositories\Order\Contracts\OrderRepositoryInterface;
 use App\Repositories\Order\OrderRepository;
 use App\Repositories\Product\Contracts\ProductRepositoryInterface;
 use App\Repositories\Product\ProductRepository;
+use App\Repositories\ProductSubscription\Contracts\ProductSubscriptionRepositoryInterface;
+use App\Repositories\ProductSubscription\ProductSubscriptionRepository;
 use App\Repositories\User\Contracts\UserRepositoryInterface;
 use App\Repositories\User\UserRepository;
+use App\Repositories\UserNotification\Contracts\UserNotificationRepositoryInterface;
+use App\Repositories\UserNotification\UserNotificationRepository;
 use App\Repositories\Visit\Contracts\VisitRepositoryInterface;
 use App\Repositories\Visit\VisitRepository;
 use App\Services\Auth\AuthService;
@@ -34,12 +42,18 @@ use App\Services\Delivery\Drivers\DeliveryDriverInterface;
 use App\Services\Delivery\Drivers\NewPostDriver;
 use App\Services\Export\Contracts\ExportServiceInterface;
 use App\Services\Export\ExportService;
+use App\Services\Favorite\Contracts\FavoriteServiceInterface;
+use App\Services\Favorite\FavoriteService;
 use App\Services\Order\Contracts\OrderServiceInterface;
 use App\Services\Order\OrderService;
 use App\Services\Product\Contracts\ProductServiceInterface;
 use App\Services\Product\ProductService;
+use App\Services\ProductSubscription\Contracts\ProductSubscriptionServiceInterface;
+use App\Services\ProductSubscription\ProductSubscriptionService;
 use App\Services\User\Contracts\UserServiceInterface;
 use App\Services\User\UserService;
+use App\Services\UserNotification\Contracts\UserNotificationServiceInterface;
+use App\Services\UserNotification\UserNotificationService;
 use App\Services\Visit\Contracts\VisitServiceInterface;
 use App\Services\Visit\VisitService;
 use Carbon\Carbon;
@@ -64,6 +78,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(DeliveryDriverInterface::class, NewPostDriver::class);
         $this->app->singleton(ExportServiceInterface::class, ExportService::class);
         $this->app->singleton(VisitServiceInterface::class, VisitService::class);
+        $this->app->singleton(ProductSubscriptionServiceInterface::class, ProductSubscriptionService::class);
+        $this->app->singleton(FavoriteServiceInterface::class, FavoriteService::class);
+        $this->app->singleton(UserNotificationServiceInterface::class, UserNotificationService::class);
 
         $this->app->singleton(UserRepositoryInterface::class, UserRepository::class);
         $this->app->singleton(CategoryRepositoryInterface::class, CategoryRepository::class);
@@ -73,6 +90,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(OrderRepositoryInterface::class, OrderRepository::class);
         $this->app->singleton(ExportRepositoryInterface::class, ExportRepository::class);
         $this->app->singleton(VisitRepositoryInterface::class, VisitRepository::class);
+        $this->app->singleton(ProductSubscriptionRepositoryInterface::class, ProductSubscriptionRepository::class);
+        $this->app->singleton(FavoriteRepositoryInterface::class, FavoriteRepository::class);
+        $this->app->singleton(UserNotificationRepositoryInterface::class, UserNotificationRepository::class);
+
     }
 
     /**
@@ -80,6 +101,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Product::observe(ProductObserver::class);
     }
 }

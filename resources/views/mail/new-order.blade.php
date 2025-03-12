@@ -484,7 +484,7 @@
                                                                                                      style="color: blue"
                                                                                                      href="https://keyscover.store">keyscover.store</a>.
                                                                     <br>
-                                                                    Замовлення: <strong><span>#{{$order->number}}</span></strong>
+                                                                    Замовлення: <strong><span>{{$order->number}}</span></strong>
                                                                     передано на комплектацію та буде оброблено
                                                                     найближчим часом
                                                                 </p></td>

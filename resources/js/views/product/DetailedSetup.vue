@@ -8,6 +8,9 @@
             </div>
             <div class="card-body">
                 <div class="flex flex-col lg:flex-row justify-between items-start gap-4">
+                    <FavoriteButton v-if="$store.state.user !== null"
+                                    classes="absolute right-2 top-2" :product-id="product.id"
+                                    :is-in-favorites="product.has_active_favorite"/>
                     <div class="w-full">
                         <h2 class="font-bold text-2xl">{{ product.name }}</h2>
                         <p class="text-lg">
@@ -45,9 +48,17 @@
                                     class="btn btn-neutral">
                                 Додати до кошика
                             </button>
-                            <button v-if="!cartProduct && product.left_in_stock <= 0" disabled
-                                    class="btn btn-neutral">
-                                Немає в наявності
+                            <button v-if="!cartProduct && product.left_in_stock <= 0"
+                                    @click="subscribeToProduct(product)"
+                                    :disabled="product.has_active_subscription"
+                                    :class="{'!bg-green-100': product.has_active_subscription}"
+                                    class="btn bg-gray-300 hover:bg-gray-500">
+                                 <span v-if="!product.has_active_subscription">
+                                    Повідомити коли зявиться
+                                </span>
+                                            <span v-else>
+                                     Повідомимо коли зявиться
+                                </span>
                             </button>
                             <button v-if="cartProduct && product.left_in_stock > 0" @click="updateProductQuantity"
                                     class="btn btn-success text-white">
@@ -113,6 +124,7 @@ import {onMounted} from "vue";
 import {useRoute} from "vue-router";
 import {useHead} from "@vueuse/head";
 import CartHelper from "../../helpers/CartHelper.js";
+import FavoriteButton from "../../components/favorites/FavoriteButton.vue";
 
 const isDataLoaded = ref(false);
 const product = ref(null);
@@ -142,7 +154,6 @@ const media = computed(() => {
     return product.value?.media?.length ? product.value.media : [{url: product.value.image}];
 });
 
-
 const activeRelatedProducts = computed(() => {
     return product.value?.related_products?.filter(product => !product.is_hidden);
 });
@@ -161,6 +172,19 @@ const copyToClipboard = (text) => {
     }).catch(err => {
     });
 };
+
+const subscribeToProduct = (product) => {
+
+    if (product.has_active_subscription) {
+        return;
+    }
+
+    axios.post('/api/products/' + product.id + '/subscribe')
+        .then(() => {
+            product.has_active_subscription = true;
+            toast.success("Ви отримаєте сповіщення на Email, коли товар знову з’явиться");
+        })
+}
 
 const fetchProduct = async () => {
     isDataLoaded.value = false;

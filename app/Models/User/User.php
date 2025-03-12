@@ -54,6 +54,13 @@ class User extends Authenticatable
         'role'              => Role::class
     ];
 
+    public function getFullNameAttribute(): string
+    {
+        $surnameAndName = [$this->surname, $this->name];
+
+        return trim(implode(' ', array_filter($surnameAndName)));
+    }
+
     /**
      * @return HasMany
      */

@@ -5,7 +5,9 @@ namespace App\Models\Product;
 use App\Enums\Config\Key;
 use App\Enums\Product\Media;
 use App\Models\CartProduct\CartProduct;
+use App\Models\Favorite\Favorite;
 use App\Models\OrderProduct\OrderProduct;
+use App\Models\ProductSubscription\ProductSubscription;
 use App\Services\Config\Contracts\ConfigServiceInterface;
 use Carbon\Carbon;
 use App\Models\Category\Category;
@@ -14,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Adobrovolsky97\LaravelRepositoryServicePattern\Models\BaseModel;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use League\Glide\Filesystem\FileNotFoundException;
 use Spatie\Image\Exceptions\InvalidManipulation;
 use Spatie\Image\Manipulations;
@@ -147,5 +150,37 @@ class Product extends BaseModel implements HasMedia
             ->watermarkOpacity(35)
             ->format(Manipulations::FORMAT_WEBP)
             ->queued();
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function activeSubscriptions(): HasMany
+    {
+        return $this->hasMany(ProductSubscription::class, 'product_id')
+            ->where('is_reminder_sent', false);
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function activeUserSubscription(): HasOne
+    {
+        return $this->hasOne(ProductSubscription::class, 'product_id')
+            ->where('user_id', auth()->id() ?? -1)
+            ->where('is_reminder_sent', false);
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function activeUserFavorite(): HasOne
+    {
+        return $this->hasOne(Favorite::class, 'product_id')->where('user_id', auth()->id() ?? -1);
+    }
+
+    public function favorites(): HasMany
+    {
+        return $this->hasMany(Favorite::class, 'product_id');
     }
 }

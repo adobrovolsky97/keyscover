@@ -1,5 +1,8 @@
 <template>
     <div class="card border bg-base-100 shadow-xl" :class="{'opacity-20': product.is_hidden, '!shadow-none': noShadow}">
+        <FavoriteButton @removed="handleFavoriteRemoved" v-if="$store.state.user !== null && !minified"
+                        classes="absolute right-2 top-2" :product-id="product.id"
+                        :is-in-favorites="product.has_active_favorite"/>
         <figure class="w-full overflow-hidden p-1">
             <Carousel :arrows-size="'15px'" :show-thumbs="false"
                       :id="product.id"
@@ -29,7 +32,9 @@
                 :data-tip="product.name"
                 :class="{'!text-xs': minified, 'tooltip': isTextTrimmed && !minified}"
             >
-                <p ref="productName" class="w-full !whitespace-nowrap !overflow-hidden !text-ellipsis">{{ product.name }}</p>
+                <p ref="productName" class="w-full !whitespace-nowrap !overflow-hidden !text-ellipsis">{{
+                        product.name
+                    }}</p>
             </router-link>
 
             <div class="flex flex-row justify-between items-center">
@@ -67,15 +72,24 @@
                     Під замовлення
                 </span>
 
-                <button v-if="!cartProduct && product.left_in_stock >= product.cart_increment_step && !product.is_hidden_price"
-                        @click="addItemToCart(product)"
-                        class="btn btn-neutral btn-block btn-sm lg:btn-md" :class="{'!btn-xs': minified}">
+                <button
+                    v-if="!cartProduct && product.left_in_stock >= product.cart_increment_step && !product.is_hidden_price"
+                    @click="addItemToCart(product)"
+                    class="btn btn-neutral btn-block btn-sm lg:btn-md" :class="{'!btn-xs': minified}">
                     Додати до кошика
                 </button>
 
-                <button v-if="!cartProduct && product.left_in_stock < product.cart_increment_step" disabled
-                        class="btn btn-neutral btn-block btn-sm lg:btn-md" :class="{'!btn-xs': minified}">
-                    Немає в наявності
+                <button v-if="!cartProduct && product.left_in_stock < product.cart_increment_step"
+                        @click="subscribeToProduct(product)"
+                        :disabled="product.has_active_subscription"
+                        :class="{'!bg-green-100': product.has_active_subscription, '!btn-xs': minified}"
+                        class="btn bg-gray-300 hover:bg-gray-500 btn-block btn-sm lg:btn-md">
+                    <span v-if="!product.has_active_subscription">
+                        Повідомити коли зявиться
+                    </span>
+                    <span v-else>
+                         Повідомимо коли зявиться
+                    </span>
                 </button>
                 <button v-if="cartProduct && product.left_in_stock >= product.cart_increment_step"
                         @click="updateProductQuantity"
@@ -134,10 +148,11 @@
 import {toast} from "vue3-toastify";
 import Carousel from "./Carousel.vue";
 import CartHelper from "../../helpers/CartHelper.js";
+import FavoriteButton from "../../components/favorites/FavoriteButton.vue";
 
 export default {
     name: 'Item',
-    components: {Carousel},
+    components: {FavoriteButton, Carousel},
     props: {
         product: {
             type: Object,
@@ -214,6 +229,18 @@ export default {
             }).catch(err => {
             });
         },
+        subscribeToProduct(product) {
+
+            if (product.has_active_subscription) {
+                return;
+            }
+
+            axios.post('/api/products/' + product.id + '/subscribe')
+                .then(() => {
+                    product.has_active_subscription = true;
+                    toast.success("Ви отримаєте сповіщення на Email, коли товар знову з’явиться");
+                })
+        },
         addItemToCart(product) {
             this.cartQty = CartHelper.updateCartQuantity(this.cartQty, product)
 
@@ -252,6 +279,9 @@ export default {
         },
         couldBeDecremented() {
             return this.cartQty > this.product.cart_increment_step;
+        },
+        handleFavoriteRemoved(productId) {
+            this.$emit('favorite-removed', productId);
         },
         updateProductQuantity() {
             this.cartQty = CartHelper.updateCartQuantity(this.cartQty, this.product)

@@ -37,7 +37,9 @@ class ProductController extends Controller
     public function index(SearchRequest $request): AnonymousResourceCollection
     {
         return ProductResource::collection(
-            $this->productService->getAllPaginated($request->validated(), $request->input('per_page', 20))
+            $this->productService
+                ->with(['activeUserSubscription', 'category', 'similarProducts', 'relatedProducts'])
+                ->getAllPaginated($request->validated(), $request->input('per_page', 20))
         );
     }
 

@@ -75,6 +75,15 @@
                                class="link">Налаштування</a>
                         </router-link>
                         <router-link
+                            :to="{name: 'admin.notifications'}"
+                            custom
+                            v-slot="{ navigate, href }"
+                        >
+                            <a @click="navigate"
+                               :class="{'link-error': $route.path === '/admin/notifications'}"
+                               class="link">Сповіщення</a>
+                        </router-link>
+                        <router-link
                             :to="{name: 'home'}"
                             custom
                             v-slot="{ navigate, href }"
@@ -160,6 +169,15 @@
                                     <a @click="navigate"
                                        :class="{'link-error': $route.path === '/admin/configs'}"
                                        class="link">Налаштування</a>
+                                </router-link>
+                                <router-link
+                                    :to="{name: 'admin.notifications'}"
+                                    custom
+                                    v-slot="{ navigate, href }"
+                                >
+                                    <a @click="navigate"
+                                       :class="{'link-error': $route.path === '/admin/notifications'}"
+                                       class="link">Сповіщення</a>
                                 </router-link>
                                 <router-link
                                     :to="{name: 'home'}"

@@ -23,6 +23,9 @@ import Dashboard from "./views/admin/Dashboard.vue";
 import NotFound from "./views/errors/NotFound.vue";
 import Detailed from "./views/product/DetailedSetup.vue";
 import ForgotPassword from "./views/auth/ForgotPassword.vue";
+import FavoritesList from './views/favorites/List.vue'
+import UserNotification from "./views/admin/notification/UserNotification.vue";
+import NotificationsList from "./views/user-notifications/List.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -45,6 +48,22 @@ const router = createRouter({
                     path: '/checkout',
                     name: 'checkout',
                     component: Checkout,
+                    meta: {
+                        middleware: [auth]
+                    }
+                },
+                {
+                    path: '/notifications',
+                    name: 'notifications',
+                    component: NotificationsList,
+                    meta: {
+                        middleware: [auth]
+                    }
+                },
+                {
+                    path: '/favorites',
+                    name: 'favorites',
+                    component: FavoritesList,
                     meta: {
                         middleware: [auth]
                     }
@@ -110,6 +129,14 @@ const router = createRouter({
                     path: 'products',
                     name: 'admin.products',
                     component: ProductList,
+                    meta: {
+                        middleware: [admin]
+                    }
+                },
+                {
+                    path: 'notifications',
+                    name: 'admin.notifications',
+                    component: UserNotification,
                     meta: {
                         middleware: [admin]
                     }

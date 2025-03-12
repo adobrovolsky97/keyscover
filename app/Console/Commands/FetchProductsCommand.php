@@ -71,7 +71,7 @@ class FetchProductsCommand extends Command
 
         while ($page <= $lastPage) {
             foreach ($data['items'] ?? [] as $product) {
-                if ($product['sku'] === CrmService::FEE_PRODUCT_SKU) {
+                if (empty($product['sku']) || $product['sku'] === CrmService::FEE_PRODUCT_SKU) {
                     continue;
                 }
 
@@ -110,21 +110,22 @@ class FetchProductsCommand extends Command
             return;
         }
 
-        /** @var Product $product */
-        $product = $this->productService->updateOrCreate(
-            [$syncField => $productData[$fieldForCrm]],
-            [
-                'external_id'           => $productData['id'],
-                'name'                  => $productData['title'],
-                'category_id'           => $category?->id,
-                'price'                 => $productData['price_amount'],
-                'is_available_in_stock' => ($productData['stock_available'] ?? 0) > 0,
-                'left_in_stock'         => $productData['stock_available'] ?? 0,
-                'custom_fields'         => $productData['custom_fields'] ?? [],
-            ]
-        );
+        try {
+            /** @var Product $product */
+            $product = $this->productService->updateOrCreate(
+                [$syncField => $productData[$fieldForCrm]],
+                [
+                    'external_id'           => $productData['id'],
+                    'name'                  => $productData['title'],
+                    'category_id'           => $category?->id,
+                    'price'                 => $productData['price_amount'],
+                    'is_available_in_stock' => ($productData['stock_available'] ?? 0) > 0,
+                    'left_in_stock'         => $productData['stock_available'] ?? 0,
+                    'custom_fields'         => $productData['custom_fields'] ?? [],
+                ]
+            );
 
-        $this->info('Product ' . $product->name . ' has been processed');
+            $this->info('Product ' . $product->name . ' has been processed');
 
 //        if (!empty($productData['asset_url']) && !app()->isLocal()) {
 //            $this->addAttachmentsToProduct($product, array_merge(
@@ -135,7 +136,10 @@ class FetchProductsCommand extends Command
 //
 //        $this->removeDuplicatedMedia($product);
 
-        $product->update(['last_sync_at' => now()]);
+            $product->update(['last_sync_at' => now()]);
+        } catch (Throwable $exception) {
+            $this->error('Product ' . $productData['title'] . ' could not be processed: ' . $exception->getMessage());
+        }
     }
 
     /**

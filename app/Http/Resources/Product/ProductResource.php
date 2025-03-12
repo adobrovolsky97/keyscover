@@ -36,29 +36,31 @@ class ProductResource extends JsonResource
         }
 
         return [
-            'id'                    => $this->id,
-            'sku'                   => $this->sku,
-            'name'                  => $this->name,
-            'description'           => $this->description,
-            'price'                 => $this->uah_price,
-            'usd_price'             => $this->price,
-            'is_available_in_stock' => $this->is_available_in_stock,
-            'is_hidden'             => $this->is_hidden,
-            'is_stop_crm_update'    => $this->is_stop_crm_update,
-            'left_in_stock'         => $this->left_in_stock,
-            'last_sync_at'          => $this->last_sync_at?->format('Y-m-d H:i:s'),
-            'related_products'      => SimplifiedProductResource::collection($this->relatedProducts),
-            'similar_products'      => SimplifiedProductResource::collection($this->similarProducts),
-            'image'                 => empty($image) ? asset('no-image.png') : $image,
-            'media'                 => $this->whenLoaded('media', MediaResource::collection($this->getMedia(Media::COLLECTION_IMAGES->value))),
-            'category'              => [
+            'id'                      => $this->id,
+            'sku'                     => $this->sku,
+            'name'                    => $this->name,
+            'description'             => $this->description,
+            'price'                   => $this->uah_price,
+            'usd_price'               => $this->price,
+            'is_available_in_stock'   => $this->is_available_in_stock,
+            'is_hidden'               => $this->is_hidden,
+            'is_stop_crm_update'      => $this->is_stop_crm_update,
+            'left_in_stock'           => $this->left_in_stock,
+            'last_sync_at'            => $this->last_sync_at?->format('Y-m-d H:i:s'),
+            'has_active_subscription' => $this->activeUserSubscription ?? false,
+            'has_active_favorite'     => $this->activeUserFavorite ?? false,
+            'related_products'        => SimplifiedProductResource::collection($this->relatedProducts),
+            'similar_products'        => SimplifiedProductResource::collection($this->similarProducts),
+            'image'                   => empty($image) ? asset('no-image.png') : $image,
+            'media'                   => $this->whenLoaded('media', MediaResource::collection($this->getMedia(Media::COLLECTION_IMAGES->value))),
+            'category'                => [
                 'id'          => $this->category?->id,
                 'name'        => $this->category?->name,
                 'breadcrumbs' => $this->category?->breadcrumbs
             ],
-            'custom_fields'         => $customFields,
-            'cart_increment_step'   => $this->cart_increment_step,
-            'is_hidden_price'       => $this->is_hidden_price,
+            'custom_fields'           => $customFields,
+            'cart_increment_step'     => $this->cart_increment_step,
+            'is_hidden_price'         => $this->is_hidden_price,
         ];
     }
 }
