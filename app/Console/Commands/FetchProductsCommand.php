@@ -122,6 +122,7 @@ class FetchProductsCommand extends Command
                     'is_available_in_stock' => ($productData['stock_available'] ?? 0) > 0,
                     'left_in_stock'         => $productData['stock_available'] ?? 0,
                     'custom_fields'         => $productData['custom_fields'] ?? [],
+                    'last_sync_at'          => now()
                 ]
             );
 
@@ -136,7 +137,6 @@ class FetchProductsCommand extends Command
 //
 //        $this->removeDuplicatedMedia($product);
 
-            $product->update(['last_sync_at' => now()]);
         } catch (Throwable $exception) {
             $this->error('Product ' . $productData['title'] . ' could not be processed: ' . $exception->getMessage());
         }
