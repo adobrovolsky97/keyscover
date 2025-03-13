@@ -290,6 +290,24 @@ export default {
             })
                 .then(response => {
                     toast.success('Товар успішно оновлено');
+
+                    let productResponse = response.data.data;
+                    this.product = {
+                        id: productResponse.id,
+                        name: productResponse.name,
+                        sku: productResponse.sku,
+                        left_in_stock: productResponse.left_in_stock,
+                        last_sync_at: productResponse.last_sync_at,
+                        description: productResponse.description ?? '',
+                        images: productResponse.media,
+                        images_to_remove: [],
+                        cart_increment_step: productResponse.cart_increment_step,
+                        is_stop_crm_update: productResponse.is_stop_crm_update,
+                        is_hidden: productResponse.is_hidden,
+                        is_hidden_price: productResponse.is_hidden_price,
+                        related_products: productResponse.related_products,
+                        similar_products: productResponse.similar_products,
+                    }
                 })
                 .catch(error => {
                     this.errors = error.response.data.errors;

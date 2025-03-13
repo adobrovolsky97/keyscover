@@ -161,20 +161,22 @@
                         </div>
 
                         <div v-if="$store.state.user !== null">
-                            <button class="btn btn-outline rounded-2xl btn-sm md:w-24 text-xs"
+                            <button class="btn btn-outline rounded-2xl btn-sm text-xs"
                                     v-if="$route.name !== 'checkout'"
                                     onclick="cartModal.showModal()">
-                                <svg class="h-6 w-6 text-slate-500" width="24" height="24" viewBox="0 0 24 24"
-                                     stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                     stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z"/>
-                                    <circle cx="9" cy="19" r="2"/>
-                                    <circle cx="17" cy="19" r="2"/>
-                                    <path d="M3 3h2l2 12a3 3 0 0 0 3 2h7a3 3 0 0 0 3 -2l1 -7h-15.2"/>
-                                </svg>
-                                <span class="mt-0.5">{{
-                                        $store.state.cart?.total ? (($store.state.cart?.total ?? 0) - $store.state.cart?.discount_amount_uah ?? 0) : 0
-                                    }} ₴</span>
+                                <span class="flex flex-row gap-1 whitespace-nowrap">
+                                    <svg class="h-5 w-5 text-slate-500" width="24" height="24" viewBox="0 0 24 24"
+                                         stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                         stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z"/>
+                                        <circle cx="9" cy="19" r="2"/>
+                                        <circle cx="17" cy="19" r="2"/>
+                                        <path d="M3 3h2l2 12a3 3 0 0 0 3 2h7a3 3 0 0 0 3 -2l1 -7h-15.2"/>
+                                    </svg>
+                                    <span class="mt-0.5">{{
+                                            $store.state.cart?.total ? (($store.state.cart?.total ?? 0) - $store.state.cart?.discount_amount_uah ?? 0) : 0
+                                        }} ₴</span>
+                                </span>
                             </button>
 
                             <button v-else class="btn btn-outline rounded-2xl btn-sm md:w-32">
