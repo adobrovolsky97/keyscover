@@ -118,7 +118,7 @@ class CrmService implements CrmServiceInterface
                 'value' => $order->delivery_type === 'new-post' ? 'Нова Пошта' : 'Самовивіз'
             ],
             [
-                'name'  => 'Гроші з сайту',
+                'name'  => 'Спосіб оплати замовлення',
                 'value' => $order->payment_type_text_for_crm
             ]
         ];
