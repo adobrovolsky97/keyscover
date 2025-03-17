@@ -2,10 +2,12 @@
 
 namespace App\Services\Auth;
 
+use App\Jobs\SendWelcomeNotificationsForUserJob;
 use App\Mail\SendResetCodeMail;
 use App\Models\User\User;
 use App\Services\Auth\Contracts\AuthServiceInterface;
 use App\Services\User\Contracts\UserServiceInterface;
+use DB;
 use Illuminate\Support\Facades\Auth;
 use Mail;
 
@@ -22,7 +24,13 @@ class AuthService implements AuthServiceInterface
      */
     public function register(array $data): User
     {
-        return app(UserServiceInterface::class)->create($data);
+        return DB::transaction(function () use ($data) {
+            $user = app(UserServiceInterface::class)->create($data);
+
+            SendWelcomeNotificationsForUserJob::dispatch($user);
+
+            return $user;
+        });
     }
 
     /**

@@ -40,7 +40,7 @@ class SendProductAvailableEmailJob implements ShouldQueue
 
             app(UserNotificationServiceInterface::class)->create([
                 'user_ids' => [$this->productSubscription->user_id],
-                'text'     => "'{$this->productSubscription->product->name}' знову в наявності."
+                'text'     => "🔔 '{$this->productSubscription->product->name}' знову в наявності."
             ]);
         } catch (Throwable $exception) {
             Log::error($exception->getMessage());

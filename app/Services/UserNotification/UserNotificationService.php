@@ -33,10 +33,11 @@ class UserNotificationService extends BaseCrudService implements UserNotificatio
                     $rows = [];
                     foreach ($users as $user) {
                         $rows[] = [
-                            'user_id'    => $user->id,
-                            'text'       => $data['text'],
-                            'created_at' => now(),
-                            'updated_at' => now(),
+                            'user_id'               => $user->id,
+                            'text'                  => $data['text'],
+                            'is_admin_notification' => $data['is_admin_notification'] ?? false,
+                            'created_at'            => now(),
+                            'updated_at'            => now(),
                         ];
                     }
 

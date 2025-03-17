@@ -32,9 +32,12 @@
                 :data-tip="product.name"
                 :class="{'!text-xs': minified, 'tooltip': isTextTrimmed && !minified}"
             >
-                <p ref="productName" class="w-full !whitespace-nowrap !overflow-hidden !text-ellipsis">{{
-                        product.name
-                    }}</p>
+                <p
+                    ref="productName"
+                    class="w-full overflow-hidden text-ellipsis lg:line-clamp-2 line-clamp-1"
+                >
+                    {{ product.name }}
+                </p>
             </router-link>
 
             <div class="flex flex-row justify-between items-center">

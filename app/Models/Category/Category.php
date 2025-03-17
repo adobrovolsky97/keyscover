@@ -44,13 +44,11 @@ class Category extends BaseModel
         $productsCount = 0;
 
         if ($children->isNotEmpty()) {
-//            $productsCount = $children->sum('products_count');
-
             foreach ($children as $child) {
                 $productsCount += $child->getChildrenCategoriesProductsCount();
             }
         } else {
-            $productsCount = $this->products->count();
+            $productsCount = $this->products->where('is_hidden', false)->count();
         }
 
         return $productsCount;

@@ -14,12 +14,22 @@
                     </label>
                 </div>
 
-                <div v-if="config?.type === 'string'" class="form-control w-full">
+                <div v-if="config?.type === 'string' && config?.key !== 'welcome_message'" class="form-control w-full">
                     <div class="label">
                         <span class="label-text">Значення</span>
                     </div>
                     <input type="text" class="input input-bordered" v-model="config.value"/>
                 </div>
+
+                <div v-if="config?.type === 'string' && config?.key === 'welcome_message'" class="form-control w-full">
+                    <div class="form-control w-full">
+                        <div class="label">
+                            <span class="label-text">Значення</span>
+                        </div>
+                        <MdEditor :language="'en_EN'" v-model="config.value"/>
+                    </div>
+                </div>
+
                 <span class="text-red-600 text-xs" v-if="errors?.value">{{ errors.value[0] }}</span>
 
                 <div v-if="config?.description">
@@ -34,12 +44,13 @@
     </div>
 </template>
 <script>
-import Pagination from "../../../components/pagination/Pagination.vue";
+import 'md-editor-v3/lib/style.css';
 import {toast} from "vue3-toastify";
-import * as sea from "node:sea";
 import {useHead} from "@vueuse/head";
+import {MdEditor} from "md-editor-v3";
 
 export default {
+    components: {MdEditor},
     setup() {
         useHead({
             title: 'Зміна налаштування',
@@ -50,6 +61,7 @@ export default {
             isLoading: false,
             errors: {},
             config: {
+                key: null,
                 type: null,
                 value: null,
                 description: null
@@ -64,7 +76,8 @@ export default {
             axios.get(`/api/configs/${this.$route.params.id}`)
                 .then(response => {
                     this.config = {
-                        value: response.data.data.value,
+                        key: response.data.data.key,
+                        value: response.data.data.value || '',
                         type: response.data.data.type,
                         description: response.data.data.description
                     }

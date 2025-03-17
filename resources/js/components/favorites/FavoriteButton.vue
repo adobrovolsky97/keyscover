@@ -1,7 +1,7 @@
 <template>
     <button aria-label="Add to favorites"
             @click="toggle(productId)"
-            class="shadow btn btn-circle z-[10]"
+            class="shadow btn btn-circle z-[10] opacity-60"
             :class="classes">
         <svg class="h-6 w-6" viewBox="0 0 24 24" :fill="isFavorite ? 'red' : 'none'"
              stroke="currentColor"

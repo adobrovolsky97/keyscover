@@ -16,6 +16,7 @@ enum Key: string
     case IS_CRM_ENABLED = 'is_crm_enabled';
     case SYNC_CRM_FIELD = 'sync_crm_field';
     case HEADER_MESSAGE = 'header_message';
+    case WELCOME_MESSAGE = 'welcome_message';
 
     /**
      * @return array|string[]
@@ -26,6 +27,7 @@ enum Key: string
             self::IS_CRM_ENABLED => ['required', 'boolean'],
             self::SYNC_CRM_FIELD => ['required', 'string', Rule::in(['sku', 'external_id'])],
             self::HEADER_MESSAGE => ['nullable', 'string'],
+            self::WELCOME_MESSAGE => ['nullable', 'string'],
         };
     }
 }

@@ -13,7 +13,7 @@
             <div class="w-full flex flex-col gap-2"
                  v-if="isDataLoaded && data.data.length">
 
-                <div v-for="notification in data.data" role="alert" class="alert w-full" :key="notification.id">
+                <div v-for="notification in data.data" role="alert" class="alert w-full" :class="{'!alert-warning': notification.is_admin_notification}" :key="notification.id">
                     <svg
                         v-if="!notification.is_read"
                         xmlns="http://www.w3.org/2000/svg"
@@ -27,7 +27,9 @@
                             d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                     <span v-else></span>
-                    <span>{{ notification.text }}</span>
+                    <span class="w-full">
+                        <MdPreview class="w-full" :modelValue="notification.text"/>
+                    </span>
                     <div>
                         <span>{{ notification.created_at }}</span>
                     </div>
@@ -60,6 +62,8 @@ import CategoryItem from "../../components/CategoryItem.vue";
 import ContentSkeleton from "../../components/skeleton/ContentSkeleton.vue";
 import {useHead} from "@vueuse/head";
 import axios from "axios";
+import 'md-editor-v3/lib/preview.css';
+import {MdPreview} from "md-editor-v3";
 
 export default {
     setup() {
@@ -87,6 +91,7 @@ export default {
         };
     },
     components: {
+        MdPreview,
         ContentSkeleton,
         CategoryItem,
         Item,
@@ -138,3 +143,9 @@ export default {
     }
 };
 </script>
+
+<style>
+.md-editor-previewOnly {
+    background: transparent !important;
+}
+</style>

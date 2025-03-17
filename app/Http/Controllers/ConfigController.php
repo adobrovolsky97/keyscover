@@ -55,7 +55,8 @@ class ConfigController extends Controller
                 [
                     Key::IS_CRM_ENABLED->value,
                     Key::SYNC_CRM_FIELD->value,
-                    Key::HEADER_MESSAGE->value
+                    Key::HEADER_MESSAGE->value,
+                    Key::WELCOME_MESSAGE->value
                 ]
             ]
         ]));

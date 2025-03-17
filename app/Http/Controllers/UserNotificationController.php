@@ -57,7 +57,7 @@ class UserNotificationController extends Controller
      */
     public function store(StoreRequest $request): JsonResponse
     {
-        $this->notificationService->create($request->validated());
+        $this->notificationService->create(array_merge($request->validated(), ['is_admin_notification' => true]));
 
         return Response::json();
     }

@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property integer $id
  * @property integer $user_id
+ * @property integer $is_admin_notification
  * @property string $text
  * @property boolean $is_read
  * @property Carbon $created_at
@@ -24,6 +25,7 @@ class UserNotification extends BaseModel
     protected $fillable = [
         'user_id',
         'text',
+        'is_admin_notification',
         'is_read'
     ];
 

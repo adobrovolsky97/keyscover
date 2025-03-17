@@ -48,7 +48,7 @@ class ProductResource extends JsonResource
             'left_in_stock'           => $this->left_in_stock,
             'last_sync_at'            => $this->last_sync_at?->format('Y-m-d H:i:s'),
             'has_active_subscription' => $this->activeUserSubscription ?? false,
-            'has_active_favorite'     => $this->activeUserFavorite ?? false,
+            'has_active_favorite'     => !empty($this->activeUserFavorite),
             'related_products'        => SimplifiedProductResource::collection($this->relatedProducts),
             'similar_products'        => SimplifiedProductResource::collection($this->similarProducts),
             'image'                   => empty($image) ? asset('no-image.png') : $image,
