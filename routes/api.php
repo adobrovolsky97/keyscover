@@ -86,6 +86,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('favorites', [FavoriteController::class, 'index']);
 
     Route::get('notifications', [UserNotificationController::class, 'index']);
+    Route::delete('notifications/{userNotification}', [UserNotificationController::class, 'destroy']);
     Route::get('notifications/count', [UserNotificationController::class, 'getCount']);
     Route::post('notifications/read-all', [UserNotificationController::class, 'readAllNotifications']);
 });

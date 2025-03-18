@@ -14,4 +14,10 @@ interface UserNotificationRepositoryInterface extends BaseRepositoryInterface
      * @return void
      */
     public function readAllForUser(int $userId): void;
+
+    /**
+     * @param string $batchUuid
+     * @return void
+     */
+    public function deleteAllByBatchUuid(string $batchUuid): void;
 }

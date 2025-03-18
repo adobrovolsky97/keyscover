@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property integer $id
  * @property integer $user_id
+ * @property string $batch_uuid
  * @property integer $is_admin_notification
  * @property string $text
  * @property boolean $is_read
@@ -26,7 +27,8 @@ class UserNotification extends BaseModel
         'user_id',
         'text',
         'is_admin_notification',
-        'is_read'
+        'is_read',
+        'batch_uuid',
     ];
 
     /**

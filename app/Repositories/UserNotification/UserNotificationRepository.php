@@ -21,6 +21,15 @@ class UserNotificationRepository extends BaseRepository implements UserNotificat
     }
 
     /**
+     * @param string $batchUuid
+     * @return void
+     */
+    public function deleteAllByBatchUuid(string $batchUuid): void
+    {
+        $this->getQuery()->where('batch_uuid', $batchUuid)->delete();
+    }
+
+    /**
      * @return string
      */
     protected function getModelClass(): string

@@ -21,7 +21,9 @@
                 <tr v-for="config in data" :key="config.id">
                     <td>{{ config.key }}</td>
                     <td>{{ config.type }}</td>
-                    <td>{{ config.value }}</td>
+                    <td>
+                        <MdPreview :modelValue="config.value"/>
+                    </td>
                     <td><span v-html="config.description"></span></td>
                     <td>
                         <router-link
@@ -49,9 +51,9 @@
 import {useRoute} from "vue-router";
 import Pagination from "../../../components/pagination/Pagination.vue";
 import TableSkeleton from "../../../components/skeleton/TableSkeleton.vue";
-import RouteHelper from "../../../helpers/Route/RouteHelper.js";
-import {toast} from "vue3-toastify";
 import {useHead} from "@vueuse/head";
+import {MdPreview} from "md-editor-v3";
+import 'md-editor-v3/lib/preview.css';
 
 export default {
     setup() {
@@ -68,6 +70,7 @@ export default {
         }
     },
     components: {
+        MdPreview,
         Pagination,
         TableSkeleton
     },
@@ -91,3 +94,9 @@ export default {
     }
 }
 </script>
+
+<style>
+.md-editor-previewOnly {
+    background: transparent !important;
+}
+</style>

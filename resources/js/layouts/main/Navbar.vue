@@ -195,7 +195,8 @@
                         <div class="dropdown dropdown-end" ref="dropdown">
                             <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar"
                                  @click="toggleDropdown">
-                                <svg class="h-8 w-8" :class="{'animate-pulse text-red-400': notificationsCount > 0}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg class="h-8 w-8" :class="{'animate-pulse text-red-400': notificationsCount > 0}"
+                                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                           d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 </svg>
@@ -214,7 +215,7 @@
                                         v-slot="{ navigate, href }"
                                     >
                                         <a @click="navigate" :class="{'link-error': $route.path === '/notifications'}"
-                                           class="link">Сповіщень ({{notificationsCount}})</a>
+                                           class="link">Сповіщень ({{ notificationsCount }})</a>
                                     </router-link>
                                 </li>
                                 <li>
@@ -286,11 +287,9 @@
         <transition name="slide-fade">
             <nav
                 v-if="isShowSubNavbar && header_message"
-                class="w-full shadow-xl flex flex-row gap-4 items-center justify-center bg-base-200 py-2"
+                class="w-full shadow-xl flex flex-row gap-4 items-center justify-center bg-base-200 notification"
             >
-                <p class="text-center">
-                    {{ header_message }}
-                </p>
+                <MdPreview class="w-full text-center" :modelValue="header_message"/>
             </nav>
         </transition>
     </div>
@@ -303,6 +302,8 @@ import Modal from "../../components/Modal.vue";
 import RouteHelper from "../../helpers/Route/RouteHelper.js";
 import store from "../../store.js";
 import axios from "axios";
+import {MdPreview} from "md-editor-v3";
+import 'md-editor-v3/lib/preview.css';
 
 export default {
     data() {
@@ -340,6 +341,7 @@ export default {
         window.addEventListener("scroll", this.checkScrollPosition);
     },
     components: {
+        MdPreview,
         Modal,
         Cart
     },
@@ -488,5 +490,15 @@ export default {
 .slide-fade-leave {
     transform: translateY(-100%); /* Move off-screen when leaving */
     opacity: 0;
+}
+</style>
+
+<style>
+.notification .md-editor-previewOnly {
+    background: transparent !important;
+}
+
+.notification .md-editor-preview-wrapper {
+    padding: 0 !important;
 }
 </style>

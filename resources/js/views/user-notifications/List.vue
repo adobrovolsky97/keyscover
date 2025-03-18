@@ -13,7 +13,8 @@
             <div class="w-full flex flex-col gap-2"
                  v-if="isDataLoaded && data.data.length">
 
-                <div v-for="notification in data.data" role="alert" class="alert w-full" :class="{'!alert-warning': notification.is_admin_notification}" :key="notification.id">
+                <div v-for="notification in data.data" role="alert" class="alert w-full relative"
+                     :class="{'!alert-warning': notification.is_admin_notification}" :key="notification.id">
                     <svg
                         v-if="!notification.is_read"
                         xmlns="http://www.w3.org/2000/svg"
@@ -32,6 +33,16 @@
                     </span>
                     <div>
                         <span>{{ notification.created_at }}</span>
+                    </div>
+
+                    <div @click="deleteNotification(notification)" v-if="notification.is_admin_notification && $store?.state?.user?.role === 'admin'" class="absolute top-2 right-2 cursor-pointer">
+                        <svg class="h-5 w-5 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            <line x1="10" y1="11" x2="10" y2="17"/>
+                            <line x1="14" y1="11" x2="14" y2="17"/>
+                        </svg>
                     </div>
                 </div>
 
@@ -64,6 +75,8 @@ import {useHead} from "@vueuse/head";
 import axios from "axios";
 import 'md-editor-v3/lib/preview.css';
 import {MdPreview} from "md-editor-v3";
+import store from "../../store.js";
+import {toast} from "vue3-toastify";
 
 export default {
     setup() {
@@ -123,6 +136,18 @@ export default {
                 .then((response) => {
                     window.location.reload();
                 });
+        },
+        deleteNotification(notification) {
+            if (confirm('Підтвердіть видалення')) {
+                axios.delete('/api/notifications/' + notification.id)
+                    .then(() => {
+                        this.fetchData();
+                        toast.success('Сповіщення успішно видалено');
+                    })
+                    .catch(error => {
+                        toast.error('Помилка видалення сповіщення');
+                    })
+            }
         },
         updatePage(page) {
             this.filters.page = page;

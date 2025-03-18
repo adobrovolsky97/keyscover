@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role\Role;
 use App\Http\Requests\UserNotification\StoreRequest;
 use App\Http\Resources\UserNotification\UserNotificationResource;
+use App\Models\UserNotification\UserNotification;
 use App\Services\UserNotification\Contracts\UserNotificationServiceInterface;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Response;
@@ -60,5 +63,19 @@ class UserNotificationController extends Controller
         $this->notificationService->create(array_merge($request->validated(), ['is_admin_notification' => true]));
 
         return Response::json();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function destroy(UserNotification $userNotification): JsonResponse
+    {
+        if (auth()->user()->role !== Role::ADMIN || empty($userNotification->batch_uuid)) {
+            abort(404);
+        }
+
+        $this->notificationService->delete($userNotification);
+
+        return Response::json(null, 204);
     }
 }

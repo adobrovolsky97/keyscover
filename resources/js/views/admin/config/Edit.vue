@@ -14,14 +14,7 @@
                     </label>
                 </div>
 
-                <div v-if="config?.type === 'string' && config?.key !== 'welcome_message'" class="form-control w-full">
-                    <div class="label">
-                        <span class="label-text">Значення</span>
-                    </div>
-                    <input type="text" class="input input-bordered" v-model="config.value"/>
-                </div>
-
-                <div v-if="config?.type === 'string' && config?.key === 'welcome_message'" class="form-control w-full">
+                <div v-if="config?.type === 'string'" class="form-control w-full">
                     <div class="form-control w-full">
                         <div class="label">
                             <span class="label-text">Значення</span>
