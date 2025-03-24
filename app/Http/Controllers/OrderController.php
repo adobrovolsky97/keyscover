@@ -67,8 +67,10 @@ class OrderController extends Controller
         if (!app()->isLocal()) {
             Mail::to($order->user->email)->send(new NewOrderMail($order));
 
-            Notification::route('telegram', config('services.telegram-bot-api.recipient'))
-                ->notify(new OrderCreatedNotification($order));
+            foreach (explode(',', config('services.telegram-bot-api.recipients')) as $recipient) {
+                Notification::route('telegram', trim($recipient))
+                    ->notify(new OrderCreatedNotification($order));
+            }
 
             SendOrderToCrmJob::dispatch($order)->onQueue('crm');
         }

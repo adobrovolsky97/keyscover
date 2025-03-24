@@ -195,7 +195,9 @@ class CrmService implements CrmServiceInterface
             ]);
 
             // Send error notification to admin
-            Notification::route('telegram', config('services.telegram-bot-api.recipient'))->notify(new OrderSyncFailedNotification($order));
+            foreach (explode(',', config('services.telegram-bot-api.recipients')) as $recipient) {
+                Notification::route('telegram', $recipient)->notify(new OrderSyncFailedNotification($order));
+            }
         });
 
         if (!empty($response->json('id'))) {

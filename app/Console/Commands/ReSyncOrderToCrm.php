@@ -38,8 +38,10 @@ class ReSyncOrderToCrm extends Command
 
             if (!app()->isLocal()) {
 
-                Notification::route('telegram', config('services.telegram-bot-api.recipient'))
-                    ->notify(new OrderCreatedNotification($order));
+                foreach (explode(',', config('services.telegram-bot-api.recipients')) as $recipient) {
+                    Notification::route('telegram', trim($recipient))
+                        ->notify(new OrderCreatedNotification($order));
+                }
 
                 $this->info('Order #' . $order->number . ' was sent to CRM');
                 SendOrderToCrmJob::dispatch($order)->onQueue('crm');

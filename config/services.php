@@ -32,7 +32,7 @@ return [
 
     'telegram-bot-api' => [
         'token' => env('TELEGRAM_TOKEN'),
-        'recipient' => env('TELEGRAM_NOTIFICATION_RECIPIENT'),
+        'recipients' => env('TELEGRAM_NOTIFICATION_RECIPIENT'),
     ],
 
     'ses' => [
