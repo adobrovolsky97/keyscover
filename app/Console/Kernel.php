@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(CleanBackupsCommand::class)->daily();
         $schedule->command(ReSyncOrderToCrm::class)->hourly();
         $schedule->command(SendCrmDisabledNotificationCommand::class)->twiceDaily();
-        $schedule->command(SyncOrderStatusesCommand::class)->everyTenMinutes()->withoutOverlapping();
+        $schedule->command(SyncOrderStatusesCommand::class)->everyFiveMinutes()->withoutOverlapping();
     }
 
     /**
