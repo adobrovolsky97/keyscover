@@ -46,7 +46,7 @@
                                     <button
                                         :disabled="product.quantity <= product.cart_increment_step"
                                         @click="decrementQuantity(product)"
-                                            class="btn btn-success text-white join-item btn-md rounded-l-full">
+                                        class="btn btn-success text-white join-item btn-md rounded-l-full">
                                         -
                                     </button>
                                     <input @input="updateProductQuantity(product)"
@@ -160,7 +160,10 @@ export default {
                     this.usd = response.data.usd;
                 })
                 .catch((error) => {
-                    toast.error(error?.response?.data?.message ?? 'Помилка', {autoClose: 5000, position: 'bottom-right'});
+                    toast.error(error?.response?.data?.message ?? 'Помилка', {
+                        autoClose: 5000,
+                        position: 'bottom-right'
+                    });
                 })
         },
         deleteProduct(product) {
@@ -169,7 +172,10 @@ export default {
                     this.$store.commit('setCart', response.data.data);
                 })
                 .catch((error) => {
-                    toast.error(error?.response?.data?.message ?? 'Помилка', {autoClose: 5000, position: 'bottom-right'});
+                    toast.error(error?.response?.data?.message ?? 'Помилка', {
+                        autoClose: 5000,
+                        position: 'bottom-right'
+                    });
                 })
         },
         clearCart() {
@@ -178,7 +184,10 @@ export default {
                     this.$store.commit('setCart', {})
                 })
                 .catch((error) => {
-                    toast.error(error?.response?.data?.message ?? 'Помилка', {autoClose: 5000, position: 'bottom-right'});
+                    toast.error(error?.response?.data?.message ?? 'Помилка', {
+                        autoClose: 5000,
+                        position: 'bottom-right'
+                    });
                 })
         },
         goToCheckout() {
@@ -192,6 +201,12 @@ export default {
                     this.$store.commit('setCart', response.data.data);
                 })
                 .catch((error) => {
+
+                    if (error.response.status === 404) {
+                        this.fetchCart();
+                        return;
+                    }
+
                     this.productErrors[product.product_id] = error.response.data.message;
                 })
         },
@@ -207,7 +222,16 @@ export default {
                     this.$store.commit('setCart', response.data.data);
                 })
                 .catch((error) => {
-                    toast.error(error?.response?.data?.message ?? 'Помилка', {autoClose: 5000, position: 'bottom-right'});
+
+                    if (error.response.status === 404) {
+                        this.fetchCart();
+                        return;
+                    }
+
+                    toast.error(error?.response?.data?.message ?? 'Помилка', {
+                        autoClose: 5000,
+                        position: 'bottom-right'
+                    });
                 })
         },
         calculateRemainingDiscounts() {
@@ -233,7 +257,7 @@ export default {
                 }
 
                 if (product.quantity % product.cart_increment_step !== 0) {
-                    product.quantity = parseInt(product.quantity) +  parseInt(product.cart_increment_step - (product.quantity % product.cart_increment_step));
+                    product.quantity = parseInt(product.quantity) + parseInt(product.cart_increment_step - (product.quantity % product.cart_increment_step));
                 }
 
                 if (product.left_in_stock <= product.quantity) {
@@ -246,10 +270,27 @@ export default {
                         this.cart = response.data.data;
                     })
                     .catch((error) => {
+
+                        if (error.response.status === 404) {
+                            this.fetchCart();
+                            return;
+                        }
+
                         this.productErrors[product.product_id] = error.response.data.message;
                     })
             }, 800);
-        }
+        },
+        fetchCart() {
+            axios.get('/api/cart')
+                .then(response => {
+                    this.$store.commit('setCart', response.data.data)
+
+                    toast.warn('Було перераховано кількість товарів в кошику', {
+                        timeout: 15000,
+                        position: 'bottom-right'
+                    });
+                })
+        },
     },
 }
 </script>
