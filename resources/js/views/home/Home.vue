@@ -299,7 +299,7 @@ export default {
                 clearTimeout(this.fetchDataTimer);
             }
 
-            const timeout = isImmediateRequest ? 1 : 500;
+            const timeout = isImmediateRequest ? 1 : 200;
 
             this.fetchDataTimer = setTimeout(() => {
 
@@ -308,9 +308,9 @@ export default {
                 return axios.get('/api/products', {params: this.filters})
                     .then((response) => {
                         this.data = response.data;
+                        this.isDataLoaded = true;
                     })
                     .then(() => {
-                        this.isDataLoaded = true;
 
                         if (!this.isInitialLoad && this.isScrollToTop) {
                             this.isScrollToTop = false;
