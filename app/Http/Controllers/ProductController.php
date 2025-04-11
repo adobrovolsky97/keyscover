@@ -38,7 +38,7 @@ class ProductController extends Controller
     {
         return ProductResource::collection(
             $this->productService
-                ->with(['activeUserSubscription', 'category', 'similarProducts', 'relatedProducts'])
+                ->with(['activeUserSubscription', 'category', 'similarProducts', 'relatedProducts', 'activeUserFavorite'])
                 ->getAllPaginated($request->validated(), $request->input('per_page', 20))
         );
     }
