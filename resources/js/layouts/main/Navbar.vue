@@ -20,9 +20,9 @@
 
                 <div class="w-full hidden md:block mx-0 md:mx-14">
                     <label class="input input-bordered items-center w-full flex gap-2">
-                        <input type="text" @input="delaySearch" :value="search" class="grow"
+                        <input type="text" @input="onSearchInput"  :value="search" class="grow"
                                :placeholder="$route.query.categories?.length ? 'Пошук по категорії': 'Пошук на сайті'"
-                               v-on:keyup.enter="delaySearch"/>
+                               v-on:keyup.enter="onSearchInput"/>
                         <svg
                             v-if="!$route.query.search?.length"
                             xmlns="http://www.w3.org/2000/svg"
@@ -68,9 +68,9 @@
                                 </svg>
                             </div>
                             <div v-if="isShowMobileSearch"
-                                 class="absolute left-1/2 transform -translate-x-1/2 w-full max-w-sm top-14">
+                                 class="absolute left-1/2 transform -translate-x-1/2 w-full max-w-sm top-14 z-[999]">
                                 <label class="input input-bordered items-center w-full flex gap-2">
-                                    <input type="text" @input="delaySearch" :value="search" class="grow"
+                                    <input type="text" @input="onSearchInput" :value="search" class="grow"
                                            :placeholder="$route.query.categories?.length ? 'Пошук по категорії': 'Пошук на сайті'"
                                            v-on:keyup.enter="closeMobileSearch"/>
                                     <svg
@@ -304,6 +304,7 @@ import store from "../../store.js";
 import axios from "axios";
 import {MdPreview} from "md-editor-v3";
 import 'md-editor-v3/lib/preview.css';
+import { debounce } from 'lodash';
 
 export default {
     data() {
@@ -326,6 +327,7 @@ export default {
     },
     mounted() {
         this.search = this.$route.query.search ?? '';
+        this.debouncedDelaySearch = debounce(this.updateQuery, 500);
 
         document.addEventListener('click', this.handleClickOutside);
         document.addEventListener('click', this.handleClickOutsideMobileSearch);
@@ -392,31 +394,41 @@ export default {
                 this.closeMobileSearch();
             }
         },
+        onSearchInput(event) {
+            this.search = event.target.value; // Оновлюємо локальний стан
+            this.debouncedDelaySearch(this.search); // Викликаємо debounce для оновлення URL
+        },
+
+        updateQuery(value) {
+
+            if (this.$route.name !== 'home') {
+                this.$router.push({name: 'home', query: {search: value}});
+                return
+            }
+
+            const query = { ...this.$route.query, search: value };
+            if (!value.length) delete query.search;
+            this.$router.replace({ query });
+        },
+
+        resetSearch() {
+            this.search = '';
+            const query = { ...this.$route.query };
+            delete query.search;
+            this.$router.replace({ query });
+        },
+
         closeMobileSearch() {
             this.isShowMobileSearch = false;
-        },
-        delaySearch(e) {
-            clearTimeout(this.timer);
-            this.timer = setTimeout(() => {
-                this.search = e.target.value;
-
-                if (this.$route.name !== 'home') {
-                    this.$router.push({name: 'home', query: {search: this.search}});
-                    return
-                }
-
-                RouteHelper.updateQueryParams({search: this.search});
-            }, 200);
+            const query = { ...this.$route.query, search: this.search };
+            if (!this.search.length) delete query.search;
+            this.$router.replace({ query });
         },
         copyNumber() {
             navigator.clipboard.writeText('0968038462').then(() => {
                 toast.success('Телефон скопійовано');
             }).catch(err => {
             })
-        },
-        resetSearch() {
-            this.search = '';
-            this.$router.push({name: 'home', query: {search: ''}});
         },
         fetchCart() {
             axios.get('/api/cart')
