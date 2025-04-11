@@ -406,7 +406,7 @@ export default {
                 }
 
                 RouteHelper.updateQueryParams({search: this.search});
-            }, 1);
+            }, 200);
         },
         copyNumber() {
             navigator.clipboard.writeText('0968038462').then(() => {
