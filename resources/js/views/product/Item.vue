@@ -4,11 +4,25 @@
                         classes="absolute right-2 top-2" :product-id="product.id"
                         :is-in-favorites="product.has_active_favorite"/>
         <figure class="w-full overflow-hidden p-1">
-            <Carousel :arrows-size="'15px'" :show-thumbs="false"
+            <Carousel v-if="product.media.length > 1" :arrows-size="'15px'" :show-thumbs="false"
                       :id="product.id"
                       :show-arrows="showArrows"
                       @link-clicked="handleClick"
                       :media="product.media.length ? product.media : [{id: null, url: product.image}]"/>
+            <router-link
+                v-else
+                :to="{ name: 'product.show', params: { id: product.id } }"
+                @click="handleClick($event)"
+                class="w-full h-full object-cover cursor-pointer"
+            >
+                <img
+                    v-show="!loading"
+                    @load="loading = false"
+                    :src="product.image"
+                    :alt="product.name"
+                    class="w-full h-full object-cover cursor-pointer"
+                />
+            </router-link>
         </figure>
 
         <svg v-if="product.is_hidden" class="h-24 w-24 absolute z-[100] m-auto left-0 right-0 top-0 bottom-0"

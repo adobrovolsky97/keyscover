@@ -2,7 +2,6 @@
     <!-- Main Image with Transition -->
     <div class="relative w-full images-carousel rounded-lg select-none">
         <swiper
-            :spaceBetween="10"
             :navigation="showArrows"
             :thumbs="{ swiper: thumbsSwiper }"
             :loop="true"
@@ -18,9 +17,9 @@
                     :to="{ name: 'product.show', params: { id: id } }"
                     @click="linkClicked($event)"
                 >
-                    <img class="w-full object-cover" :src="image.url" alt=""/>
+                    <img loading="lazy" class="w-full object-cover" :src="image.url" alt=""/>
                 </router-link>
-                <img v-else class="w-full object-cover" :src="image.url" alt=""/>
+                <img loading="lazy" v-else class="w-full object-cover" :src="image.url" alt=""/>
             </swiper-slide>
         </swiper>
         <swiper
@@ -33,7 +32,7 @@
             :modules="modules"
         >
             <swiper-slide v-for="(image, index) in media" :key="index">
-                <img class="w-full border rounded-lg object-cover cursor-pointer" :src="image.url" alt=""/>
+                <img loading="lazy" class="w-full border rounded-lg object-cover cursor-pointer" :src="image.url" alt=""/>
             </swiper-slide>
         </swiper>
     </div>

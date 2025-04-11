@@ -11,7 +11,7 @@
                     <input type="checkbox"/>
                     <div
                         class="collapse-title md:text-xl text-sm font-medium flex md:flex-row flex-col md:justify-between justify-start md:items-center items-start">
-                        <span>Замовлення {{order.number }}<span
+                        <span class="cursor-pointer">Замовлення {{order.number}}<span
                             v-if="order.crm_status"
                             :class="ProductHelper().getColorForStatus(order.crm_status)"> ({{
                                 order.crm_status
@@ -20,9 +20,6 @@
                     </div>
                     <div class="collapse-content  overflow-x-auto">
                         <div class="client-data flex flex-col justify-start items-start">
-                            <span><span class="font-bold">Номер замовлення</span>: <b
-                                class="cursor-pointer text-gray-400 hover:text-black"
-                                @mousedown.stop="copyNumber(order.number)">{{ order.number }}</b></span>
                             <span v-if="order.ttn"><span class="font-bold">ТТН</span>: {{ order.ttn }} <span
                                 class="italic" v-if="order.nova_poshta_status"> ({{ order.nova_poshta_status }})</span></span>
                             <span><span class="font-bold">ПІБ</span>: {{ order.surname }} {{
