@@ -20,7 +20,7 @@
 
                 <div class="w-full hidden md:block mx-0 md:mx-14">
                     <label class="input input-bordered items-center w-full flex gap-2">
-                        <input type="text" @input="onSearchInput"  :value="search" class="grow"
+                        <input type="text" @input="onSearchInput" :value="search" class="grow"
                                :placeholder="$route.query.categories?.length ? 'Пошук по категорії': 'Пошук на сайті'"
                                v-on:keyup.enter="onSearchInput"/>
                         <svg
@@ -299,12 +299,10 @@ import Auth from "../../api/Auth/Auth.js";
 import Cart from "../../views/cart/Cart.vue";
 import {toast} from "vue3-toastify";
 import Modal from "../../components/Modal.vue";
-import RouteHelper from "../../helpers/Route/RouteHelper.js";
-import store from "../../store.js";
 import axios from "axios";
 import {MdPreview} from "md-editor-v3";
 import 'md-editor-v3/lib/preview.css';
-import { debounce } from 'lodash';
+import {debounce} from 'lodash';
 
 export default {
     data() {
@@ -332,9 +330,12 @@ export default {
         document.addEventListener('click', this.handleClickOutside);
         document.addEventListener('click', this.handleClickOutsideMobileSearch);
         window.addEventListener("scroll", this.checkScrollPosition);
+        this.getNotificationsCount();
 
-        if (store.state.user !== null) {
-            this.getNotificationsCount();
+        if (this.$store.state.user !== null) {
+            setInterval( () => {
+                this.getNotificationsCount();
+            }, 60000);
         }
     },
     beforeDestroy() {
@@ -406,23 +407,23 @@ export default {
                 return
             }
 
-            const query = { ...this.$route.query, search: value };
+            const query = {...this.$route.query, search: value};
             if (!value.length) delete query.search;
-            this.$router.replace({ query });
+            this.$router.replace({query});
         },
 
         resetSearch() {
             this.search = '';
-            const query = { ...this.$route.query };
+            const query = {...this.$route.query};
             delete query.search;
-            this.$router.replace({ query });
+            this.$router.replace({query});
         },
 
         closeMobileSearch() {
             this.isShowMobileSearch = false;
-            const query = { ...this.$route.query, search: this.search };
+            const query = {...this.$route.query, search: this.search};
             if (!this.search.length) delete query.search;
-            this.$router.replace({ query });
+            this.$router.replace({query});
         },
         copyNumber() {
             navigator.clipboard.writeText('0968038462').then(() => {
@@ -453,7 +454,7 @@ export default {
                     this.$router.push({name: 'home'});
                 })
         },
-        getNotificationsCount() {
+        async getNotificationsCount() {
             axios.get('/api/notifications/count')
                 .then((response) => {
                     this.notificationsCount = response.data.count ?? 0;
