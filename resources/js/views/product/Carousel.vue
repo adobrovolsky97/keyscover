@@ -2,6 +2,7 @@
     <!-- Main Image with Transition -->
     <div class="relative w-full images-carousel rounded-lg select-none">
         <swiper
+            virtual
             :navigation="showArrows"
             :thumbs="{ swiper: thumbsSwiper }"
             :loop="true"
@@ -11,7 +12,7 @@
               '--swiper-navigation-color': '#1f2937',
             }"
         >
-            <swiper-slide v-for="(image, index) in media" :key="index">
+            <swiper-slide :lazy="true" v-for="(image, index) in media" :key="index" :virtualIndex="index">
                 <router-link
                     v-if="id"
                     :to="{ name: 'product.show', params: { id: id } }"
@@ -41,13 +42,13 @@
 <script setup>
 import {ref, watch} from 'vue';
 import {Swiper, SwiperSlide} from 'swiper/vue';
-import {FreeMode, Navigation, Thumbs} from 'swiper/modules';
+import {FreeMode, Navigation, Thumbs, Virtual} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 
-const modules = [FreeMode, Navigation, Thumbs];
+const modules = [FreeMode, Navigation, Thumbs, Virtual];
 
 const emit = defineEmits(['link-clicked']);
 

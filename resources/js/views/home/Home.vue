@@ -311,7 +311,6 @@ export default {
                         this.isDataLoaded = true;
                     })
                     .then(() => {
-
                         if (!this.isInitialLoad && this.isScrollToTop) {
                             this.isScrollToTop = false;
                             window.scrollTo({top: 0, behavior: 'instant'});
