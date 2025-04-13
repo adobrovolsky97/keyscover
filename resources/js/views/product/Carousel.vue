@@ -23,8 +23,10 @@
             </swiper-slide>
         </swiper>
 
+        <img v-else loading="lazy" class="w-full object-cover" :src="media[0].url" alt=""/>
+
         <swiper
-            v-if="media.length > 1 && showThumbs"
+            v-if="isVisible && media.length > 1 && showThumbs"
             @swiper="setThumbsSwiper"
             :spaceBetween="10"
             :slidesPerView="4"
