@@ -87,8 +87,6 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     Route::get('notifications', [UserNotificationController::class, 'index']);
     Route::delete('notifications/{userNotification}', [UserNotificationController::class, 'destroy']);
-    Route::get('notifications/count', [UserNotificationController::class, 'getCount']);
-    Route::post('notifications/read-all', [UserNotificationController::class, 'readAllNotifications']);
 });
 
 /**
@@ -103,6 +101,9 @@ Route::group(['prefix' => 'products'], function () {
     Route::get('', [ProductController::class, 'index']);
     Route::get('{product}', [ProductController::class, 'show']);
 });
+
+Route::get('notifications/count', [UserNotificationController::class, 'getCount']);
+Route::post('notifications/read-all', [UserNotificationController::class, 'readAllNotifications']);
 
 Route::get('configs', [ConfigController::class, 'index']);
 

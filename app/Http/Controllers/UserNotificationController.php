@@ -41,12 +41,16 @@ class UserNotificationController extends Controller
     public function getCount(): JsonResponse
     {
         return Response::json([
-            'count' => $this->notificationService->count(['user_id' => auth()->id(), 'is_read' => false])
+            'count' => $this->notificationService->count(['user_id' => auth()->id() ?? -1, 'is_read' => false])
         ]);
     }
 
     public function readAllNotifications(): JsonResponse
     {
+        if (auth()->guest()) {
+            return Response::json();
+        }
+
         $this->notificationService->readAll();
 
         return Response::json();
