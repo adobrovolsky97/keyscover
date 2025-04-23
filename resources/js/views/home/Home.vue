@@ -22,6 +22,7 @@
                     <input id="my-drawer" type="checkbox" class="drawer-toggle"/>
                     <div class="drawer-content">
                         <label for="my-drawer"
+                               :class="{'animate-pulse text-red-400': categoriesArray?.length > 0}"
                                class="btn btn-sm font-medium border-gray-300 drawer-button btn-outline lg:text-md text-xs w-full z-[5]">Категорії</label>
                     </div>
                     <div class="drawer-side z-[100]">

@@ -33,7 +33,7 @@ class NewOrderMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Ми опрацьовуємо Ваше замовлення #' . $this->order->number,
+            subject: 'Ми опрацьовуємо Ваше замовлення ' . $this->order->number,
         );
     }
 

@@ -7,6 +7,7 @@
             :breakpoints="breakpoints"
             :freeMode="false"
             :navigation="true"
+            :loop="true"
             :watchSlidesProgress="true"
             :modules="modules"
             :style="{

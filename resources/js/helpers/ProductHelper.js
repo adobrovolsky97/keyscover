@@ -4,6 +4,7 @@ class CartHelper {
             case 'Необроблені':
                 return 'text-gray-400 text-light';
             case 'Успішно':
+            case 'Успішно завершене':
                 return 'text-black-400 text-light';
             case 'Потребує оплати':
                 return 'text-red-400 font-bold';
