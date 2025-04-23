@@ -47,7 +47,7 @@
                     <div class="auth flex flex-row justify-between items-center gap-2.5 md:gap-5">
 
                         <div ref="mobileSearch" class="block md:hidden cursor-pointer">
-                            <div class="relative" :class="{'animate-pulse': $route.query.search?.length}">
+                            <div class="relative" :class="{'animate-pulse text-red-400': $route.query.search?.length}">
                                 <svg class="h-6 w-6"
                                      @click="isShowMobileSearch = !isShowMobileSearch" viewBox="0 0 24 24"
                                      fill="none"
