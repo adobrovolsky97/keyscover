@@ -7,6 +7,7 @@ use App\Models\Order\Order;
 use App\Notifications\OrderCreatedNotification;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Notification;
+use Throwable;
 
 class ReSyncOrderToCrm extends Command
 {
@@ -36,15 +37,20 @@ class ReSyncOrderToCrm extends Command
                 continue;
             }
 
-            if (!app()->isLocal()) {
+            try {
+                if (!app()->isLocal()) {
+                    $this->info('Order #' . $order->number . ' sending to CRM');
 
-                foreach (explode(',', config('services.telegram-bot-api.recipients')) as $recipient) {
-                    Notification::route('telegram', trim($recipient))
-                        ->notify(new OrderCreatedNotification($order));
+                    SendOrderToCrmJob::dispatchSync($order);
+                    $this->info('Order #' . $order->number . ' was sent to CRM');
+
+                    foreach (explode(',', config('services.telegram-bot-api.recipients')) as $recipient) {
+                        Notification::route('telegram', trim($recipient))
+                            ->notify(new OrderCreatedNotification($order));
+                    }
                 }
-
-                $this->info('Order #' . $order->number . ' was sent to CRM');
-                SendOrderToCrmJob::dispatch($order)->onQueue('crm');
+            }catch (Throwable $exception) {
+                $this->error("{$exception->getMessage()}, {$exception->getFile()}:{$exception->getLine()}");
             }
         }
     }
