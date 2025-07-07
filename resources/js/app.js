@@ -6,6 +6,7 @@ import router from "./router.js";
 import store from './store'
 
 import axios from "axios";
+import VueGtag from 'vue-gtag-next';
 
 axios.defaults.headers['Content-Type'] = 'application/json';
 axios.defaults.headers['Accept'] = 'application/json';
@@ -43,6 +44,12 @@ const app = createApp(App);
 app.use(router);
 app.use(store);
 app.use(head)
+
+app.use(VueGtag, {
+    property: {
+        id: 'G-HXZKCWZ3Y4',
+    }
+});
 
 app.config.globalProperties.emitter = emitter
 
