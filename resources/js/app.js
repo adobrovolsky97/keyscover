@@ -49,7 +49,7 @@ app.use(VueGtag, {
     property: {
         id: 'G-HXZKCWZ3Y4',
     }
-});
+}, router);
 
 app.config.globalProperties.emitter = emitter
 
