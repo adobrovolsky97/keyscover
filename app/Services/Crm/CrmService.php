@@ -190,6 +190,7 @@ class CrmService implements CrmServiceInterface
             ->post(self::API_URL . '/agreements', $payload);
 
         $response->onError(function ($response) use ($order) {
+            \Log::error($response);
             $order->update([
                 'sync_error' => $response->json()
             ]);
