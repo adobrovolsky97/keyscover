@@ -186,7 +186,7 @@ class CrmService implements CrmServiceInterface
         ];
 
         $response = Http::withHeader('X-Auth-Token', config('app.crm_api_key'))
-            ->timeout(120)
+            ->timeout(300)
             ->post(self::API_URL . '/agreements', $payload);
 
         $response->onError(function ($response) use ($order) {
