@@ -200,6 +200,8 @@ class CrmService implements CrmServiceInterface
             }
         });
 
+        \Log::info($response->json());
+
         if (!empty($response->json('id'))) {
             $order->update([
                 'is_crm_synced' => true,
