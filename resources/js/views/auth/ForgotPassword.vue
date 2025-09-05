@@ -56,7 +56,8 @@
                 </div>
                 <input type="password" required v-model="password_confirmation" placeholder="Повторіть пароль" class="input input-bordered w-full"/>
                 <div class="label" v-if="isError">
-                    <span class="label-text text-error">Паролі не збігаютьс</span>
+                    <span v-if="!errorMessage" class="label-text text-error">Паролі не збігаються</span>
+                    <span v-else class="label-text text-error">{{ errorMessage }}</span>
                 </div>
             </label>
 
@@ -80,6 +81,7 @@ import {toast} from "vue3-toastify";
 export default {
     data() {
         return {
+            errorMessage: '',
             isCodeSent: false,
             isCodeValidated: false,
             isLoading: false,
@@ -150,6 +152,7 @@ export default {
                     this.$router.push({name: 'login'});
                 })
                 .catch(err => {
+                    this.errorMessage = err.response?.data?.errors?.password[0] ?? null;
                     this.isError = true;
                     // this.loader.hide();
                 })
